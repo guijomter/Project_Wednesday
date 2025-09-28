@@ -1,36 +1,47 @@
+# main.py
 import pandas as pd
-from datetime import datetime
 import os
+import datetime
+import logging
 
+from src.loader import cargar_datos
+from src.features import feature_engineering_lag
 
+## config basico logging
+os.makedirs("logs", exist_ok=True)
+
+fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+monbre_log = f"log_{fecha}.log"
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - %(name)s %(lineno)d - %(message)s',
+    handlers=[
+        logging.FileHandler(f"logs/{monbre_log}", mode="w", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger(__name__)
+
+## Funcion principal
 def main():
-    print(">>> Inicio de ejecución")
+    logger.info("Inicio de ejecucion.")
 
-    # Asegurar que exista la carpeta de logs
-    os.makedirs("logs", exist_ok=True)
+    #00 Cargar datos
+    os.makedirs("data", exist_ok=True)
+    path = "data/competencia_01.csv"
+    df = cargar_datos(path)   
 
-    # Cargar dataset desde carpeta data
-    try:
-        df = pd.read_csv("data/competencia_01.csv")
-    except FileNotFoundError:
-        print("No se encontró el archivo data/competencia_01.csv")
-        return
-
-    # Mostrar primeras filas en consola
-    print(df.head())
-
-    # Información básica
-    filas, columnas = df.shape
-    mensaje = f"[{datetime.now()}] Dataset cargado con {filas} filas y {columnas} columnas\n"
-
-    # Guardar log en archivo
-    with open("logs/logs.txt", "a", encoding="utf-8") as f:
-        f.write(mensaje)
-
-    print(">>> Ejecución finalizada. Revisa logs/logs.txt")
-
+    #01 Feature Engineering
+    atributos = ["ctrx_quarter"]
+    cant_lag = 2
+    df = feature_engineering_lag(df, columnas=atributos, cant_lag=cant_lag)
+  
+    #02 Guardar datos
+    path = "data/competencia_01_lag.csv"
+    df.to_csv(path, index=False)
+  
+    logger.info(f">>> Ejecución finalizada. Revisar logs para mas detalles.{monbre_log}")
 
 if __name__ == "__main__":
     main()
-
-    ## Chequeo

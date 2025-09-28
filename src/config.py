@@ -13,7 +13,7 @@ try:
         _cfgGeneral = yaml.safe_load(f)
         _cfg = _cfgGeneral["competencia01"]
 
-        STUDY_NAME = _cfgGeneral.get("STUDY_NAME", "Wendsday")
+        STUDY_NAME = _cfgGeneral.get("STUDY_NAME", "Wednesday")
         DATA_PATH = _cfg.get("DATA_PATH", "../data/competencia.csv")
         SEMILLA = _cfg.get("SEMILLA", [42])
         MES_TRAIN = _cfg.get("MES_TRAIN", "202102")

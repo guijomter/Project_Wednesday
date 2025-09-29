@@ -1,7 +1,7 @@
 # src/gain_function.py
 import numpy as np
 import pandas as pd
-#from .config import GANANCIA_ACIERTO, COSTO_ESTIMULO
+from .config import *
 import logging
 
 logger = logging.getLogger(__name__)

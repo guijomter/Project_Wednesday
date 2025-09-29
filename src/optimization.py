@@ -38,14 +38,14 @@ def objetivo_ganancia(trial, df) -> float:
         'metric': 'None',  # Usamos nuestra métrica personalizada
 
 	#completar a gusto!!!!!!!
-        'num_leaves': trial.suggest_int('num_leaves', parametros_lgb.num_leaves[0], parametros_lgb.num_leaves[1]),
-        'learning_rate': trial.suggest_float('learning_rate', parametros_lgb.learning_rate[0], parametros_lgb.learning_rate[1], log=True),
-        'feature_fraction': trial.suggest_float('feature_fraction', parametros_lgb.feature_fraction[0], parametros_lgb.feature_fraction[1]),
-        'bagging_fraction': trial.suggest_float('bagging_fraction', parametros_lgb.bagging_fraction[0], parametros_lgb.bagging_fraction[1]),
-        'min_child_samples': trial.suggest_int('min_child_samples', parametros_lgb.min_child_samples[0], parametros_lgb.min_child_samples[1]),
-        'max_depth': trial.suggest_int('max_depth', parametros_lgb.max_depth[0], parametros_lgb.max_depth[1]),
-        'reg_lambda': trial.suggest_float('reg_lambda', parametros_lgb.reg_lambda[0], parametros_lgb.reg_lambda[1]),
-        'reg_alpha': trial.suggest_float('reg_alpha', parametros_lgb.reg_alpha[0], parametros_lgb.reg_alpha[1]),
+        'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
+        'learning_rate': trial.suggest_float('learn_rate', conf.parametros_lgb.learn_rate[0], conf.parametros_lgb.learn_rate[1], log=True),
+        'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
+        'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
+        'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
+        'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
+        'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
+        'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': 0.0,
         'verbose': -1,
         'verbosity': -1,
@@ -57,12 +57,14 @@ def objetivo_ganancia(trial, df) -> float:
     # Preparar dataset para entrenamiento y validación
 
     if isinstance(MES_TRAIN, list):
-        df_train = df[df['foto_mes'].isin(MES_TRAIN)]
+        df_train = df[df['foto_mes'].astype(str).isin(MES_TRAIN)]
     else:
-        df_train = df[df['foto_mes'] == MES_TRAIN]
+        df_train = df[df['foto_mes'].astype(str) == MES_TRAIN]
     
-    df_val = df[df['foto_mes'] == MES_VALIDACION]
+    df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
 
+    logger.info(f"Dimensiones df_train: {df_train.shape}, Dimensiones df_val: {df_val.shape}")
+    logger.info(f"Dimensiones df: {df.shape}")
 
     # Usar target (con clase ternaria ya convertida a binaria)
     
@@ -78,6 +80,13 @@ def objetivo_ganancia(trial, df) -> float:
 
     train_data = lgb.Dataset(X_train, label=y_train)
     val_data = lgb.Dataset(X_val, label=y_val, reference=train_data)
+
+# guardar en el log las diemnsiones de X_train y X_val y de train_data y val_data, además del tipo de dato que son
+    logger.info(f"Mes train: {MES_TRAIN}, Mes validacion: {MES_VALIDACION}")
+    logger.info(f"Dimensiones de X_train: {X_train.shape}, Dimensiones de X_val: {X_val.shape}")
+    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de val_data: {type(val_data)}")
+    logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de val_data: {val_data.data.shape}")
+
 
     model = lgb.train(
         params, 
@@ -114,7 +123,7 @@ def guardar_iteracion(trial, ganancia, archivo_base=None):
         archivo_base: Nombre base del archivo (si es None, usa el de config.yaml)
     """
     if archivo_base is None:
-        archivo_base = STUDY_NAME
+        archivo_base = conf.STUDY_NAME
   
     # Nombre del archivo único para todas las iteraciones
     archivo = f"resultados/{archivo_base}_iteraciones.json"

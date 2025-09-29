@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import logging
 from datetime import datetime
-#from .config import STUDY_NAME
+from .config import *
 
 logger = logging.getLogger(__name__)
 

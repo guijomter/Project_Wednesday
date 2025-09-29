@@ -1,6 +1,6 @@
 import json
 import logging
-#from .config import STUDY_NAME
+from .config import *
 
 logger = logging.getLogger(__name__)
 

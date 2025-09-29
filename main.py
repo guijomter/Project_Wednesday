@@ -49,7 +49,7 @@ def main():
     df_fe = convertir_clase_ternaria_a_target(df_fe)
   
     #03 Ejecutar optimizacion de hiperparametros
-    study = optimizar(df_fe, n_trial=5)
+    study = optimizar(df_fe, n_trials=5)
   
     #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")

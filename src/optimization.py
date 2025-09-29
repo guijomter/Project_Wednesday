@@ -176,7 +176,7 @@ def optimizar(df, n_trials=100) -> optuna.Study:
         optuna.Study: Estudio de Optuna con resultados
     """
 
-    study_name = STUDY_NAME
+    study_name = conf.STUDY_NAME
 
     logger.info(f"Iniciando optimización con {n_trials} trials")
     logger.info(f"Configuración: TRAIN={MES_TRAIN}, VALID={MES_VALIDACION}, SEMILLA={SEMILLA}")
@@ -253,12 +253,12 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     """
     Guarda los resultados de la evaluación en test en un archivo JSON.
     """
- """
+    """
     Args:
         archivo_base: Nombre base del archivo (si es None, usa el de config.yaml)
     """
     if archivo_base is None:
-        archivo_base = STUDY_NAME
+        archivo_base = conf.STUDY_NAME
   
     # Nombre del archivo único para todas las iteraciones
     archivo = f"resultados/{archivo_base}_resultado_test.json"

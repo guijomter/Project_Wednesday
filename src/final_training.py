@@ -5,6 +5,7 @@ import logging
 import os
 from datetime import datetime
 #from .config import FINAL_TRAIN, FINAL_PREDIC, SEMILLA
+from .config import *
 from .best_params import cargar_mejores_hiperparametros
 from .gain_function import ganancia_lgb_binary
 
@@ -78,7 +79,7 @@ def entrenar_modelo_final(X_train: pd.DataFrame, y_train: pd.Series, mejores_par
 
     return modelo
 
-def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, clientes_predict: np.ndarray, umbral: float = UMBRAL) -> pd.DataFrame:
+def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, clientes_predict: np.ndarray, umbral: UMBRAL) -> pd.DataFrame:
     """
     Genera las predicciones finales para el período objetivo.
   

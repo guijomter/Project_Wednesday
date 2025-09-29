@@ -1,7 +1,7 @@
 # src/gain_function.py
 import numpy as np
 import pandas as pd
-from .config import GANANCIA_ACIERTO, COSTO_ESTIMULO
+#from .config import GANANCIA_ACIERTO, COSTO_ESTIMULO
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,8 +29,8 @@ def calcular_ganancia(y_true, y_pred):
     # Verdaderos negativos y falsos negativos: ganancia = 0
   
     ganancia_total = np.sum(
-        (y_true == 1) & (y_pred == 1) * GANANCIA_ACIERTO +  # TP
-        (y_true == 0) & (y_pred == 1) * (-COSTO_ESTIMULO)   # FP
+        ((y_true == 1) & (y_pred == 1)) * GANANCIA_ACIERTO +  # TP
+        ((y_true == 0) & (y_pred == 1)) * (-COSTO_ESTIMULO)   # FP
     )
   
     logger.debug(f"Ganancia calculada: {ganancia_total:,.0f} "
@@ -38,6 +38,7 @@ def calcular_ganancia(y_true, y_pred):
   
     return ganancia_total
 
+# Función de ganancia para LightGBM binaria (cambia la probabilidad por una predicción 0/1, usando un umbral)
 def ganancia_lgb_binary(y_pred, y_true):
     """
     Función de ganancia para LightGBM en clasificación binaria.
@@ -54,7 +55,7 @@ def ganancia_lgb_binary(y_pred, y_true):
     y_true_labels = y_true.get_label()
   
     # Convertir probabilidades a predicciones binarias (umbral 0.5)
-    y_pred_binary = (y_pred > 0.025).astype(int)
+    y_pred_binary = (y_pred > UMBRAL).astype(int)
   
     # Calcular ganancia usando configuración
     ganancia_total = calcular_ganancia(y_true_labels, y_pred_binary)

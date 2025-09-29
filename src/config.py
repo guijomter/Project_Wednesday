@@ -1,6 +1,7 @@
 import yaml
 import os
 import logging
+from types import SimpleNamespace
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,9 @@ PATH_CONFIG = os.path.join(os.path.dirname(os.path.dirname(__file__)), "conf.yam
 #         MES_TEST = _cfg.get("MES_TEST", "202104")
 #         GANANCIA_ACIERTO = _cfg.get("GANANCIA_ACIERTO", None)
 #         COSTO_ESTIMULO = _cfg.get("COSTO_ESTIMULO", None)
+#  # Configuración para entrenamiento final
+#         FINAL_TRAIN = _cfg.get("FINAL_TRAIN", ["202101", "202102", "202103", "202104"])
+#         FINAL_PREDIC = _cfg.get("FINAL_PREDIC", "202106")
 
 # except Exception as e:
 #     logger.error(f"Error al cargar el archivo de configuracion: {e}")
@@ -54,3 +58,9 @@ def load_yaml_config():
 
 # Cargar configuración automáticamente al importar el módulo
 conf = load_yaml_config()
+
+## Disponibilizar variables globales de la competencia01 para acceso directo (no hace falta poner conf.competencia01. delante)
+cfg = conf.competencia01
+globals().update(cfg.__dict__)
+
+

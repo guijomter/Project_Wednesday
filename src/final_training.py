@@ -8,6 +8,7 @@ from datetime import datetime
 from .config import *
 from .best_params import cargar_mejores_hiperparametros
 from .gain_function import ganancia_lgb_binary
+from .features import feature_engineering_lag
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +54,7 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
     
     X_predict = df_predict.drop(columns=['clase_ternaria'])
     
-    clientes_predict = df_predict['numero_cliente'].values
+    clientes_predict = df_predict['numero_de_cliente'].values
 
     logger.info(f"Features utilizadas: {len(X_predict.columns):,}")
     logger.info(f"Distribución del target - 0: {(y_train == 0).sum():,}, 1: {(y_train == 1).sum():,}")
@@ -96,11 +97,11 @@ def entrenar_modelo_final(X_train: pd.DataFrame, y_train: pd.Series, mejores_par
         params, 
         train_data,
         valid_sets=None,
-        feval=ganancia_lgb_binary, 
-        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+        feval=ganancia_lgb_binary 
+        #callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
 
-
+    logger.info("Entrenamiento del modelo final completado")
     return modelo
 
 def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, clientes_predict: np.ndarray, umbral: UMBRAL) -> pd.DataFrame:

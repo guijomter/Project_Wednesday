@@ -10,5 +10,29 @@
     "total_predicciones": 163418,
     "predicciones_positivas": 17837,
     "porcentaje_positivas": 10.914954289001212
+  },
+  {
+    "ganancia_test": 945840000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17828,
+    "porcentaje_positivas": 10.9094469397496
+  },
+  {
+    "ganancia_test": 952100000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17635,
+    "porcentaje_positivas": 10.791344894687244
+  },
+  {
+    "ganancia_test": 942340000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17643,
+    "porcentaje_positivas": 10.796240316244232
+  },
+  {
+    "ganancia_test": 941260000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17777,
+    "porcentaje_positivas": 10.878238627323796
   }
 ]

@@ -90,7 +90,7 @@ def main():
   
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
-    resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict)
+    resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict, UMBRAL)
   
     # Guardar predicciones
     logger.info("Guardar predicciones")

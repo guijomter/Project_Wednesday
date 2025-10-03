@@ -120,11 +120,17 @@ def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, c
     logger.info("Generando predicciones finales")
   
     # Generar probabilidades con el modelo entrenado
-  
+    y_pred_prob = modelo.predict(X_predict)
+     
     # Convertir a predicciones binarias con el umbral establecido
-  
+    y_pred_binary = (y_pred_prob >= umbral).astype(int) 
+
     # Crear DataFrame de 'resultados' con nombres de atributos que pide kaggle
-  
+    resultados = pd.DataFrame({
+        'numero_de_cliente': clientes_predict,
+        'predict': y_pred_binary
+    })
+    
     # Estadísticas de predicciones
     total_predicciones = len(resultados)
     predicciones_positivas = (resultados['predict'] == 1).sum()

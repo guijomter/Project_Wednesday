@@ -82,10 +82,10 @@ def objetivo_ganancia(trial, df) -> float:
     val_data = lgb.Dataset(X_val, label=y_val, reference=train_data)
 
 # guardar en el log las diemnsiones de X_train y X_val y de train_data y val_data, además del tipo de dato que son
-    logger.info(f"Mes train: {MES_TRAIN}, Mes validacion: {MES_VALIDACION}")
-    logger.info(f"Dimensiones de X_train: {X_train.shape}, Dimensiones de X_val: {X_val.shape}")
-    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de val_data: {type(val_data)}")
-    logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de val_data: {val_data.data.shape}")
+    # logger.info(f"Mes train: {MES_TRAIN}, Mes validacion: {MES_VALIDACION}")
+    # logger.info(f"Dimensiones de X_train: {X_train.shape}, Dimensiones de X_val: {X_val.shape}")
+    # logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de val_data: {type(val_data)}")
+    # logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de val_data: {val_data.data.shape}")
 
 
     model = lgb.train(
@@ -238,7 +238,30 @@ def evaluar_en_test(df, mejores_params) -> dict:
     # Entrenar modelo con mejores parámetros
     # ... Implementar entrenamiento y test con la logica de entrenamiento FINAL para mayor detalle
     # recordar realizar todos los df necesarios y utilizar lgb.train()
-  
+    # Cargar mejores parámetros
+
+    # Entrenar modelo con mejores parámetros
+
+    train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
+    test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
+
+    model = lgb.train(
+        mejores_params,
+        train_data,
+        #num_boost_round=1000,
+        valid_sets=[test_data],
+        feval=ganancia_lgb_binary,
+        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+    )
+
+    # Predecir en test
+    
+    X_test = df_test.drop(columns=['clase_ternaria'])
+    y_test = df_test['clase_ternaria'].values
+    y_pred_proba = model.predict(X_test)
+    y_pred_binary = (y_pred_proba >= UMBRAL).astype(int)  # Usar mismo umbral que en ganancia_lgb_binary
+
+
     # Calcular solo la ganancia
     ganancia_test = calcular_ganancia(y_test, y_pred_binary)
   

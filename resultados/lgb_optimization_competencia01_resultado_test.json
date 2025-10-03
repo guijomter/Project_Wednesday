@@ -1,0 +1,14 @@
+[
+  {
+    "ganancia_test": 957720000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17714,
+    "porcentaje_positivas": 10.839687182562509
+  },
+  {
+    "ganancia_test": 951260000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17837,
+    "porcentaje_positivas": 10.914954289001212
+  }
+]

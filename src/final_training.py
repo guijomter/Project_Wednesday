@@ -26,8 +26,13 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
     logger.info(f"Período de predicción: {FINAL_PREDIC}")
   
     # Datos de entrenamiento: todos los períodos en FINAL_TRAIN
-  
-    # Datos de predicción: período FINAL_PREDIC 
+
+    df_train = df[df['foto_mes'].astype(str).isin(FINAL_TRAIN)]
+
+    
+    # Datos de predicción: período FINAL_PREDIC
+
+    df_predict = df[df['foto_mes'].astype(str) == FINAL_PREDIC]
 
     logger.info(f"Registros de entrenamiento: {len(df_train):,}")
     logger.info(f"Registros de predicción: {len(df_predict):,}")
@@ -36,14 +41,21 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
 
     # Preparar features y target para entrenamiento
   
-    X_train 
-    y_train 
+    y_train = df_train['clase_ternaria'].values
+    X_train = df_train.drop(columns=['clase_ternaria'])
 
     # Preparar features para predicción
-    X_predict 
-    clientes_predict 
+    atributos = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos"]
+    cant_lag = 2
 
-    logger.info(f"Features utilizadas: {len(features_cols)}")
+    df_predict = feature_engineering_lag(df_predict, atributos, cant_lag)
+    logger.info(f"Feature Engineering completado sobre DF_predict: {df_predict.shape}")
+    
+    X_predict = df_predict.drop(columns=['clase_ternaria'])
+    
+    clientes_predict = df_predict['numero_cliente'].values
+
+    logger.info(f"Features utilizadas: {len(X_predict.columns):,}")
     logger.info(f"Distribución del target - 0: {(y_train == 0).sum():,}, 1: {(y_train == 1).sum():,}")
   
     return X_train, y_train, X_predict, clientes_predict
@@ -75,7 +87,19 @@ def entrenar_modelo_final(X_train: pd.DataFrame, y_train: pd.Series, mejores_par
   
     # Crear dataset de LightGBM
   
+    train_data = lgb.Dataset(X_train, label=y_train)
+  
+
     # Entrenar modelo con lgb.train()
+
+    modelo = lgb.train(
+        params, 
+        train_data,
+        valid_sets=None,
+        feval=ganancia_lgb_binary, 
+        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+    )
+
 
     return modelo
 

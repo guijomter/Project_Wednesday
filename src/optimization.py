@@ -63,8 +63,8 @@ def objetivo_ganancia(trial, df) -> float:
     
     df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
 
-    logger.info(f"Dimensiones df_train: {df_train.shape}, Dimensiones df_val: {df_val.shape}")
-    logger.info(f"Dimensiones df: {df.shape}")
+    # logger.info(f"Dimensiones df_train: {df_train.shape}, Dimensiones df_val: {df_val.shape}")
+    # logger.info(f"Dimensiones df: {df.shape}")
 
     # Usar target (con clase ternaria ya convertida a binaria)
     
@@ -232,8 +232,8 @@ def evaluar_en_test(df, mejores_params) -> dict:
     else:
         periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
   
-    df_train_completo = df[df['foto_mes'].isin(periodos_entrenamiento)]
-    df_test = df[df['foto_mes'] == MES_TEST]
+    df_train_completo = df[df['foto_mes'].astype(str).isin(periodos_entrenamiento)]
+    df_test = df[df['foto_mes'].astype(str) == MES_TEST]
   
     # Entrenar modelo con mejores parámetros
     # ... Implementar entrenamiento y test con la logica de entrenamiento FINAL para mayor detalle
@@ -241,9 +241,16 @@ def evaluar_en_test(df, mejores_params) -> dict:
     # Cargar mejores parámetros
 
     # Entrenar modelo con mejores parámetros
+    logger.info("Entrenando modelo con mejores hiperparámetros...")
+    logger.info(f'Dimensiones df_train_completo: {df_train_completo.shape}, Dimensiones df_test: {df_test.shape}')
+
+    # Preparar datasets
 
     train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
     test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
+  # chequeo si train_data y test_data estan bien formados
+    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de test_data: {type(test_data)}")
+    logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {test_data.data.shape}")
 
     model = lgb.train(
         mejores_params,
@@ -314,5 +321,5 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     with open(archivo, 'w') as f:
         json.dump(datos_existentes, f, indent=2)
   
-    logger.info(f"Iteración {trial.number} guardada en {archivo}")
+    #logger.info(f"Iteración {trial.number} guardada en {archivo}")
     logger.info(f"Ganancia: {resultados_test['ganancia_test']:,.0f}" + "---" + f"Total Predicciones positivas: {resultados_test['predicciones_positivas']:,.0f}")

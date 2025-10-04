@@ -1888,5 +1888,275 @@
       "mes_train": "202102",
       "mes_validacion": "202103"
     }
+  },
+  {
+    "trial_number": 0,
+    "params": {
+      "num_leaves": 160,
+      "learn_rate": 0.022069687490613183,
+      "feature_fraction": 0.6282618387632418,
+      "bagging_fraction": 0.4313631929021955,
+      "min_child_samples": 78,
+      "max_depth": 5,
+      "reg_lambda": 1.0263570653307608,
+      "reg_alpha": 1.9560015788429719
+    },
+    "value": 863160000.0,
+    "datetime": "2025-10-03T14:55:36.380580",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 1,
+    "params": {
+      "num_leaves": 71,
+      "learn_rate": 0.039442447432082264,
+      "feature_fraction": 0.7796886938506328,
+      "bagging_fraction": 0.6439316818024339,
+      "min_child_samples": 34,
+      "max_depth": 6,
+      "reg_lambda": 9.253738502425506,
+      "reg_alpha": 4.921945149520765
+    },
+    "value": 874220000.0,
+    "datetime": "2025-10-03T14:55:41.276527",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 2,
+    "params": {
+      "num_leaves": 28,
+      "learn_rate": 0.015556718637796037,
+      "feature_fraction": 0.558449351407484,
+      "bagging_fraction": 0.7083151398496881,
+      "min_child_samples": 66,
+      "max_depth": 12,
+      "reg_lambda": 2.825664280025779,
+      "reg_alpha": 6.742169349561481
+    },
+    "value": 830600000.0,
+    "datetime": "2025-10-03T14:55:45.196324",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 3,
+    "params": {
+      "num_leaves": 262,
+      "learn_rate": 0.0170838467756968,
+      "feature_fraction": 0.9196052413520361,
+      "bagging_fraction": 0.46426464273823587,
+      "min_child_samples": 55,
+      "max_depth": 6,
+      "reg_lambda": 2.5309813754619572,
+      "reg_alpha": 9.28269604412608
+    },
+    "value": 823280000.0,
+    "datetime": "2025-10-03T14:55:49.714537",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 4,
+    "params": {
+      "num_leaves": 218,
+      "learn_rate": 0.10843283260735086,
+      "feature_fraction": 0.40983160377394134,
+      "bagging_fraction": 0.797220400295908,
+      "min_child_samples": 18,
+      "max_depth": 15,
+      "reg_lambda": 8.35982328963073,
+      "reg_alpha": 4.8564029026374556
+    },
+    "value": 925020000.0,
+    "datetime": "2025-10-03T14:55:56.801443",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 0,
+    "params": {
+      "num_leaves": 187,
+      "learn_rate": 0.01932564391116057,
+      "feature_fraction": 0.44573625675824174,
+      "bagging_fraction": 0.7518270155543595,
+      "min_child_samples": 33,
+      "max_depth": 14,
+      "reg_lambda": 4.581989846551866,
+      "reg_alpha": 6.490322022876814
+    },
+    "value": 849800000.0,
+    "datetime": "2025-10-03T22:25:40.578696",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 1,
+    "params": {
+      "num_leaves": 175,
+      "learn_rate": 0.034857725082915576,
+      "feature_fraction": 0.5381066030453155,
+      "bagging_fraction": 0.7792760590635492,
+      "min_child_samples": 46,
+      "max_depth": 15,
+      "reg_lambda": 8.055071450564938,
+      "reg_alpha": 9.279816157038155
+    },
+    "value": 874780000.0,
+    "datetime": "2025-10-03T22:25:47.645283",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 2,
+    "params": {
+      "num_leaves": 63,
+      "learn_rate": 0.11414841761291172,
+      "feature_fraction": 0.8471187037731102,
+      "bagging_fraction": 0.7663994815981328,
+      "min_child_samples": 77,
+      "max_depth": 6,
+      "reg_lambda": 3.566852741049986,
+      "reg_alpha": 3.100202449934686
+    },
+    "value": 908840000.0,
+    "datetime": "2025-10-03T22:25:52.946151",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 3,
+    "params": {
+      "num_leaves": 72,
+      "learn_rate": 0.061263040284201355,
+      "feature_fraction": 0.8902113569471306,
+      "bagging_fraction": 0.8798696183807588,
+      "min_child_samples": 34,
+      "max_depth": 13,
+      "reg_lambda": 2.0420732817556484,
+      "reg_alpha": 3.8240380703853405
+    },
+    "value": 899780000.0,
+    "datetime": "2025-10-03T22:25:58.997505",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
+  },
+  {
+    "trial_number": 4,
+    "params": {
+      "num_leaves": 275,
+      "learn_rate": 0.11645288121130173,
+      "feature_fraction": 0.6021077036634281,
+      "bagging_fraction": 0.8775701143166564,
+      "min_child_samples": 55,
+      "max_depth": 12,
+      "reg_lambda": 5.607281138758901,
+      "reg_alpha": 2.6189081509077647
+    },
+    "value": 926800000.0,
+    "datetime": "2025-10-03T22:26:06.933715",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": [
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "mes_train": "202102",
+      "mes_validacion": "202103"
+    }
   }
 ]

@@ -41,19 +41,22 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
     #Corroborar que no esten vacios los df
 
     # Preparar features y target para entrenamiento
-  
-    y_train = df_train['clase_ternaria'].values
-    X_train = df_train.drop(columns=['clase_ternaria'])
-
+     
     # Preparar features para predicción
     atributos = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos"]
     cant_lag = 2
 
     df_predict = feature_engineering_lag(df_predict, atributos, cant_lag)
     logger.info(f"Feature Engineering completado sobre DF_predict: {df_predict.shape}")
-    
+
+    df_train  = feature_engineering_lag(df_train, atributos, cant_lag)
+    logger.info(f"Feature Engineering completado sobre DF_train: {df_train.shape}")
+
     X_predict = df_predict.drop(columns=['clase_ternaria'])
-    
+    X_train = df_train.drop(columns=['clase_ternaria'])
+
+    y_train = df_train['clase_ternaria'].values
+
     clientes_predict = df_predict['numero_de_cliente'].values
 
     logger.info(f"Features utilizadas: {len(X_predict.columns):,}")
@@ -130,7 +133,7 @@ def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, c
         'numero_de_cliente': clientes_predict,
         'predict': y_pred_binary
     })
-    
+
     # Estadísticas de predicciones
     total_predicciones = len(resultados)
     predicciones_positivas = (resultados['predict'] == 1).sum()

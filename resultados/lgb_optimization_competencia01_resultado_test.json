@@ -58,5 +58,11 @@
     "total_predicciones": 163418,
     "predicciones_positivas": 17765,
     "porcentaje_positivas": 10.870895494988313
+  },
+  {
+    "ganancia_test": 969860000.0,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17307,
+    "porcentaje_positivas": 10.590632610850701
   }
 ]

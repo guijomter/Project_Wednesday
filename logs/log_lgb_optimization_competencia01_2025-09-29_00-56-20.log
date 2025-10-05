@@ -1,0 +1,15 @@
+2025-09-29 00:56:20,185 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-09-29 00:56:20,185 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-09-29 00:56:29,492 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-09-29 00:56:29,492 - INFO - __name__ 27 - Realizando feature engineering con 2 lags para 3 atributos
+2025-09-29 00:56:34,575 - INFO - __name__ 57 - Feature engineering completado. DataFrame resultante con 161 columnas
+2025-09-29 00:56:34,575 - INFO - __main__ 46 - Feature Engineering completado: (978439, 161)
+2025-09-29 00:56:35,075 - INFO - __name__ 54 - Conversión completada:
+2025-09-29 00:56:35,075 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-09-29 00:56:35,076 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-09-29 00:56:35,076 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-09-29 00:56:35,193 - INFO - src.optimization 186 - Iniciando optimización con 5 trials
+2025-09-29 00:56:35,193 - INFO - src.optimization 187 - Configuración: TRAIN=202102, VALID=202103, SEMILLA=[12, 13, 14, 15, 16]
+2025-09-29 00:56:35,203 - INFO - src.optimization 82 - Dimensiones de X_train: (0, 160), Dimensiones de X_val: (0, 160)
+2025-09-29 00:56:35,203 - INFO - src.optimization 83 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de val_data: <class 'lightgbm.basic.Dataset'>
+2025-09-29 00:56:35,203 - INFO - src.optimization 84 - Dimensiones de train_data: (0, 160), Dimensiones de val_data: (0, 160)

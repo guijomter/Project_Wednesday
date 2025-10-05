@@ -1,0 +1,69 @@
+2025-09-29 01:13:49,742 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-09-29 01:13:49,743 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-09-29 01:13:58,969 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-09-29 01:13:58,970 - INFO - __name__ 27 - Realizando feature engineering con 2 lags para 3 atributos
+2025-09-29 01:14:04,014 - INFO - __name__ 57 - Feature engineering completado. DataFrame resultante con 161 columnas
+2025-09-29 01:14:04,015 - INFO - __main__ 46 - Feature Engineering completado: (978439, 161)
+2025-09-29 01:14:04,559 - INFO - __name__ 54 - Conversión completada:
+2025-09-29 01:14:04,560 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-09-29 01:14:04,560 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-09-29 01:14:04,560 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-09-29 01:14:04,677 - INFO - src.optimization 190 - Iniciando optimización con 5 trials
+2025-09-29 01:14:04,677 - INFO - src.optimization 191 - Configuración: TRAIN=202102, VALID=202103, SEMILLA=[12, 13, 14, 15, 16]
+2025-09-29 01:14:05,411 - INFO - src.optimization 66 - Dimensiones df_train: (162155, 161), Dimensiones df_val: (163109, 161)
+2025-09-29 01:14:05,412 - INFO - src.optimization 67 - Dimensiones df: (978439, 161)
+2025-09-29 01:14:05,568 - INFO - src.optimization 85 - Mes train: 202102, Mes validacion: 202103
+2025-09-29 01:14:05,569 - INFO - src.optimization 86 - Dimensiones de X_train: (162155, 160), Dimensiones de X_val: (163109, 160)
+2025-09-29 01:14:05,569 - INFO - src.optimization 87 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de val_data: <class 'lightgbm.basic.Dataset'>
+2025-09-29 01:14:05,569 - INFO - src.optimization 88 - Dimensiones de train_data: (162155, 160), Dimensiones de val_data: (163109, 160)
+2025-09-29 01:14:08,536 - INFO - src.optimization 164 - Iteración 0 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-09-29 01:14:08,536 - INFO - src.optimization 165 - Ganancia: 893,220,000---Parámetros: {params}
+2025-09-29 01:14:09,277 - INFO - src.optimization 66 - Dimensiones df_train: (162155, 161), Dimensiones df_val: (163109, 161)
+2025-09-29 01:14:09,278 - INFO - src.optimization 67 - Dimensiones df: (978439, 161)
+2025-09-29 01:14:09,415 - INFO - src.optimization 85 - Mes train: 202102, Mes validacion: 202103
+2025-09-29 01:14:09,416 - INFO - src.optimization 86 - Dimensiones de X_train: (162155, 160), Dimensiones de X_val: (163109, 160)
+2025-09-29 01:14:09,416 - INFO - src.optimization 87 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de val_data: <class 'lightgbm.basic.Dataset'>
+2025-09-29 01:14:09,416 - INFO - src.optimization 88 - Dimensiones de train_data: (162155, 160), Dimensiones de val_data: (163109, 160)
+2025-09-29 01:14:12,200 - INFO - src.optimization 164 - Iteración 1 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-09-29 01:14:12,200 - INFO - src.optimization 165 - Ganancia: 875,780,000---Parámetros: {params}
+2025-09-29 01:14:12,951 - INFO - src.optimization 66 - Dimensiones df_train: (162155, 161), Dimensiones df_val: (163109, 161)
+2025-09-29 01:14:12,952 - INFO - src.optimization 67 - Dimensiones df: (978439, 161)
+2025-09-29 01:14:13,084 - INFO - src.optimization 85 - Mes train: 202102, Mes validacion: 202103
+2025-09-29 01:14:13,084 - INFO - src.optimization 86 - Dimensiones de X_train: (162155, 160), Dimensiones de X_val: (163109, 160)
+2025-09-29 01:14:13,084 - INFO - src.optimization 87 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de val_data: <class 'lightgbm.basic.Dataset'>
+2025-09-29 01:14:13,085 - INFO - src.optimization 88 - Dimensiones de train_data: (162155, 160), Dimensiones de val_data: (163109, 160)
+2025-09-29 01:14:16,100 - INFO - src.optimization 164 - Iteración 2 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-09-29 01:14:16,100 - INFO - src.optimization 165 - Ganancia: 870,240,000---Parámetros: {params}
+2025-09-29 01:14:16,861 - INFO - src.optimization 66 - Dimensiones df_train: (162155, 161), Dimensiones df_val: (163109, 161)
+2025-09-29 01:14:16,861 - INFO - src.optimization 67 - Dimensiones df: (978439, 161)
+2025-09-29 01:14:16,999 - INFO - src.optimization 85 - Mes train: 202102, Mes validacion: 202103
+2025-09-29 01:14:16,999 - INFO - src.optimization 86 - Dimensiones de X_train: (162155, 160), Dimensiones de X_val: (163109, 160)
+2025-09-29 01:14:16,999 - INFO - src.optimization 87 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de val_data: <class 'lightgbm.basic.Dataset'>
+2025-09-29 01:14:16,999 - INFO - src.optimization 88 - Dimensiones de train_data: (162155, 160), Dimensiones de val_data: (163109, 160)
+2025-09-29 01:14:20,200 - INFO - src.optimization 164 - Iteración 3 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-09-29 01:14:20,200 - INFO - src.optimization 165 - Ganancia: 896,940,000---Parámetros: {params}
+2025-09-29 01:14:20,944 - INFO - src.optimization 66 - Dimensiones df_train: (162155, 161), Dimensiones df_val: (163109, 161)
+2025-09-29 01:14:20,945 - INFO - src.optimization 67 - Dimensiones df: (978439, 161)
+2025-09-29 01:14:21,079 - INFO - src.optimization 85 - Mes train: 202102, Mes validacion: 202103
+2025-09-29 01:14:21,079 - INFO - src.optimization 86 - Dimensiones de X_train: (162155, 160), Dimensiones de X_val: (163109, 160)
+2025-09-29 01:14:21,079 - INFO - src.optimization 87 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de val_data: <class 'lightgbm.basic.Dataset'>
+2025-09-29 01:14:21,079 - INFO - src.optimization 88 - Dimensiones de train_data: (162155, 160), Dimensiones de val_data: (163109, 160)
+2025-09-29 01:14:24,844 - INFO - src.optimization 164 - Iteración 4 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-09-29 01:14:24,844 - INFO - src.optimization 165 - Ganancia: 900,140,000---Parámetros: {params}
+2025-09-29 01:14:24,912 - INFO - src.optimization 206 - Mejor ganancia: 900,140,000
+2025-09-29 01:14:24,913 - INFO - src.optimization 207 - Mejores parámetros: {'num_leaves': 238, 'learn_rate': 0.19145011461914177, 'feature_fraction': 0.9479027930787967, 'bagging_fraction': 0.6328395299052232, 'min_child_samples': 15, 'max_depth': 6, 'reg_lambda': 2.2753040756692866, 'reg_alpha': 6.685610053494675}
+2025-09-29 01:14:24,913 - INFO - __main__ 55 - === ANÁLISIS DE RESULTADOS ===
+2025-09-29 01:14:24,917 - INFO - __main__ 59 - Top 5 mejores trials:
+2025-09-29 01:14:24,918 - INFO - __main__ 61 -   Trial 4: 900,140,000
+2025-09-29 01:14:24,918 - INFO - __main__ 61 -   Trial 3: 896,940,000
+2025-09-29 01:14:24,918 - INFO - __main__ 61 -   Trial 0: 893,220,000
+2025-09-29 01:14:24,918 - INFO - __main__ 61 -   Trial 1: 875,780,000
+2025-09-29 01:14:24,919 - INFO - __main__ 61 -   Trial 2: 870,240,000
+2025-09-29 01:14:24,919 - INFO - __main__ 63 - === OPTIMIZACIÓN COMPLETADA ===
+2025-09-29 01:14:24,919 - INFO - __main__ 66 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-09-29 01:14:24,920 - INFO - src.best_params 34 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_competencia01_iteraciones.json
+2025-09-29 01:14:24,920 - INFO - src.best_params 35 - Mejor ganancia encontrada: 921,600,000
+2025-09-29 01:14:24,920 - INFO - src.best_params 36 - Trial número: 0
+2025-09-29 01:14:24,921 - INFO - src.best_params 37 - Parámetros: {'num_leaves': 141, 'learn_rate': 0.13034266750081833, 'feature_fraction': 0.9798862049159224, 'bagging_fraction': 0.5939661898614075, 'min_child_samples': 92, 'max_depth': 13, 'reg_lambda': 9.143322363391258, 'reg_alpha': 1.18715072108721}
+2025-09-29 01:14:24,921 - INFO - src.optimization 226 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-09-29 01:14:24,921 - INFO - src.optimization 227 - Período de test: 202104

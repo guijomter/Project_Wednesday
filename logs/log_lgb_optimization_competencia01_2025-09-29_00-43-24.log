@@ -1,0 +1,12 @@
+2025-09-29 00:43:24,619 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-09-29 00:43:24,619 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-09-29 00:43:38,452 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-09-29 00:43:38,452 - INFO - __name__ 27 - Realizando feature engineering con 2 lags para 3 atributos
+2025-09-29 00:43:45,494 - INFO - __name__ 57 - Feature engineering completado. DataFrame resultante con 161 columnas
+2025-09-29 00:43:45,495 - INFO - __main__ 46 - Feature Engineering completado: (978439, 161)
+2025-09-29 00:43:46,299 - INFO - __name__ 54 - Conversión completada:
+2025-09-29 00:43:46,299 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-09-29 00:43:46,300 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-09-29 00:43:46,300 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-09-29 00:43:46,483 - INFO - src.optimization 181 - Iniciando optimización con 5 trials
+2025-09-29 00:43:46,484 - INFO - src.optimization 182 - Configuración: TRAIN=202102, VALID=202103, SEMILLA=[12, 13, 14, 15, 16]

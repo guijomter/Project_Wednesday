@@ -54,7 +54,7 @@ def ganancia_lgb_binary(y_pred, y_true):
     # Obtener labels verdaderos
     y_true_labels = y_true.get_label()
   
-    # Convertir probabilidades a predicciones binarias (umbral 0.5)
+    # Convertir probabilidades a predicciones binarias (umbral 0.025)
     y_pred_binary = (y_pred > UMBRAL).astype(int)
   
     # Calcular ganancia usando configuración

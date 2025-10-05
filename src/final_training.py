@@ -8,7 +8,7 @@ from datetime import datetime
 from .config import *
 from .best_params import cargar_mejores_hiperparametros
 from .gain_function import ganancia_lgb_binary
-from .features import feature_engineering_lag
+from .features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses
 
 logger = logging.getLogger(__name__)
 
@@ -43,15 +43,42 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
     # Preparar features y target para entrenamiento
      
     # Preparar features para predicción
-    atributos = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos"]
-    cant_lag = 2
+    # atributos = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos"]
+    # cant_lag = 2
 
-    df_predict = feature_engineering_lag(df_predict, atributos, cant_lag)
+    # df_predict = feature_engineering_lag(df_predict, atributos, cant_lag)
+    # logger.info(f"Feature Engineering completado sobre DF_predict: {df_predict.shape}")
+
+    # df_train  = feature_engineering_lag(df_train, atributos, cant_lag)
+    # logger.info(f"Feature Engineering completado sobre DF_train: {df_train.shape}")
+
+    atributos_lag = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mcuenta_corriente']
+    cant_lag = 2
+    atributos_perc = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mpayroll','mactivos_margen','mpasivos_margen','matm','matm_other','mcuenta_corriente','mcaja_ahorro']
+    
+    meses_min_max = 3
+    atributos_max = ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
+
+    #atributos_min = []
+    
+    df_predict = feature_engineering_lag(df_predict, atributos_lag, cant_lag)
+        
+    df_predict= feature_engineering_percentil(df_predict, atributos_perc)
+
+    df_predict = feature_engineering_max_ultimos_n_meses(df_predict, atributos_max, meses_min_max )
     logger.info(f"Feature Engineering completado sobre DF_predict: {df_predict.shape}")
 
-    df_train  = feature_engineering_lag(df_train, atributos, cant_lag)
+    df_train = feature_engineering_lag(df_train, atributos_lag, cant_lag)
+        
+    df_train= feature_engineering_percentil(df_train, atributos_perc)
+
+    df_train = feature_engineering_max_ultimos_n_meses(df_train, atributos_max, meses_min_max )
     logger.info(f"Feature Engineering completado sobre DF_train: {df_train.shape}")
 
+
+
+
+################################################
     X_predict = df_predict.drop(columns=['clase_ternaria'])
     X_train = df_train.drop(columns=['clase_ternaria'])
 

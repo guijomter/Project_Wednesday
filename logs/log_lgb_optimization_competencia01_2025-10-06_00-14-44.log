@@ -1,0 +1,141 @@
+2025-10-06 00:14:44,124 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-10-06 00:14:44,125 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-06 00:14:54,385 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-06 00:14:54,754 - INFO - __name__ 30 - Realizando feature engineering con 2 lags para 1 atributos
+2025-10-06 00:15:01,050 - INFO - __name__ 60 - Feature engineering completado. DataFrame resultante con 157 columnas
+2025-10-06 00:15:01,123 - INFO - __name__ 506 - Operación 'lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_lag_1', 'mcuentas_saldo_lag_2']
+2025-10-06 00:15:01,124 - INFO - __name__ 84 - Realizando feature engineering de delta lag con 1 lags para 1 atributos
+2025-10-06 00:15:07,080 - INFO - __name__ 115 - Feature engineering de delta lag completado. DataFrame resultante con 158 columnas
+2025-10-06 00:15:07,213 - INFO - __name__ 510 - Operación 'delta_lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_delta_lag_1']
+2025-10-06 00:15:07,214 - INFO - __name__ 138 - Realizando feature engineering con percentiles para 1 atributos
+2025-10-06 00:15:13,507 - INFO - __name__ 167 - Feature engineering completado. DataFrame resultante con 159 columnas
+2025-10-06 00:15:13,639 - INFO - __name__ 513 - Operación 'percentil' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_percentil']
+2025-10-06 00:15:13,639 - INFO - __name__ 193 - Realizando feature engineering con máximo de los últimos 3 meses para 9 atributos
+2025-10-06 00:15:20,238 - INFO - __name__ 227 - Feature engineering completado. DataFrame resultante con 168 columnas
+2025-10-06 00:15:20,387 - INFO - __name__ 517 - Operación 'max' aplicada. Nombre de nuevas variables: ['mrentabilidad_max_ult_3m', 'mactivos_margen_max_ult_3m', 'mcomisiones_mantenimiento_max_ult_3m', 'mcuentas_saldo_max_ult_3m', 'mtarjeta_visa_consumo_max_ult_3m', 'mtarjeta_master_consumo_max_ult_3m', 'mpasivos_margen_max_ult_3m', 'mttarjeta_visa_debitos_automaticos_max_ult_3m', 'mttarjeta_master_debitos_automaticos_max_ult_3m']
+2025-10-06 00:15:20,387 - INFO - __name__ 251 - Realizando feature engineering con mínimo de los últimos 2 meses para 9 atributos
+2025-10-06 00:15:27,896 - INFO - __name__ 285 - Feature engineering completado. DataFrame resultante con 177 columnas
+2025-10-06 00:15:28,054 - INFO - __name__ 521 - Operación 'min' aplicada. Nombre de nuevas variables: ['mrentabilidad_min_ult_2m', 'mactivos_margen_min_ult_2m', 'mcomisiones_mantenimiento_min_ult_2m', 'mcuentas_saldo_min_ult_2m', 'mtarjeta_visa_consumo_min_ult_2m', 'mtarjeta_master_consumo_min_ult_2m', 'mpasivos_margen_min_ult_2m', 'mttarjeta_visa_debitos_automaticos_min_ult_2m', 'mttarjeta_master_debitos_automaticos_min_ult_2m']
+2025-10-06 00:15:28,055 - INFO - __name__ 306 - Realizando feature engineering de ratios para 2 combinaciones
+2025-10-06 00:15:31,864 - INFO - __name__ 334 - Feature engineering de ratios completado. DataFrame resultante con 179 columnas
+2025-10-06 00:15:31,992 - INFO - __name__ 493 - Operación 'ratios' aplicada. Nombre de nuevas variables: ['prop_rentabilidad_anual', 'monto_promedio_transferencias_emitidas']
+2025-10-06 00:15:31,993 - INFO - __main__ 61 - Feature Engineering completado: (978439, 179)
+2025-10-06 00:15:32,650 - INFO - __name__ 54 - Conversión completada:
+2025-10-06 00:15:32,651 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-06 00:15:32,651 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-10-06 00:15:32,652 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-10-06 00:15:32,724 - INFO - src.optimization 190 - Iniciando optimización con 5 trials
+2025-10-06 00:15:32,724 - INFO - src.optimization 191 - Configuración: TRAIN=202102, VALID=202103, SEMILLA=[839071, 666557, 390653, 408341, 858577]
+2025-10-06 00:15:38,200 - INFO - src.optimization 164 - Iteración 0 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 00:15:38,200 - INFO - src.optimization 165 - Ganancia: 908,620,000---Parámetros: {params}
+2025-10-06 00:15:45,417 - INFO - src.optimization 164 - Iteración 1 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 00:15:45,417 - INFO - src.optimization 165 - Ganancia: 923,360,000---Parámetros: {params}
+2025-10-06 00:15:52,303 - INFO - src.optimization 164 - Iteración 2 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 00:15:52,303 - INFO - src.optimization 165 - Ganancia: 938,120,000---Parámetros: {params}
+2025-10-06 00:15:58,590 - INFO - src.optimization 164 - Iteración 3 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 00:15:58,590 - INFO - src.optimization 165 - Ganancia: 833,120,000---Parámetros: {params}
+2025-10-06 00:16:05,329 - INFO - src.optimization 164 - Iteración 4 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 00:16:05,329 - INFO - src.optimization 165 - Ganancia: 908,240,000---Parámetros: {params}
+2025-10-06 00:16:05,395 - INFO - src.optimization 206 - Mejor ganancia: 938,120,000
+2025-10-06 00:16:05,396 - INFO - src.optimization 207 - Mejores parámetros: {'num_leaves': 69, 'learn_rate': 0.11567954004782814, 'feature_fraction': 0.7554291054986113, 'bagging_fraction': 0.8298474463496895, 'min_child_samples': 95, 'max_depth': 14, 'reg_lambda': 0.9715550621553926, 'reg_alpha': 6.337191146377079}
+2025-10-06 00:16:05,396 - INFO - __main__ 70 - === ANÁLISIS DE RESULTADOS ===
+2025-10-06 00:16:05,423 - INFO - __main__ 74 - Top 5 mejores trials:
+2025-10-06 00:16:05,426 - INFO - __main__ 76 -   Trial 2: 938,120,000
+2025-10-06 00:16:05,426 - INFO - __main__ 76 -   Trial 1: 923,360,000
+2025-10-06 00:16:05,427 - INFO - __main__ 76 -   Trial 0: 908,620,000
+2025-10-06 00:16:05,427 - INFO - __main__ 76 -   Trial 4: 908,240,000
+2025-10-06 00:16:05,428 - INFO - __main__ 76 -   Trial 3: 833,120,000
+2025-10-06 00:16:05,428 - INFO - __main__ 78 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-06 00:16:05,428 - INFO - __main__ 81 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-06 00:16:05,431 - INFO - src.best_params 34 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 00:16:05,431 - INFO - src.best_params 35 - Mejor ganancia encontrada: 938,120,000
+2025-10-06 00:16:05,432 - INFO - src.best_params 36 - Trial número: 2
+2025-10-06 00:16:05,433 - INFO - src.best_params 37 - Parámetros: {'num_leaves': 69, 'learn_rate': 0.11567954004782814, 'feature_fraction': 0.7554291054986113, 'bagging_fraction': 0.8298474463496895, 'min_child_samples': 95, 'max_depth': 14, 'reg_lambda': 0.9715550621553926, 'reg_alpha': 6.337191146377079}
+2025-10-06 00:16:05,433 - INFO - src.optimization 226 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-06 00:16:05,433 - INFO - src.optimization 227 - Período de test: 202104
+2025-10-06 00:16:06,464 - INFO - src.optimization 244 - Entrenando modelo con mejores hiperparámetros...
+2025-10-06 00:16:06,465 - INFO - src.optimization 245 - Dimensiones df_train_completo: (325264, 179), Dimensiones df_test: (163418, 179)
+2025-10-06 00:16:06,666 - INFO - src.optimization 252 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de test_data: <class 'lightgbm.basic.Dataset'>
+2025-10-06 00:16:06,667 - INFO - src.optimization 253 - Dimensiones de train_data: (325264, 178), Dimensiones de test_data: (163418, 178)
+2025-10-06 00:16:13,445 - INFO - src.optimization 325 - Ganancia: 977,940,000---Total Predicciones positivas: 15,743
+2025-10-06 00:16:13,446 - INFO - __main__ 92 - === RESUMEN DE EVALUACIÓN EN TEST ===
+2025-10-06 00:16:13,446 - INFO - __main__ 93 - ✅ Ganancia en test: 977,940,000
+2025-10-06 00:16:13,447 - INFO - __main__ 94 - 🎯 Predicciones positivas: 15,743 (9.63%)
+2025-10-06 00:16:13,447 - INFO - __main__ 98 - === ENTRENAMIENTO FINAL ===
+2025-10-06 00:16:13,447 - INFO - __main__ 99 - Preparar datos para entrenamiento final
+2025-10-06 00:16:13,447 - INFO - src.final_training 25 - Preparando datos para entrenamiento final
+2025-10-06 00:16:13,448 - INFO - src.final_training 26 - Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-06 00:16:13,448 - INFO - src.final_training 27 - Período de predicción: 202106
+2025-10-06 00:16:14,532 - INFO - src.final_training 38 - Registros de entrenamiento: 650,209
+2025-10-06 00:16:14,532 - INFO - src.final_training 39 - Registros de predicción: 164,313
+2025-10-06 00:16:14,703 - INFO - __name__ 30 - Realizando feature engineering con 2 lags para 1 atributos
+2025-10-06 00:16:16,857 - INFO - __name__ 60 - Feature engineering completado. DataFrame resultante con 181 columnas
+2025-10-06 00:16:16,871 - INFO - __name__ 506 - Operación 'lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_lag_1', 'mcuentas_saldo_lag_2']
+2025-10-06 00:16:16,871 - INFO - __name__ 84 - Realizando feature engineering de delta lag con 1 lags para 1 atributos
+2025-10-06 00:16:18,835 - INFO - __name__ 115 - Feature engineering de delta lag completado. DataFrame resultante con 182 columnas
+2025-10-06 00:16:18,849 - INFO - __name__ 510 - Operación 'delta_lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_delta_lag_1']
+2025-10-06 00:16:18,850 - INFO - __name__ 138 - Realizando feature engineering con percentiles para 1 atributos
+2025-10-06 00:16:21,203 - INFO - __name__ 167 - Feature engineering completado. DataFrame resultante con 183 columnas
+2025-10-06 00:16:21,221 - INFO - __name__ 513 - Operación 'percentil' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_percentil']
+2025-10-06 00:16:21,222 - INFO - __name__ 193 - Realizando feature engineering con máximo de los últimos 3 meses para 9 atributos
+2025-10-06 00:16:23,286 - INFO - __name__ 227 - Feature engineering completado. DataFrame resultante con 192 columnas
+2025-10-06 00:16:23,302 - INFO - __name__ 517 - Operación 'max' aplicada. Nombre de nuevas variables: ['mrentabilidad_max_ult_3m', 'mactivos_margen_max_ult_3m', 'mcomisiones_mantenimiento_max_ult_3m', 'mcuentas_saldo_max_ult_3m', 'mtarjeta_visa_consumo_max_ult_3m', 'mtarjeta_master_consumo_max_ult_3m', 'mpasivos_margen_max_ult_3m', 'mttarjeta_visa_debitos_automaticos_max_ult_3m', 'mttarjeta_master_debitos_automaticos_max_ult_3m']
+2025-10-06 00:16:23,302 - INFO - __name__ 251 - Realizando feature engineering con mínimo de los últimos 2 meses para 9 atributos
+2025-10-06 00:16:25,473 - INFO - __name__ 285 - Feature engineering completado. DataFrame resultante con 201 columnas
+2025-10-06 00:16:25,488 - INFO - __name__ 521 - Operación 'min' aplicada. Nombre de nuevas variables: ['mrentabilidad_min_ult_2m', 'mactivos_margen_min_ult_2m', 'mcomisiones_mantenimiento_min_ult_2m', 'mcuentas_saldo_min_ult_2m', 'mtarjeta_visa_consumo_min_ult_2m', 'mtarjeta_master_consumo_min_ult_2m', 'mpasivos_margen_min_ult_2m', 'mttarjeta_visa_debitos_automaticos_min_ult_2m', 'mttarjeta_master_debitos_automaticos_min_ult_2m']
+2025-10-06 00:16:25,489 - INFO - __name__ 306 - Realizando feature engineering de ratios para 2 combinaciones
+2025-10-06 00:16:26,511 - INFO - __name__ 334 - Feature engineering de ratios completado. DataFrame resultante con 203 columnas
+2025-10-06 00:16:26,524 - INFO - __name__ 493 - Operación 'ratios' aplicada. Nombre de nuevas variables: ['prop_rentabilidad_anual', 'monto_promedio_transferencias_emitidas']
+2025-10-06 00:16:26,535 - INFO - src.final_training 48 - Feature Engineering completado sobre DF_predict: (164313, 203)
+2025-10-06 00:16:27,318 - INFO - __name__ 30 - Realizando feature engineering con 2 lags para 1 atributos
+2025-10-06 00:16:36,351 - INFO - __name__ 60 - Feature engineering completado. DataFrame resultante con 181 columnas
+2025-10-06 00:16:36,458 - INFO - __name__ 506 - Operación 'lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_lag_1', 'mcuentas_saldo_lag_2']
+2025-10-06 00:16:36,459 - INFO - __name__ 84 - Realizando feature engineering de delta lag con 1 lags para 1 atributos
+2025-10-06 00:16:45,604 - INFO - __name__ 115 - Feature engineering de delta lag completado. DataFrame resultante con 182 columnas
+2025-10-06 00:16:45,745 - INFO - __name__ 510 - Operación 'delta_lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_delta_lag_1']
+2025-10-06 00:16:45,746 - INFO - __name__ 138 - Realizando feature engineering con percentiles para 1 atributos
+2025-10-06 00:16:56,112 - INFO - __name__ 167 - Feature engineering completado. DataFrame resultante con 183 columnas
+2025-10-06 00:16:56,186 - INFO - __name__ 513 - Operación 'percentil' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_percentil']
+2025-10-06 00:16:56,186 - INFO - __name__ 193 - Realizando feature engineering con máximo de los últimos 3 meses para 9 atributos
+2025-10-06 00:17:08,090 - INFO - __name__ 227 - Feature engineering completado. DataFrame resultante con 192 columnas
+2025-10-06 00:17:08,207 - INFO - __name__ 517 - Operación 'max' aplicada. Nombre de nuevas variables: ['mrentabilidad_max_ult_3m', 'mactivos_margen_max_ult_3m', 'mcomisiones_mantenimiento_max_ult_3m', 'mcuentas_saldo_max_ult_3m', 'mtarjeta_visa_consumo_max_ult_3m', 'mtarjeta_master_consumo_max_ult_3m', 'mpasivos_margen_max_ult_3m', 'mttarjeta_visa_debitos_automaticos_max_ult_3m', 'mttarjeta_master_debitos_automaticos_max_ult_3m']
+2025-10-06 00:17:08,207 - INFO - __name__ 251 - Realizando feature engineering con mínimo de los últimos 2 meses para 9 atributos
+2025-10-06 00:17:18,396 - INFO - __name__ 285 - Feature engineering completado. DataFrame resultante con 201 columnas
+2025-10-06 00:17:18,496 - INFO - __name__ 521 - Operación 'min' aplicada. Nombre de nuevas variables: ['mrentabilidad_min_ult_2m', 'mactivos_margen_min_ult_2m', 'mcomisiones_mantenimiento_min_ult_2m', 'mcuentas_saldo_min_ult_2m', 'mtarjeta_visa_consumo_min_ult_2m', 'mtarjeta_master_consumo_min_ult_2m', 'mpasivos_margen_min_ult_2m', 'mttarjeta_visa_debitos_automaticos_min_ult_2m', 'mttarjeta_master_debitos_automaticos_min_ult_2m']
+2025-10-06 00:17:18,497 - INFO - __name__ 306 - Realizando feature engineering de ratios para 2 combinaciones
+2025-10-06 00:17:22,119 - INFO - __name__ 334 - Feature engineering de ratios completado. DataFrame resultante con 203 columnas
+2025-10-06 00:17:22,206 - INFO - __name__ 493 - Operación 'ratios' aplicada. Nombre de nuevas variables: ['prop_rentabilidad_anual', 'monto_promedio_transferencias_emitidas']
+2025-10-06 00:17:22,242 - INFO - src.final_training 51 - Feature Engineering completado sobre DF_train: (650209, 203)
+2025-10-06 00:17:22,891 - INFO - src.final_training 64 - Features utilizadas: 202
+2025-10-06 00:17:22,898 - INFO - src.final_training 65 - Distribución del target - 0: 642,830, 1: 7,379
+2025-10-06 00:17:22,937 - INFO - __main__ 103 - Entrenar modelo final
+2025-10-06 00:17:22,937 - INFO - src.final_training 81 - Iniciando entrenamiento del modelo final
+2025-10-06 00:17:22,938 - INFO - src.final_training 92 - Parámetros del modelo: {'objective': 'binary', 'metric': 'None', 'random_state': 839071, 'verbose': -1, 'num_leaves': 69, 'learn_rate': 0.11567954004782814, 'feature_fraction': 0.7554291054986113, 'bagging_fraction': 0.8298474463496895, 'min_child_samples': 95, 'max_depth': 14, 'reg_lambda': 0.9715550621553926, 'reg_alpha': 6.337191146377079}
+2025-10-06 00:17:38,769 - INFO - src.final_training 109 - Entrenamiento del modelo final completado
+2025-10-06 00:17:38,788 - INFO - __main__ 107 - Generar predicciones finales
+2025-10-06 00:17:38,788 - INFO - src.final_training 125 - Generando predicciones finales
+2025-10-06 00:17:39,104 - INFO - src.final_training 144 - Predicciones generadas:
+2025-10-06 00:17:39,105 - INFO - src.final_training 145 -   Total clientes: 164,313
+2025-10-06 00:17:39,105 - INFO - src.final_training 146 -   Predicciones positivas: 12,191 (7.42%)
+2025-10-06 00:17:39,105 - INFO - src.final_training 147 -   Predicciones negativas: 152,122
+2025-10-06 00:17:39,106 - INFO - src.final_training 148 -   Umbral utilizado: 0.025
+2025-10-06 00:17:39,106 - INFO - __main__ 111 - Guardar predicciones
+2025-10-06 00:17:39,236 - INFO - src.output_manager 42 - Predicciones guardadas en: predict/lgb_optimization_competencia01_20251006_001739.csv
+2025-10-06 00:17:39,236 - INFO - src.output_manager 43 - Formato del archivo:
+2025-10-06 00:17:39,237 - INFO - src.output_manager 44 -   Columnas: ['numero_de_cliente', 'predict']
+2025-10-06 00:17:39,237 - INFO - src.output_manager 45 -   Registros: 164,313
+2025-10-06 00:17:39,237 - INFO - src.output_manager 46 -   Primeras filas:
+2025-10-06 00:17:39,247 - INFO - src.output_manager 47 -    numero_de_cliente  predict
+0          249302860        0
+1          249363168        0
+2          249378334        0
+3          249427711        0
+4          249509684        0
+2025-10-06 00:17:39,248 - INFO - __main__ 115 - === RESUMEN FINAL ===
+2025-10-06 00:17:39,248 - INFO - __main__ 116 - ✅ Entrenamiento final completado exitosamente
+2025-10-06 00:17:39,248 - INFO - __main__ 117 - 📊 Mejores hiperparámetros utilizados: {'num_leaves': 69, 'learn_rate': 0.11567954004782814, 'feature_fraction': 0.7554291054986113, 'bagging_fraction': 0.8298474463496895, 'min_child_samples': 95, 'max_depth': 14, 'reg_lambda': 0.9715550621553926, 'reg_alpha': 6.337191146377079}
+2025-10-06 00:17:39,249 - INFO - __main__ 118 - 🎯 Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-06 00:17:39,249 - INFO - __main__ 119 - 🔮 Período de predicción: 202106
+2025-10-06 00:17:39,250 - INFO - __main__ 120 - 📁 Archivo de salida: predict/lgb_optimization_competencia01_20251006_001739.csv
+2025-10-06 00:17:39,250 - INFO - __main__ 121 - 📝 Log detallado: logs/log_lgb_optimization_competencia01_2025-10-06_00-14-44.log
+2025-10-06 00:17:39,250 - INFO - __main__ 124 - >>> Ejecución finalizada. Revisar logs para mas detalles.

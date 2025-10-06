@@ -38,10 +38,10 @@ def dict_to_namespace(d):
     else:
         return d
 
-def load_yaml_config():
+def load_yaml_config(file_path=PATH_CONFIG):
     """Carga el YAML y devuelve un único objeto con acceso por puntos."""
     try:
-        with open(PATH_CONFIG, "r") as f:
+        with open(file_path, "r") as f:
             config_data = yaml.safe_load(f)
 
         # Convertir todo el diccionario a un objeto con acceso por puntos
@@ -57,7 +57,7 @@ def load_yaml_config():
         raise
 
 # Cargar configuración automáticamente al importar el módulo
-conf = load_yaml_config()
+conf = load_yaml_config(PATH_CONFIG)
 
 ## Disponibilizar variables globales de la competencia01 para acceso directo (no hace falta poner conf.competencia01. delante)
 cfg = conf.competencia01

@@ -1,0 +1,19 @@
+2025-10-05 23:56:04,976 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-10-05 23:56:04,977 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-05 23:56:15,455 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-05 23:56:15,817 - INFO - __name__ 30 - Realizando feature engineering con 2 lags para 1 atributos
+2025-10-05 23:56:22,344 - INFO - __name__ 60 - Feature engineering completado. DataFrame resultante con 157 columnas
+2025-10-05 23:56:22,402 - INFO - __name__ 439 - Operación 'lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_lag_1', 'mcuentas_saldo_lag_2']
+2025-10-05 23:56:22,403 - INFO - __name__ 84 - Realizando feature engineering de delta lag con 1 lags para 1 atributos
+2025-10-05 23:56:28,742 - INFO - __name__ 115 - Feature engineering de delta lag completado. DataFrame resultante con 158 columnas
+2025-10-05 23:56:28,870 - INFO - __name__ 443 - Operación 'delta_lag' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_delta_lag_1']
+2025-10-05 23:56:28,870 - INFO - __name__ 138 - Realizando feature engineering con percentiles para 1 atributos
+2025-10-05 23:56:35,548 - INFO - __name__ 167 - Feature engineering completado. DataFrame resultante con 159 columnas
+2025-10-05 23:56:35,701 - INFO - __name__ 446 - Operación 'percentil' aplicada. Nombre de nuevas variables: ['mcuentas_saldo_percentil']
+2025-10-05 23:56:35,702 - INFO - __name__ 193 - Realizando feature engineering con máximo de los últimos 3 meses para 9 atributos
+2025-10-05 23:56:42,765 - INFO - __name__ 227 - Feature engineering completado. DataFrame resultante con 168 columnas
+2025-10-05 23:56:42,925 - INFO - __name__ 450 - Operación 'max' aplicada. Nombre de nuevas variables: ['mrentabilidad_max_ult_3m', 'mactivos_margen_max_ult_3m', 'mcomisiones_mantenimiento_max_ult_3m', 'mcuentas_saldo_max_ult_3m', 'mtarjeta_visa_consumo_max_ult_3m', 'mtarjeta_master_consumo_max_ult_3m', 'mpasivos_margen_max_ult_3m', 'mttarjeta_visa_debitos_automaticos_max_ult_3m', 'mttarjeta_master_debitos_automaticos_max_ult_3m']
+2025-10-05 23:56:42,926 - INFO - __name__ 251 - Realizando feature engineering con mínimo de los últimos 2 meses para 9 atributos
+2025-10-05 23:56:50,666 - INFO - __name__ 285 - Feature engineering completado. DataFrame resultante con 177 columnas
+2025-10-05 23:56:50,807 - INFO - __name__ 454 - Operación 'min' aplicada. Nombre de nuevas variables: ['mrentabilidad_min_ult_2m', 'mactivos_margen_min_ult_2m', 'mcomisiones_mantenimiento_min_ult_2m', 'mcuentas_saldo_min_ult_2m', 'mtarjeta_visa_consumo_min_ult_2m', 'mtarjeta_master_consumo_min_ult_2m', 'mpasivos_margen_min_ult_2m', 'mttarjeta_visa_debitos_automaticos_min_ult_2m', 'mttarjeta_master_debitos_automaticos_min_ult_2m']
+2025-10-05 23:56:50,807 - INFO - __name__ 306 - Realizando feature engineering de ratios para 1 combinaciones

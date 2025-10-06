@@ -1,0 +1,5 @@
+2025-10-05 23:12:44,506 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-10-05 23:12:44,508 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-05 23:12:54,665 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-05 23:12:54,990 - INFO - __name__ 371 - Se generarán un total de 5 nuevas columnas según la configuración para la competencia 'competencia01'.
+2025-10-05 23:12:54,990 - INFO - __name__ 30 - Realizando feature engineering con 1 lags para 1 atributos

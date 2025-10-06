@@ -5,7 +5,7 @@ import datetime
 import logging
 
 from src.loader import cargar_datos, convertir_clase_ternaria_a_target
-from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses
+from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
 from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test
 from src.best_params import cargar_mejores_hiperparametros
 from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final
@@ -40,21 +40,23 @@ def main():
     df = cargar_datos(DATA_PATH)   
 
     #01 Feature Engineering
-    atributos_lag = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mcuenta_corriente']
-    cant_lag = 2
-    atributos_perc = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mpayroll','mactivos_margen','mpasivos_margen','matm','matm_other','mcuenta_corriente','mcaja_ahorro']
+    # atributos_lag = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mcuenta_corriente']
+    # cant_lag = 2
+    # atributos_perc = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mpayroll','mactivos_margen','mpasivos_margen','matm','matm_other','mcuenta_corriente','mcaja_ahorro']
     
-    meses_min_max = 3
-    atributos_max = ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
+    # meses_min_max = 3
+    # atributos_max = ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
 
     #atributos_min = []
     
-    df_fe = feature_engineering_lag(df, atributos_lag, cant_lag)
+    # df_fe = feature_engineering_lag(df, atributos_lag, cant_lag)
         
-    df_fe= feature_engineering_percentil(df_fe, atributos_perc)
+    # df_fe= feature_engineering_percentil(df_fe, atributos_perc)
 
-    #df_fe = feature_engineering_min_ultimos_n_meses(df_fe, atributos_min, meses_min_max )
-    df_fe = feature_engineering_max_ultimos_n_meses(df_fe, atributos_max, meses_min_max )
+    # #df_fe = feature_engineering_min_ultimos_n_meses(df_fe, atributos_min, meses_min_max )
+    # df_fe = feature_engineering_max_ultimos_n_meses(df_fe, atributos_max, meses_min_max )
+
+    df_fe = feature_engineering(df, competencia="competencia01") #, cant_lag=2, n_meses=3)
 
     logger.info(f"Feature Engineering completado: {df_fe.shape}")
 

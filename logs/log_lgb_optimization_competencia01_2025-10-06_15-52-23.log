@@ -1,0 +1,57 @@
+2025-10-06 15:52:24,000 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-10-06 15:52:24,001 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-06 15:52:35,278 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-06 15:52:35,732 - INFO - __name__ 193 - Realizando feature engineering con percentiles aproximados para 23 atributos
+2025-10-06 16:07:34,987 - WARNING - __name__ 205 - El atributo mtarjeta_visa_debitos_automaticos no existe en el DataFrame
+2025-10-06 16:08:35,661 - INFO - __name__ 245 - Feature engineering completado. DataFrame resultante con 177 columnas
+2025-10-06 16:08:35,707 - INFO - __name__ 644 - Operación 'percentil' aplicada. Nombre de nuevas variables: ['mrentabilidad_percentil', 'mrentabilidad_annual_percentil', 'mcomisiones_percentil', 'mcuenta_corriente_percentil', 'mcaja_ahorro_percentil', 'mcaja_ahorro_dolares_percentil', 'mcuentas_saldo_percentil', 'mautoservicio_percentil', 'mtarjeta_visa_consumo_percentil', 'mtarjeta_master_consumo_percentil', 'mprestamos_personales_percentil', 'mprestamos_prendarios_percentil', 'mprestamos_hipotecarios_percentil', 'mplazo_fijo_dolares_percentil', 'mplazo_fijo_pesos_percentil', 'minversion1_pesos_percentil', 'minversion1_dolares_percentil', 'minversion2_percentil', 'mpayroll_percentil', 'mpayroll2_percentil', 'mcuenta_debitos_automaticos_percentil', 'mtarjeta_visa_debitos_automaticos_percentil', 'mttarjeta_master_debitos_automaticos_percentil']
+2025-10-06 16:08:35,709 - INFO - __main__ 61 - Feature Engineering completado: (931045, 177)
+2025-10-06 16:08:36,647 - INFO - __name__ 54 - Conversión completada:
+2025-10-06 16:08:36,648 - INFO - __name__ 55 -   Original - CONTINUA: 611263, BAJA+1: 4241, BAJA+2: 3678
+2025-10-06 16:08:36,649 - INFO - __name__ 56 -   Binario - 0: 611263, 1: 7919
+2025-10-06 16:08:36,649 - INFO - __name__ 57 -   Distribución: 1.28% casos positivos
+2025-10-06 16:08:36,807 - INFO - src.optimization 190 - Iniciando optimización con 5 trials
+2025-10-06 16:08:36,808 - INFO - src.optimization 191 - Configuración: TRAIN=202102, VALID=202103, SEMILLA=[839071, 666557, 390653, 408341, 858577]
+2025-10-06 16:08:44,523 - INFO - src.optimization 164 - Iteración 0 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 16:08:44,523 - INFO - src.optimization 165 - Ganancia: 816,780,000---Parámetros: {params}
+2025-10-06 16:08:56,010 - INFO - src.optimization 164 - Iteración 1 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 16:08:56,010 - INFO - src.optimization 165 - Ganancia: 820,300,000---Parámetros: {params}
+2025-10-06 16:09:03,803 - INFO - src.optimization 164 - Iteración 2 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 16:09:03,803 - INFO - src.optimization 165 - Ganancia: 739,280,000---Parámetros: {params}
+2025-10-06 16:09:13,837 - INFO - src.optimization 164 - Iteración 3 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 16:09:13,837 - INFO - src.optimization 165 - Ganancia: 774,800,000---Parámetros: {params}
+2025-10-06 16:09:20,715 - INFO - src.optimization 164 - Iteración 4 guardada en resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 16:09:20,716 - INFO - src.optimization 165 - Ganancia: 742,920,000---Parámetros: {params}
+2025-10-06 16:09:20,785 - INFO - src.optimization 206 - Mejor ganancia: 820,300,000
+2025-10-06 16:09:20,786 - INFO - src.optimization 207 - Mejores parámetros: {'num_leaves': 234, 'learn_rate': 0.06825022360642662, 'feature_fraction': 0.8530055061160868, 'bagging_fraction': 0.5879541735065101, 'min_child_samples': 25, 'max_depth': 12, 'reg_lambda': 6.795261327444122, 'reg_alpha': 8.426514328362352}
+2025-10-06 16:09:20,786 - INFO - __main__ 70 - === ANÁLISIS DE RESULTADOS ===
+2025-10-06 16:09:20,829 - INFO - __main__ 74 - Top 5 mejores trials:
+2025-10-06 16:09:20,836 - INFO - __main__ 76 -   Trial 1: 820,300,000
+2025-10-06 16:09:20,837 - INFO - __main__ 76 -   Trial 0: 816,780,000
+2025-10-06 16:09:20,837 - INFO - __main__ 76 -   Trial 3: 774,800,000
+2025-10-06 16:09:20,838 - INFO - __main__ 76 -   Trial 4: 742,920,000
+2025-10-06 16:09:20,838 - INFO - __main__ 76 -   Trial 2: 739,280,000
+2025-10-06 16:09:20,839 - INFO - __main__ 78 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-06 16:09:20,839 - INFO - __main__ 81 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-06 16:09:20,842 - INFO - src.best_params 34 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_competencia01_iteraciones.json
+2025-10-06 16:09:20,842 - INFO - src.best_params 35 - Mejor ganancia encontrada: 938,120,000
+2025-10-06 16:09:20,842 - INFO - src.best_params 36 - Trial número: 2
+2025-10-06 16:09:20,843 - INFO - src.best_params 37 - Parámetros: {'num_leaves': 69, 'learn_rate': 0.11567954004782814, 'feature_fraction': 0.7554291054986113, 'bagging_fraction': 0.8298474463496895, 'min_child_samples': 95, 'max_depth': 14, 'reg_lambda': 0.9715550621553926, 'reg_alpha': 6.337191146377079}
+2025-10-06 16:09:20,843 - INFO - src.optimization 226 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-06 16:09:20,844 - INFO - src.optimization 227 - Período de test: 202104
+2025-10-06 16:09:22,286 - INFO - src.optimization 244 - Entrenando modelo con mejores hiperparámetros...
+2025-10-06 16:09:22,287 - INFO - src.optimization 245 - Dimensiones df_train_completo: (309232, 177), Dimensiones df_test: (155363, 177)
+2025-10-06 16:09:22,611 - INFO - src.optimization 252 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de test_data: <class 'lightgbm.basic.Dataset'>
+2025-10-06 16:09:22,612 - INFO - src.optimization 253 - Dimensiones de train_data: (309232, 176), Dimensiones de test_data: (155363, 176)
+2025-10-06 16:09:32,288 - INFO - src.optimization 325 - Ganancia: 868,580,000---Total Predicciones positivas: 15,731
+2025-10-06 16:09:32,289 - INFO - __main__ 92 - === RESUMEN DE EVALUACIÓN EN TEST ===
+2025-10-06 16:09:32,289 - INFO - __main__ 93 - ✅ Ganancia en test: 868,580,000
+2025-10-06 16:09:32,290 - INFO - __main__ 94 - 🎯 Predicciones positivas: 15,731 (10.13%)
+2025-10-06 16:09:32,290 - INFO - __main__ 98 - === ENTRENAMIENTO FINAL ===
+2025-10-06 16:09:32,291 - INFO - __main__ 99 - Preparar datos para entrenamiento final
+2025-10-06 16:09:32,291 - INFO - src.final_training 25 - Preparando datos para entrenamiento final
+2025-10-06 16:09:32,291 - INFO - src.final_training 26 - Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-06 16:09:32,292 - INFO - src.final_training 27 - Período de predicción: 202106
+2025-10-06 16:09:33,831 - INFO - src.final_training 38 - Registros de entrenamiento: 618,156
+2025-10-06 16:09:33,832 - INFO - src.final_training 39 - Registros de predicción: 156,672
+2025-10-06 16:09:34,063 - INFO - __name__ 193 - Realizando feature engineering con percentiles aproximados para 23 atributos

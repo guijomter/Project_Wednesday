@@ -118,57 +118,133 @@ def feature_engineering_delta_lag(df: pd.DataFrame, columnas: list[str], cant_la
 
 ####################################################################################
 
+# def feature_engineering_percentil(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
+#     """
+#     Genera variables de percentil para los atributos especificados utilizando SQL.
+  
+#     Parameters:
+#     -----------
+#     df : pd.DataFrame
+#         DataFrame con los datos
+#     columnas : list
+#         Lista de atributos para los cuales generar los percentiles. Si es None, no se generan 
+  
+#     Returns:
+#     --------
+#     pd.DataFrame
+#         DataFrame con las variables de percentil agregadas
+#     """
+
+#     logger.info(f"Realizando feature engineering con percentiles para {len(columnas) if columnas else 0} atributos")
+
+#     if columnas is None or len(columnas) == 0:
+#         logger.warning("No se especificaron atributos para generar percentiles")
+#         return df
+  
+#     # Construir la consulta SQL
+#     sql = "SELECT *"
+  
+#     # Agregar los lags para los atributos especificados
+#     for attr in columnas:
+#         if attr in df.columns:
+#             sql += f"\n, ROUND(percent_rank() OVER (PARTITION BY foto_mes ORDER BY {attr}) * 100) AS {attr}_percentil"
+#             #sql += f"\n, ntile(100) over (partition by foto_mes order by {attr}) AS {attr}_percentil"
+#         else:
+#             logger.warning(f"El atributo {attr} no existe en el DataFrame")
+
+#     # Completar la consulta
+#     sql += " FROM df"
+
+#     logger.debug(f"Consulta SQL: {sql}")
+
+#     # Ejecutar la consulta SQL
+#     con = duckdb.connect(database=":memory:")
+#     con.register("df", df)
+#     df = con.execute(sql).df()
+#     con.close()
+
+#     #print(df.head())
+  
+#     logger.info(f"Feature engineering completado. DataFrame resultante con {df.shape[1]} columnas")
+
+#     return df
+
+########################## NUEVA VERSIÓN CON PERCENTILES APROXIMADOS #############################
+
 def feature_engineering_percentil(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
     """
-    Genera variables de percentil para los atributos especificados utilizando SQL.
+    Genera variables de percentil aproximado para los atributos especificados,
+    calculando previamente los límites de percentil por grupo (foto_mes)
+    y luego asignándolos mediante un JOIN.
   
-    Parameters:
-    -----------
+    Parameters
+    ----------
     df : pd.DataFrame
         DataFrame con los datos
-    columnas : list
-        Lista de atributos para los cuales generar los percentiles. Si es None, no se generan 
+    columnas : list[str]
+        Lista de atributos para los cuales generar los percentiles.
   
-    Returns:
-    --------
+    Returns
+    -------
     pd.DataFrame
         DataFrame con las variables de percentil agregadas
     """
 
-    logger.info(f"Realizando feature engineering con percentiles para {len(columnas) if columnas else 0} atributos")
+    logger.info(f"Realizando feature engineering con percentiles aproximados para {len(columnas) if columnas else 0} atributos")
 
-    if columnas is None or len(columnas) == 0:
+    if not columnas:
         logger.warning("No se especificaron atributos para generar percentiles")
         return df
-  
-    # Construir la consulta SQL
-    sql = "SELECT *"
-  
-    # Agregar los lags para los atributos especificados
-    for attr in columnas:
-        if attr in df.columns:
-            sql += f"\n, ntile(100) over (partition by foto_mes order by {attr}) AS {attr}_percentil"
-        else:
-            logger.warning(f"El atributo {attr} no existe en el DataFrame")
 
-    # Completar la consulta
-    sql += " FROM df"
-
-    logger.debug(f"Consulta SQL: {sql}")
-
-    # Ejecutar la consulta SQL
     con = duckdb.connect(database=":memory:")
     con.register("df", df)
-    df = con.execute(sql).df()
-    con.close()
 
-    #print(df.head())
-  
+        # para cada columna, generamos un bloque SQL
+    for attr in columnas:
+        if attr not in df.columns:
+            logger.warning(f"El atributo {attr} no existe en el DataFrame")
+            continue
+
+        # número de percentiles a calcular (por ejemplo 100)
+        n_percentiles = 100
+        percentiles = [round(i / n_percentiles, 2) for i in range(1, n_percentiles)]
+
+        # CTE que calcula los límites
+        sql_limites = f"""
+        WITH limites AS (
+            SELECT 
+                foto_mes,
+                unnest(quantile_cont({attr}, {percentiles})) AS valor_limite,
+                unnest(range(1, {n_percentiles})) AS percentil
+            FROM df
+            GROUP BY foto_mes
+        )
+        """
+
+        # Join para asignar el percentil a cada registro
+        sql_join = f"""
+        SELECT 
+            d.*, 
+            MAX(l.percentil) AS {attr}_percentil
+        FROM df d
+        JOIN limites l
+            ON d.foto_mes = l.foto_mes
+           AND d.{attr} >= l.valor_limite
+        GROUP BY ALL
+        """
+
+        logger.debug(f"Ejecutando cálculo de percentiles para {attr}")
+        con.execute(sql_limites + sql_join)
+        df = con.fetchdf()
+
+        # Reemplaza el df registrado por el actualizado (para el siguiente atributo)
+        con.unregister("df")
+        con.register("df", df)
+
+    con.close()
     logger.info(f"Feature engineering completado. DataFrame resultante con {df.shape[1]} columnas")
 
     return df
-
-
 ####################################################################################
 
 def feature_engineering_max_ultimos_n_meses(df: pd.DataFrame, columnas: list[str], n_meses: int = 3) -> pd.DataFrame:

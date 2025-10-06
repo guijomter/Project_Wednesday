@@ -21,9 +21,9 @@ competencia01:
       columnas: ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
       n_meses: 2
     ratios:
-      numerador: [mrentabilidad, mtransferencias_emitidas]
-      denominador: [mrentabilidad_annual, ctransferencias_emitidas]
-      nombre: [prop_rentabilidad_anual, monto_promedio_transferencias_emitidas]
+      numerador: ['mrentabilidad', 'mtransferencias_emitidas']
+      denominador: ['mrentabilidad_annual', 'ctransferencias_emitidas']
+      nombre: ['prop_rentabilidad_anual', 'monto_promedio_transferencias_emitidas']
     #rolling_mean:
     cambio_estado:
       columnas: ['active_quarter', 'cliente_vip', 'internet', 'tcuentas', 'cdescubierto_preacordado', 'ccaja_seguridad', 'tcallcenter', 'thomebanking', 'tmobile_app', 'Master_delinquency', 'Master_status', 'Visa_delinquency', 'Visa_status']

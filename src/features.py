@@ -545,7 +545,7 @@ def feature_engineering(
                     else:
                         expanded_ratios.append(ratio)
                 df_result = feature_engineering_ratios(df_result, expanded_ratios)
-                logger.info(f"Operación '{op}' aplicada. Nombre de nuevas variables: {[r.get('nombre', f'{r.get('numerador')}_{r.get('denominador')}_ratio') for r in expanded_ratios]}")
+               # logger.info(f"Operación '{op}' aplicada. Nombre de nuevas variables: {[r.get('nombre', f'{r.get('numerador')}_{r.get('denominador')}_ratio') for r in expanded_ratios]}")
                 break  # ratios handled for all at once
             if not isinstance(cfg, dict) and hasattr(cfg, "__dict__"):
                 cfg = vars(cfg)

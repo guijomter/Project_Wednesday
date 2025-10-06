@@ -196,10 +196,7 @@ def feature_engineering_percentil(df: pd.DataFrame, columnas: list[str]) -> pd.D
         logger.warning("No se especificaron atributos para generar percentiles")
         return df
 
-    con = duckdb.connect(database=":memory:")
-    con.register("df", df)
-
-        # para cada columna, generamos un bloque SQL
+         # para cada columna, generamos un bloque SQL
     for attr in columnas:
         if attr not in df.columns:
             logger.warning(f"El atributo {attr} no existe en el DataFrame")
@@ -233,15 +230,15 @@ def feature_engineering_percentil(df: pd.DataFrame, columnas: list[str]) -> pd.D
         GROUP BY ALL
         """
 
-        logger.debug(f"Ejecutando cálculo de percentiles para {attr}")
-        con.execute(sql_limites + sql_join)
-        df = con.fetchdf()
-
-        # Reemplaza el df registrado por el actualizado (para el siguiente atributo)
-        con.unregister("df")
+        # Ejecutar la consulta SQL
+        con = duckdb.connect(database=":memory:")
         con.register("df", df)
+        df = con.execute(sql_limites + sql_join).df()
+        con.close()
 
-    con.close()
+        logger.debug(f"Consulta SQL: {sql_limites + sql_join}")
+
+    # con.close()
     logger.info(f"Feature engineering completado. DataFrame resultante con {df.shape[1]} columnas")
 
     return df

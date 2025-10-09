@@ -27,7 +27,7 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
     logger.info(f"Período de predicción: {FINAL_PREDIC}")
   
     # Datos de entrenamiento: todos los períodos en FINAL_TRAIN
-     df_train = df[df['foto_mes'].astype(str).isin(FINAL_TRAIN)]
+    df_train = df[df['foto_mes'].astype(str).isin(FINAL_TRAIN)]
 
     
     # Datos de predicción: período FINAL_PREDIC
@@ -105,7 +105,7 @@ def entrenar_modelo_final(X_train: pd.DataFrame, y_train: pd.Series, mejores_par
 
     os.makedirs("resultados", exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    modelo_path = f"resultados/modelo_final_{STUDY_NAME}_{timestamp}.txt"
+    modelo_path = f"resultados/modelo_final_{conf.STUDY_NAME}_{timestamp}.txt"
 
     modelo.save_model(modelo_path)
     logger.info(f"Modelo final guardado en: {modelo_path}")

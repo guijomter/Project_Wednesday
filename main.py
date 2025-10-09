@@ -43,14 +43,15 @@ def main():
 
     #01 Feature Engineering
 
-    df_fe = feature_engineering(df, competencia="competencia01") #, cant_lag=2, n_meses=3)
-    # guardar df_fe en disco dentro de data con fecha y hora en formato CSV
-
-    df_fe.to_csv(f"data/df_fe_{conf.STUDY_NAME}.csv", index=False)
-
-
-
-
+    fe_path = f"data/df_fe_{conf.STUDY_NAME}.csv"
+    if os.path.exists(fe_path):
+        logger.info(f"Archivo de features encontrado: {fe_path}. Cargando desde disco.")
+        df_fe = pd.read_csv(fe_path)
+    else:
+        logger.info("Archivo de features no encontrado. Ejecutando feature engineering.")
+        df_fe = feature_engineering(df, competencia="competencia01")
+        df_fe.to_csv(fe_path, index=False)
+   
     logger.info(f"Feature Engineering completado: {df_fe.shape}")
 
     #02 Convertir clase_ternaria a target binario

@@ -1,0 +1,90 @@
+2025-10-09 00:13:34,281 - INFO - __main__ 36 - Inicio de ejecucion.
+2025-10-09 00:13:34,281 - INFO - __main__ 38 - Número de trials por estudio: 5
+2025-10-09 00:13:34,283 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-09 00:13:44,671 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-09 00:13:44,684 - INFO - __main__ 48 - Archivo de features encontrado: data/df_fe_lgb_optimization_competencia01c_v2.csv. Cargando desde disco.
+2025-10-09 00:15:17,877 - INFO - __main__ 55 - Feature Engineering completado: (978439, 725)
+2025-10-09 00:15:28,140 - INFO - __name__ 54 - Conversión completada:
+2025-10-09 00:15:28,159 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-09 00:15:28,163 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-10-09 00:15:28,187 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-10-09 00:15:29,690 - INFO - src.optimization 186 - Iniciando optimización con 5 trials
+2025-10-09 00:15:29,695 - INFO - src.optimization 187 - Configuración: TRAIN=202102, VALID=202103, SEMILLA=[839071, 666557, 390653, 408341, 858577]
+2025-10-09 00:15:56,207 - INFO - src.optimization 160 - Iteración 0 guardada en resultados/lgb_optimization_competencia01c_v2_iteraciones.json
+2025-10-09 00:15:56,209 - INFO - src.optimization 161 - Ganancia: 909,200,000---Parámetros: {params}
+2025-10-09 00:16:27,932 - INFO - src.optimization 160 - Iteración 1 guardada en resultados/lgb_optimization_competencia01c_v2_iteraciones.json
+2025-10-09 00:16:27,934 - INFO - src.optimization 161 - Ganancia: 918,360,000---Parámetros: {params}
+2025-10-09 00:17:00,706 - INFO - src.optimization 160 - Iteración 2 guardada en resultados/lgb_optimization_competencia01c_v2_iteraciones.json
+2025-10-09 00:17:00,707 - INFO - src.optimization 161 - Ganancia: 913,800,000---Parámetros: {params}
+2025-10-09 00:17:30,830 - INFO - src.optimization 160 - Iteración 3 guardada en resultados/lgb_optimization_competencia01c_v2_iteraciones.json
+2025-10-09 00:17:30,833 - INFO - src.optimization 161 - Ganancia: 917,900,000---Parámetros: {params}
+2025-10-09 00:17:59,664 - INFO - src.optimization 160 - Iteración 4 guardada en resultados/lgb_optimization_competencia01c_v2_iteraciones.json
+2025-10-09 00:17:59,666 - INFO - src.optimization 161 - Ganancia: 904,500,000---Parámetros: {params}
+2025-10-09 00:17:59,871 - INFO - src.optimization 202 - Mejor ganancia: 918,360,000
+2025-10-09 00:17:59,872 - INFO - src.optimization 203 - Mejores parámetros: {'num_iterations': 902, 'num_leaves': 121, 'learn_rate': 0.05343246295023051, 'feature_fraction': 0.5794267094960314, 'bagging_fraction': 0.4299307553385313, 'min_child_samples': 11, 'max_depth': 9, 'reg_lambda': 5.065084524276674, 'reg_alpha': 3.8923376499328723}
+2025-10-09 00:17:59,873 - INFO - __main__ 64 - === ANÁLISIS DE RESULTADOS ===
+2025-10-09 00:17:59,971 - INFO - __main__ 68 - Top 5 mejores trials:
+2025-10-09 00:17:59,977 - INFO - __main__ 70 -   Trial 1: 918,360,000
+2025-10-09 00:17:59,977 - INFO - __main__ 70 -   Trial 3: 917,900,000
+2025-10-09 00:17:59,978 - INFO - __main__ 70 -   Trial 2: 913,800,000
+2025-10-09 00:17:59,978 - INFO - __main__ 70 -   Trial 0: 909,200,000
+2025-10-09 00:17:59,978 - INFO - __main__ 70 -   Trial 4: 904,500,000
+2025-10-09 00:17:59,978 - INFO - __main__ 72 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-09 00:17:59,979 - INFO - __main__ 75 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-09 00:17:59,981 - INFO - src.best_params 34 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_competencia01c_v2_iteraciones.json
+2025-10-09 00:17:59,982 - INFO - src.best_params 35 - Mejor ganancia encontrada: 937,400,000
+2025-10-09 00:17:59,982 - INFO - src.best_params 36 - Trial número: 2
+2025-10-09 00:17:59,982 - INFO - src.best_params 37 - Parámetros: {'num_iterations': 907, 'num_leaves': 125, 'learn_rate': 0.05477279704984475, 'feature_fraction': 0.5401670796008579, 'bagging_fraction': 0.502026110782169, 'min_child_samples': 10, 'max_depth': 9, 'reg_lambda': 5.648658454353217, 'reg_alpha': 4.891256433118826}
+2025-10-09 00:17:59,983 - INFO - src.optimization 300 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-09 00:17:59,983 - INFO - src.optimization 301 - Período de test: 202104
+2025-10-09 00:18:05,452 - INFO - src.optimization 318 - Entrenando modelo con mejores hiperparámetros...
+2025-10-09 00:18:05,453 - INFO - src.optimization 319 - Dimensiones df_train_completo: (325264, 725), Dimensiones df_test: (163418, 725)
+2025-10-09 00:18:10,273 - INFO - src.optimization 326 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Tipo de dato de test_data: <class 'lightgbm.basic.Dataset'>
+2025-10-09 00:18:10,274 - INFO - src.optimization 327 - Dimensiones de train_data: (325264, 724), Dimensiones de test_data: (163418, 724)
+2025-10-09 00:19:10,755 - INFO - src.optimization 412 - Ganancia: 982,120,000---Total Predicciones positivas: 16,774
+2025-10-09 00:19:10,756 - INFO - __main__ 86 - === RESUMEN DE EVALUACIÓN EN TEST ===
+2025-10-09 00:19:10,757 - INFO - __main__ 87 - ✅ Ganancia en test: 982,120,000
+2025-10-09 00:19:10,757 - INFO - __main__ 88 - 🔍 Umbral óptimo encontrado: 0.0250
+2025-10-09 00:19:10,758 - INFO - __main__ 89 - 🎯 Predicciones positivas: 16,774 (10.26%)
+2025-10-09 00:19:10,758 - INFO - __main__ 93 - === ENTRENAMIENTO FINAL ===
+2025-10-09 00:19:10,758 - INFO - __main__ 94 - Preparar datos para entrenamiento final
+2025-10-09 00:19:10,758 - INFO - src.final_training 25 - Preparando datos para entrenamiento final
+2025-10-09 00:19:10,759 - INFO - src.final_training 26 - Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-09 00:19:10,759 - INFO - src.final_training 27 - Período de predicción: 202106
+2025-10-09 00:19:23,393 - INFO - src.final_training 37 - Registros de entrenamiento: 650,209
+2025-10-09 00:19:23,405 - INFO - src.final_training 38 - Registros de predicción: 164,313
+2025-10-09 00:19:52,662 - INFO - src.final_training 55 - Features utilizadas: 724
+2025-10-09 00:19:52,767 - INFO - src.final_training 56 - Distribución del target - 0: 642,830, 1: 7,379
+2025-10-09 00:19:53,227 - INFO - __main__ 98 - Entrenar modelo final
+2025-10-09 00:19:53,228 - INFO - src.final_training 76 - Iniciando entrenamiento del modelo final
+2025-10-09 00:19:53,229 - INFO - src.final_training 87 - Parámetros del modelo: {'objective': 'binary', 'metric': 'None', 'random_state': 839071, 'verbose': -1, 'num_iterations': 907, 'num_leaves': 125, 'learn_rate': 0.05477279704984475, 'feature_fraction': 0.5401670796008579, 'bagging_fraction': 0.502026110782169, 'min_child_samples': 10, 'max_depth': 9, 'reg_lambda': 5.648658454353217, 'reg_alpha': 4.891256433118826}
+2025-10-09 00:25:20,978 - INFO - src.final_training 111 - Modelo final guardado en: resultados/modelo_final_lgb_optimization_competencia01c_v2_2025-10-09_00-25-20.txt
+2025-10-09 00:25:20,978 - INFO - src.final_training 113 - Entrenamiento del modelo final completado
+2025-10-09 00:25:21,085 - INFO - __main__ 102 - Generar predicciones finales
+2025-10-09 00:25:21,086 - INFO - src.final_training 129 - Generando predicciones finales
+2025-10-09 00:25:27,572 - INFO - src.final_training 142 - Predicciones de probabilidad guardadas en: resultados/predicciones_probabilidad_lgb_optimization_competencia01c_v2_2025-10-09_00-25-27.csv
+2025-10-09 00:25:27,583 - INFO - src.final_training 164 - Predicciones generadas:
+2025-10-09 00:25:27,583 - INFO - src.final_training 165 -   Total clientes: 164,313
+2025-10-09 00:25:27,583 - INFO - src.final_training 166 -   Predicciones positivas: 16,866 (10.26%)
+2025-10-09 00:25:27,583 - INFO - src.final_training 167 -   Predicciones negativas: 147,447
+2025-10-09 00:25:27,584 - INFO - src.final_training 168 -   Porcentaje solicitado: 0.1026
+2025-10-09 00:25:27,585 - INFO - __main__ 107 - Guardar predicciones
+2025-10-09 00:25:27,676 - INFO - src.output_manager 42 - Predicciones guardadas en: predict/lgb_optimization_competencia01c_v2_20251009_002527.csv
+2025-10-09 00:25:27,676 - INFO - src.output_manager 43 - Formato del archivo:
+2025-10-09 00:25:27,677 - INFO - src.output_manager 44 -   Columnas: ['numero_de_cliente', 'predict']
+2025-10-09 00:25:27,677 - INFO - src.output_manager 45 -   Registros: 164,313
+2025-10-09 00:25:27,677 - INFO - src.output_manager 46 -   Primeras filas:
+2025-10-09 00:25:27,707 - INFO - src.output_manager 47 -    numero_de_cliente  predict
+0          249350768        0
+1          249432306        0
+2          249565688        0
+3          249596175        0
+4          249695645        1
+2025-10-09 00:25:27,708 - INFO - __main__ 111 - === RESUMEN FINAL ===
+2025-10-09 00:25:27,708 - INFO - __main__ 112 - ✅ Entrenamiento final completado exitosamente
+2025-10-09 00:25:27,708 - INFO - __main__ 113 - 📊 Mejores hiperparámetros utilizados: {'num_iterations': 907, 'num_leaves': 125, 'learn_rate': 0.05477279704984475, 'feature_fraction': 0.5401670796008579, 'bagging_fraction': 0.502026110782169, 'min_child_samples': 10, 'max_depth': 9, 'reg_lambda': 5.648658454353217, 'reg_alpha': 4.891256433118826}
+2025-10-09 00:25:27,708 - INFO - __main__ 114 - 🎯 Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-09 00:25:27,709 - INFO - __main__ 115 - 🔮 Período de predicción: 202106
+2025-10-09 00:25:27,709 - INFO - __main__ 118 - 📁 Archivo de salida: predict/lgb_optimization_competencia01c_v2_20251009_002527.csv
+2025-10-09 00:25:27,710 - INFO - __main__ 119 - 📝 Log detallado: logs/log_lgb_optimization_competencia01c_v2_2025-10-09_00-13-34.log
+2025-10-09 00:25:27,710 - INFO - __main__ 122 - >>> Ejecución finalizada. Revisar logs para mas detalles.

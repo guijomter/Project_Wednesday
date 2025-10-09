@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 from .config import *
 from .gain_function import calcular_ganancia, ganancia_lgb_binary
+from datetime import timezone, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,7 @@ def objetivo_ganancia(trial, df) -> float:
         'metric': 'None',  # Usamos nuestra métrica personalizada
 
 	#completar a gusto!!!!!!!
+        'num_iterations' : trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
         'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
         'learning_rate': trial.suggest_float('learn_rate', conf.parametros_lgb.learn_rate[0], conf.parametros_lgb.learn_rate[1], log=True),
         'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
@@ -81,19 +83,12 @@ def objetivo_ganancia(trial, df) -> float:
     train_data = lgb.Dataset(X_train, label=y_train)
     val_data = lgb.Dataset(X_val, label=y_val, reference=train_data)
 
-# guardar en el log las diemnsiones de X_train y X_val y de train_data y val_data, además del tipo de dato que son
-    # logger.info(f"Mes train: {MES_TRAIN}, Mes validacion: {MES_VALIDACION}")
-    # logger.info(f"Dimensiones de X_train: {X_train.shape}, Dimensiones de X_val: {X_val.shape}")
-    # logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de val_data: {type(val_data)}")
-    # logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de val_data: {val_data.data.shape}")
-
-
     model = lgb.train(
         params, 
         train_data,
         valid_sets=[val_data],
         feval=ganancia_lgb_binary, 
-        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+        callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
     )
 
     # Predecir y calcular ganancia
@@ -110,6 +105,7 @@ def objetivo_ganancia(trial, df) -> float:
     logger.debug(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
   
     return ganancia_total
+   
 
 #######################################################################################################
 
@@ -210,6 +206,84 @@ def optimizar(df, n_trials=100) -> optuna.Study:
     return study
 
 #######################################################################################################
+### VERSION VIEJA DE EVALUACION EN TEST SOLO PARA CALCULAR GANANCIA
+
+# def evaluar_en_test(df, mejores_params) -> dict:
+#     """
+#     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
+#     Solo calcula la ganancia, sin usar sklearn.
+  
+#     Args:
+#         df: DataFrame con todos los datos
+#         mejores_params: Mejores hiperparámetros encontrados por Optuna
+  
+#     Returns:
+#         dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
+#     """
+#     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
+#     logger.info(f"Período de test: {MES_TEST}")
+  
+#     # Preparar datos de entrenamiento (TRAIN + VALIDACION)
+#     if isinstance(MES_TRAIN, list):
+#         periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
+#     else:
+#         periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
+  
+#     df_train_completo = df[df['foto_mes'].astype(str).isin(periodos_entrenamiento)]
+#     df_test = df[df['foto_mes'].astype(str) == MES_TEST]
+  
+#     # Entrenar modelo con mejores parámetros
+#     # ... Implementar entrenamiento y test con la logica de entrenamiento FINAL para mayor detalle
+#     # recordar realizar todos los df necesarios y utilizar lgb.train()
+#     # Cargar mejores parámetros
+
+#     # Entrenar modelo con mejores parámetros
+#     logger.info("Entrenando modelo con mejores hiperparámetros...")
+#     logger.info(f'Dimensiones df_train_completo: {df_train_completo.shape}, Dimensiones df_test: {df_test.shape}')
+
+#     # Preparar datasets
+
+#     train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
+#     test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
+#   # chequeo si train_data y test_data estan bien formados
+#     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de test_data: {type(test_data)}")
+#     logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {test_data.data.shape}")
+
+#     model = lgb.train(
+#         mejores_params,
+#         train_data,
+#         #num_boost_round=1000,
+#         valid_sets=[test_data],
+#         feval=ganancia_lgb_binary,
+#         callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+#     )
+
+#     # Predecir en test
+    
+#     X_test = df_test.drop(columns=['clase_ternaria'])
+#     y_test = df_test['clase_ternaria'].values
+#     y_pred_proba = model.predict(X_test)
+#     y_pred_binary = (y_pred_proba >= UMBRAL).astype(int)  # Usar mismo umbral que en ganancia_lgb_binary
+
+
+#     # Calcular solo la ganancia
+#     ganancia_test = calcular_ganancia(y_test, y_pred_binary)
+  
+#     # Estadísticas básicas
+#     total_predicciones = len(y_pred_binary)
+#     predicciones_positivas = np.sum(y_pred_binary == 1)
+#     porcentaje_positivas = (predicciones_positivas / total_predicciones) * 100
+  
+#     resultados = {
+#         'ganancia_test': float(ganancia_test),
+#         'total_predicciones': int(total_predicciones),
+#         'predicciones_positivas': int(predicciones_positivas),
+#         'porcentaje_positivas': float(porcentaje_positivas)
+#     }
+  
+#     return resultados
+#########################################################################################################
+
 
 def evaluar_en_test(df, mejores_params) -> dict:
     """
@@ -262,16 +336,25 @@ def evaluar_en_test(df, mejores_params) -> dict:
     )
 
     # Predecir en test
-    
     X_test = df_test.drop(columns=['clase_ternaria'])
     y_test = df_test['clase_ternaria'].values
     y_pred_proba = model.predict(X_test)
-    y_pred_binary = (y_pred_proba >= UMBRAL).astype(int)  # Usar mismo umbral que en ganancia_lgb_binary
 
+    # Buscar el umbral que maximiza la ganancia
+    mejor_ganancia = -np.inf
+    mejor_umbral = 0.5
+    umbrales = np.linspace(0, 1, 201)  # 0.00, 0.005, ..., 1.00
 
-    # Calcular solo la ganancia
-    ganancia_test = calcular_ganancia(y_test, y_pred_binary)
-  
+    for umbral in umbrales:
+        y_pred_bin = (y_pred_proba >= umbral).astype(int)
+        ganancia = calcular_ganancia(y_test, y_pred_bin)
+        if ganancia > mejor_ganancia:
+            mejor_ganancia = ganancia
+            mejor_umbral = umbral
+            y_pred_binary = y_pred_bin  # Guardar predicción óptima
+
+    ganancia_test = mejor_ganancia
+    # Si se desea, guardar mejor_umbral en resultados
     # Estadísticas básicas
     total_predicciones = len(y_pred_binary)
     predicciones_positivas = np.sum(y_pred_binary == 1)
@@ -279,13 +362,13 @@ def evaluar_en_test(df, mejores_params) -> dict:
   
     resultados = {
         'ganancia_test': float(ganancia_test),
+        'umbral_optimo': float(mejor_umbral),
         'total_predicciones': int(total_predicciones),
         'predicciones_positivas': int(predicciones_positivas),
         'porcentaje_positivas': float(porcentaje_positivas)
     }
   
     return resultados
-
 #######################################################################################################
 
 def guardar_resultados_test(resultados_test, archivo_base=None):
@@ -314,6 +397,10 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     else:
         datos_existentes = []
   
+    # Agregar fecha y hora de la ejecución en GMT-3:00
+    tz = timezone(timedelta(hours=-3))
+    resultados_test['fecha_hora'] = datetime.now(tz).isoformat()
+
     # Agregar nueva iteración
     datos_existentes.append(resultados_test)
   

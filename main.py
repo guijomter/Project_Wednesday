@@ -34,29 +34,22 @@ logger = logging.getLogger(__name__)
 def main():
       
     logger.info("Inicio de ejecucion.")
+   
+    logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
 
     #00 Cargar datos
     os.makedirs("data", exist_ok=True)
     df = cargar_datos(DATA_PATH)   
 
     #01 Feature Engineering
-    # atributos_lag = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mcuenta_corriente']
-    # cant_lag = 2
-    # atributos_perc = ["mcuentas_saldo", "mtarjeta_visa_consumo", "cproductos", 'ctrx_quarter','mpayroll','mactivos_margen','mpasivos_margen','matm','matm_other','mcuenta_corriente','mcaja_ahorro']
-    
-    # meses_min_max = 3
-    # atributos_max = ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
-
-    #atributos_min = []
-    
-    # df_fe = feature_engineering_lag(df, atributos_lag, cant_lag)
-        
-    # df_fe= feature_engineering_percentil(df_fe, atributos_perc)
-
-    # #df_fe = feature_engineering_min_ultimos_n_meses(df_fe, atributos_min, meses_min_max )
-    # df_fe = feature_engineering_max_ultimos_n_meses(df_fe, atributos_max, meses_min_max )
 
     df_fe = feature_engineering(df, competencia="competencia01") #, cant_lag=2, n_meses=3)
+    # guardar df_fe en disco dentro de data con fecha y hora en formato CSV
+
+    df_fe.to_csv(f"data/df_fe_{conf.STUDY_NAME}.csv", index=False)
+
+
+
 
     logger.info(f"Feature Engineering completado: {df_fe.shape}")
 
@@ -64,7 +57,7 @@ def main():
     df_fe = convertir_clase_ternaria_a_target(df_fe)
   
     #03 Ejecutar optimizacion de hiperparametros
-    study = optimizar(df_fe, n_trials=5)
+    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial)  # Usar el valor de n_trials del archivo de configuración
   
     #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -91,6 +84,7 @@ def main():
     # Resumen de evaluación en test
     logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
     logger.info(f"✅ Ganancia en test: {resultados_test['ganancia_test']:,.0f}")
+    logger.info(f"🔍 Umbral óptimo encontrado: {resultados_test['umbral_optimo']:.4f}")
     logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
 
 
@@ -105,7 +99,8 @@ def main():
   
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
-    resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict, UMBRAL)
+    #resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict, UMBRAL)
+    resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict, resultados_test['porcentaje_positivas']/100)
   
     # Guardar predicciones
     logger.info("Guardar predicciones")
@@ -117,6 +112,8 @@ def main():
     logger.info(f"📊 Mejores hiperparámetros utilizados: {mejores_params}")
     logger.info(f"🎯 Períodos de entrenamiento: {FINAL_TRAIN}")
     logger.info(f"🔮 Período de predicción: {FINAL_PREDIC}")
+
+    ## Sumar cantidad de features utilizadas, feature importance y cantidad de clientes predichos
     logger.info(f"📁 Archivo de salida: {archivo_salida}")
     logger.info(f"📝 Log detallado: logs/{monbre_log}")
 

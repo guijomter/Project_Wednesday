@@ -1,0 +1,26 @@
+[
+  {
+    "ganancia_test": 966520000.0,
+    "umbral_optimo": 0.025,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 16874,
+    "porcentaje_positivas": 10.325667919078683,
+    "fecha_hora": "2025-10-08T07:26:38.751960-03:00"
+  },
+  {
+    "ganancia_test": 987480000.0,
+    "umbral_optimo": 0.025,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17546,
+    "porcentaje_positivas": 10.736883329865742,
+    "fecha_hora": "2025-10-08T09:31:15.481005-03:00"
+  },
+  {
+    "ganancia_test": 976600000.0,
+    "umbral_optimo": 0.025,
+    "total_predicciones": 163418,
+    "predicciones_positivas": 17250,
+    "porcentaje_positivas": 10.555752732257156,
+    "fecha_hora": "2025-10-08T10:32:05.108269-03:00"
+  }
+]

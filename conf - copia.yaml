@@ -1,0 +1,33 @@
+# config.yaml
+STUDY_NAME : "lgb_optimization_competencia01b"
+
+competencia01:
+    DATA_PATH: "./data/competencia_01.csv"
+    SEMILLA: [839071, 666557, 390653, 408341, 858577]
+    MES_TRAIN: "202102"
+    MES_VALIDACION: "202103"
+    MES_TEST: "202104"
+    GANANCIA_ACIERTO: 780000
+    COSTO_ESTIMULO: 20000
+  # Configuración para entrenamiento final
+    FINAL_TRAIN: ["202101", "202102", "202103", "202104"]  # Todos los períodos para entrenar
+    FINAL_PREDIC: "202106"                                 # Período objetivo para predicción
+    UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
+
+parametros_lgb:
+    n_trial: 100
+    num_leaves: [10, 300]
+    num_iterations: [50, 1000]
+    feature_fraction: [0.4, 1.0]
+    learn_rate: [0.01, 0.3]
+    bagging_fraction: [0.4, 1.0]
+    min_child_samples: [5, 100]
+    max_depth: [3, 15]
+    reg_alpha: [0.0, 10.0]
+    reg_lambda: [0.0, 10.0]
+    bin: [30, 31]
+    # bagging_freq: 5
+    # lambda_l1: 0.0
+    # lambda_l2: 0.0
+    # verbosity: -1
+    # seed: 42

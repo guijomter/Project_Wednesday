@@ -62,3 +62,34 @@ def ganancia_lgb_binary(y_pred, y_true):
   
     # Retornar en formato esperado por LightGBM
     return 'ganancia', ganancia_total, True  # True = higher is better
+
+# funcion de ganancia que en lugar de un umbral utiliza el porcentaje de positivos en el dataset
+# def ganancia_lgb_binary_percentile(y_pred, y_true):
+#     """
+#     Función de ganancia para LightGBM en clasificación binaria.
+#     Usa el percentil de positivos en el dataset para definir el umbral.
+  
+#     Args:
+#         y_pred: Predicciones de probabilidad del modelo
+#         y_true: Dataset de LightGBM con labels verdaderos
+  
+#     Returns:
+#         tuple: (eval_name, eval_result, is_higher_better)
+#     """
+#     # Obtener labels verdaderos
+#     y_true_labels = y_true.get_label()
+  
+#     # Calcular porcentaje de positivos en y_true
+#     porcentaje_positivos = np.mean(y_true_labels)
+  
+#     # Definir umbral como el percentil correspondiente
+#     umbral_percentil = np.percentile(y_pred, 100 * (1 - porcentaje_positivos))
+  
+#     # Convertir probabilidades a predicciones binarias usando el umbral calculado
+#     y_pred_binary = (y_pred >= umbral_percentil).astype(int)
+  
+#     # Calcular ganancia usando configuración
+#     ganancia_total = calcular_ganancia(y_true_labels, y_pred_binary)
+  
+#     # Retornar en formato esperado por LightGBM
+#     return 'ganancia_percentile', ganancia_total, True  # True = higher is better

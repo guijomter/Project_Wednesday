@@ -8,7 +8,7 @@ import json
 import os
 from datetime import datetime
 from .config import *
-from .gain_function import calcular_ganancia, ganancia_lgb_binary
+from .gain_function import calcular_ganancia, ganancia_lgb_binary, ganancia_evaluator
 from datetime import timezone, timedelta
 
 logger = logging.getLogger(__name__)
@@ -53,7 +53,8 @@ def objetivo_ganancia(trial, df) -> float:
         'verbosity': -1,
         'silent': True,
         'bin': 31,
-        'random_state': SEMILLA[0],  # Desde configuración YAML
+        'random_state': SEMILLA[0] #,  # Desde configuración YAML
+        
     }
   
     # Preparar dataset para entrenamiento y validación
@@ -102,7 +103,7 @@ def objetivo_ganancia(trial, df) -> float:
     # Guardar cada iteración en JSON
     guardar_iteracion(trial, ganancia_total)
   
-    logger.debug(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
+    logger.info(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
   
     return ganancia_total
    
@@ -321,7 +322,7 @@ def evaluar_en_test(df, mejores_params) -> dict:
     # Preparar datasets
 
     train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
-    test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
+    #test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
   # chequeo si train_data y test_data estan bien formados
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de test_data: {type(test_data)}")
     logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {test_data.data.shape}")
@@ -330,8 +331,9 @@ def evaluar_en_test(df, mejores_params) -> dict:
         mejores_params,
         train_data,
         #num_boost_round=1000,
-        valid_sets=[test_data],
-        feval=ganancia_lgb_binary,
+        #valid_sets=[test_data],
+        #feval=ganancia_lgb_binary,
+        feval=ganancia_evaluator,
         callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
 

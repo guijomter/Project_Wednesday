@@ -7,7 +7,7 @@ from datetime import datetime
 #from .config import FINAL_TRAIN, FINAL_PREDIC, SEMILLA
 from .config import *
 from .best_params import cargar_mejores_hiperparametros
-from .gain_function import ganancia_lgb_binary
+from .gain_function import ganancia_lgb_binary, ganancia_evaluator
 from .features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
 
 logger = logging.getLogger(__name__)
@@ -97,7 +97,8 @@ def entrenar_modelo_final(X_train: pd.DataFrame, y_train: pd.Series, mejores_par
         params, 
         train_data,
         valid_sets=None,
-        feval=ganancia_lgb_binary 
+        #feval=ganancia_lgb_binary 
+        feval=ganancia_evaluator
         #callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
     

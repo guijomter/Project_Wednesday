@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from .config import *
 import logging
+import polars as pl
 
 logger = logging.getLogger(__name__)
 
@@ -93,3 +94,37 @@ def ganancia_lgb_binary(y_pred, y_true):
   
 #     # Retornar en formato esperado por LightGBM
 #     return 'ganancia_percentile', ganancia_total, True  # True = higher is better
+
+##############################################################################################
+
+def ganancia_evaluator(y_pred, y_true) -> float:
+    """
+    Función de evaluación personalizada para LightGBM.
+    Ordena probabilidades de mayor a menor y calcula ganancia acumulada
+    para encontrar el punto de máxima ganancia.
+  
+    Args:
+        y_pred: Predicciones de probabilidad del modelo
+        y_true: Dataset de LightGBM con labels verdaderos
+  
+    Returns:
+        float: Ganancia total
+    """
+    y_true = y_true.get_label()
+  
+    # Convertir a DataFrame de Polars para procesamiento eficiente
+    df_eval = pl.DataFrame({'y_true': y_true,'y_pred_proba': y_pred})
+  
+    # Ordenar por probabilidad descendente
+    df_ordenado = df_eval.sort('y_pred_proba', descending=True)
+  
+    # Calcular ganancia individual para cada cliente
+    df_ordenado = df_ordenado.with_columns([pl.when(pl.col('y_true') == 1).then(GANANCIA_ACIERTO).otherwise(-COSTO_ESTIMULO).alias('ganancia_individual')])
+  
+    # Calcular ganancia acumulada
+    df_ordenado = df_ordenado.with_columns([pl.col('ganancia_individual').cum_sum().alias('ganancia_acumulada')])
+  
+    # Encontrar la ganancia máxima
+    ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()
+  
+    return 'ganancia', ganancia_maxima, True

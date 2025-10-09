@@ -7,6 +7,7 @@ import logging
 from src.loader import cargar_datos, convertir_clase_ternaria_a_target
 from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
 from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test
+from src.optimizacion_cv import optimizar_con_cv
 from src.best_params import cargar_mejores_hiperparametros
 from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final
 from src.output_manager import guardar_predicciones_finales
@@ -58,7 +59,9 @@ def main():
     df_fe = convertir_clase_ternaria_a_target(df_fe)
   
     #03 Ejecutar optimizacion de hiperparametros
-    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial)  # Usar el valor de n_trials del archivo de configuración
+    #study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial)  # Usar el valor de n_trials del archivo de configuración
+    study = optimizar_con_cv(df_fe, n_trials=conf.parametros_lgb.n_trial)
+
   
     #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")

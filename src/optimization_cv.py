@@ -7,6 +7,7 @@ import os
 import logging
 from .config import *
 from .gain_function import ganancia_evaluator
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ def objetivo_ganancia_cv(trial, df) -> float:
         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
         #'verbose': -1,
         'verbosity': -1,
-        'silent': True,
+        #'silent': True,
         #'bin': trial.suggest_int('bin', conf.parametros_lgb.bin[0], conf.parametros_lgb.bin[1]),
         'bin': 31,
         'random_state': SEMILLA[0]  # Desde configuración YAML
@@ -75,7 +76,7 @@ def objetivo_ganancia_cv(trial, df) -> float:
         seed=SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
         #feval=ganancia_lgb_binary, 
         feval=ganancia_evaluator,
-        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+        callbacks=[lgb.early_stopping(10), lgb.log_evaluation(0)]
     )
   
     # Extraer ganancia promedio y maxima
@@ -91,7 +92,7 @@ def objetivo_ganancia_cv(trial, df) -> float:
 
     # Guardar iteración para análisis posterior
 
-    guardar_iteracion_cv(trial, ganancia_promedio, ganancias_cv, ganancia_std, best_iteration)
+    guardar_iteracion_cv(trial, ganancia_promedio, ganancias_cv, ganancia_std, conf.STUDY_NAME)
 
     return ganancia_promedio
 
@@ -131,7 +132,7 @@ def guardar_iteracion_cv(trial, ganancia_promedio, ganancias_cv, ganancia_std, a
     iteracion_data = {
         'trial_number': trial.number,
         'params': trial.params,
-        'value': float(ganancia_promedio),
+        'value': round(float(ganancia_promedio)),
         'datetime': datetime.now().isoformat(),
         'ganancias_cv': ganancias_cv,
         'state': 'COMPLETE',
@@ -142,7 +143,7 @@ def guardar_iteracion_cv(trial, ganancia_promedio, ganancias_cv, ganancia_std, a
     with open(archivo, 'w') as f:
         json.dump(datos_existentes, f, indent=2)
   
-    logger.info(f"Iteración {trial_number} guardada. Ganancia promedio CV: {ganancia_promedio:,.0f} ")
+    logger.info(f"Iteración {trial.number} guardada. Ganancia promedio CV: {ganancia_promedio:,.0f} ")
 
 def optimizar_con_cv(df, n_trials=50) -> optuna.Study:
     """

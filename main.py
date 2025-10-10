@@ -7,7 +7,7 @@ import logging
 from src.loader import cargar_datos, convertir_clase_ternaria_a_target
 from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
 from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test
-from src.optimizacion_cv import optimizar_con_cv
+from src.optimization_cv import optimizar_con_cv
 from src.best_params import cargar_mejores_hiperparametros
 from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final
 from src.output_manager import guardar_predicciones_finales
@@ -80,7 +80,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros()
   
     # Evaluar en test
-    resultados_test = evaluar_en_test(df_fe, mejores_params)
+    resultados_test = evaluar_en_test(df_fe, mejores_params, SEMILLA[0])
   
     # Guardar resultados de test
     guardar_resultados_test(resultados_test)
@@ -97,6 +97,12 @@ def main():
     logger.info("Preparar datos para entrenamiento final")
     X_train, y_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final(df_fe)
   
+    # # Grafico de test
+    # logger.info("=== GRAFICO DE TEST ===")
+    # ruta_grafico = generar_grafico_test_completo(df_fe)
+    # logger.info(f"✅ Gráfico generado: {ruta_grafico}")
+
+
     # Entrenar modelo final
     logger.info("Entrenar modelo final")
     modelo_final = entrenar_modelo_final(X_train, y_train, mejores_params)

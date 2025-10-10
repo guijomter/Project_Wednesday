@@ -1,0 +1,41 @@
+2025-10-09 16:30:16,727 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-09 16:30:16,727 - INFO - __main__ 39 - Número de trials por estudio: 5
+2025-10-09 16:30:16,729 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-09 16:30:26,796 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-09 16:30:26,799 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_competencia01c_v2.csv. Cargando desde disco.
+2025-10-09 16:31:45,268 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-09 16:31:51,653 - INFO - __name__ 54 - Conversión completada:
+2025-10-09 16:31:51,680 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-09 16:31:51,681 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-10-09 16:31:51,691 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-10-09 16:31:53,028 - INFO - src.optimization_cv 161 - Iniciando optimización con CV - 5 trials
+2025-10-09 16:31:53,029 - INFO - src.optimization_cv 162 - Configuración CV: períodos=['202102', '202103']
+2025-10-09 16:35:13,094 - INFO - src.optimization_cv 90 - Trial 0: Ganancia CV = 355,650,850 ± 9,475,178 
+2025-10-09 16:35:13,095 - INFO - src.optimization_cv 91 - Trial 0: Mejor iteración en CV: 246 
+2025-10-09 16:35:13,103 - INFO - src.optimization_cv 146 - Iteración 0 guardada. Ganancia promedio CV: 355,650,850 
+2025-10-09 16:38:54,904 - INFO - src.optimization_cv 90 - Trial 1: Ganancia CV = 353,568,942 ± 10,194,395 
+2025-10-09 16:38:54,907 - INFO - src.optimization_cv 91 - Trial 1: Mejor iteración en CV: 207 
+2025-10-09 16:38:54,912 - INFO - src.optimization_cv 146 - Iteración 1 guardada. Ganancia promedio CV: 353,568,942 
+2025-10-09 16:41:50,620 - INFO - src.optimization_cv 90 - Trial 2: Ganancia CV = 354,777,333 ± 10,831,692 
+2025-10-09 16:41:50,622 - INFO - src.optimization_cv 91 - Trial 2: Mejor iteración en CV: 209 
+2025-10-09 16:41:50,626 - INFO - src.optimization_cv 146 - Iteración 2 guardada. Ganancia promedio CV: 354,777,333 
+2025-10-09 16:44:59,666 - INFO - src.optimization_cv 90 - Trial 3: Ganancia CV = 353,110,462 ± 11,379,491 
+2025-10-09 16:44:59,668 - INFO - src.optimization_cv 91 - Trial 3: Mejor iteración en CV: 155 
+2025-10-09 16:44:59,673 - INFO - src.optimization_cv 146 - Iteración 3 guardada. Ganancia promedio CV: 353,110,462 
+2025-10-09 16:48:16,438 - INFO - src.optimization_cv 90 - Trial 4: Ganancia CV = 355,177,472 ± 9,793,168 
+2025-10-09 16:48:16,441 - INFO - src.optimization_cv 91 - Trial 4: Mejor iteración en CV: 355 
+2025-10-09 16:48:16,452 - INFO - src.optimization_cv 146 - Iteración 4 guardada. Ganancia promedio CV: 355,177,472 
+2025-10-09 16:48:17,247 - INFO - src.optimization_cv 175 - === OPTIMIZACIÓN CON CV COMPLETADA ===
+2025-10-09 16:48:17,250 - INFO - src.optimization_cv 176 - Número de trials completados: 5
+2025-10-09 16:48:17,250 - INFO - src.optimization_cv 177 - Mejor ganancia promedio = 355,650,850
+2025-10-09 16:48:17,251 - INFO - src.optimization_cv 178 - Mejores parámetros: {'num_iterations': 914, 'num_leaves': 123, 'learn_rate': 0.050865319604105445, 'feature_fraction': 0.5334315670255523, 'bagging_fraction': 0.4520455044767435, 'min_child_samples': 8, 'max_depth': 8, 'reg_lambda': 5.861224056620561, 'reg_alpha': 3.638578257008687, 'min_gain_to_split': 0.06455459651999176}
+2025-10-09 16:48:17,253 - INFO - __main__ 67 - === ANÁLISIS DE RESULTADOS ===
+2025-10-09 16:48:17,368 - INFO - __main__ 71 - Top 5 mejores trials:
+2025-10-09 16:48:17,376 - INFO - __main__ 73 -   Trial 0: 355,650,850
+2025-10-09 16:48:17,376 - INFO - __main__ 73 -   Trial 4: 355,177,472
+2025-10-09 16:48:17,377 - INFO - __main__ 73 -   Trial 2: 354,777,333
+2025-10-09 16:48:17,377 - INFO - __main__ 73 -   Trial 1: 353,568,942
+2025-10-09 16:48:17,377 - INFO - __main__ 73 -   Trial 3: 353,110,462
+2025-10-09 16:48:17,378 - INFO - __main__ 75 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-09 16:48:17,378 - INFO - __main__ 78 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-09 16:48:17,380 - ERROR - src.best_params 46 - Error al cargar mejores hiperparámetros: Expecting ',' delimiter: line 699 column 33 (char 16667)

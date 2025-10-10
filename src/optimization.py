@@ -49,7 +49,7 @@ def objetivo_ganancia(trial, df) -> float:
         'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': 0.0,
-        'verbose': -1,
+       # 'verbose': -1,
         'verbosity': -1,
         'silent': True,
         'bin': 31,
@@ -286,7 +286,7 @@ def optimizar(df, n_trials=100) -> optuna.Study:
 #########################################################################################################
 
 
-def evaluar_en_test(df, mejores_params) -> dict:
+def evaluar_en_test(df, mejores_params, semilla=SEMILLA[0]) -> dict:
     """
     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
     Solo calcula la ganancia, sin usar sklearn.
@@ -324,8 +324,8 @@ def evaluar_en_test(df, mejores_params) -> dict:
     train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
     #test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
   # chequeo si train_data y test_data estan bien formados
-    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de test_data: {type(test_data)}")
-    logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {test_data.data.shape}")
+    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
+    #logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {df_test.shape}")
 
     model = lgb.train(
         mejores_params,
@@ -334,7 +334,8 @@ def evaluar_en_test(df, mejores_params) -> dict:
         #valid_sets=[test_data],
         #feval=ganancia_lgb_binary,
         feval=ganancia_evaluator,
-        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+        seed = semilla
+      #  callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
 
     # Predecir en test
@@ -367,7 +368,8 @@ def evaluar_en_test(df, mejores_params) -> dict:
         'umbral_optimo': float(mejor_umbral),
         'total_predicciones': int(total_predicciones),
         'predicciones_positivas': int(predicciones_positivas),
-        'porcentaje_positivas': float(porcentaje_positivas)
+        'porcentaje_positivas': float(porcentaje_positivas),
+        'semilla': semilla
     }
   
     return resultados
@@ -398,13 +400,23 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
                 datos_existentes = []
     else:
         datos_existentes = []
-  
-    # Agregar fecha y hora de la ejecución en GMT-3:00
+    
     tz = timezone(timedelta(hours=-3))
-    resultados_test['fecha_hora'] = datetime.now(tz).isoformat()
+
+    iteracion_data = {
+        'Mes_test'= MES_TEST,
+        'ganancia_test': float(resultados_test['ganancia_test']),
+        'date_time': datetime.now(tz).isoformat(),
+        'state': 'COMPLETE',
+        'configuracion':{
+            'semilla': resultados_test['semilla'],
+            'meses_train': MES_TRAIN + [MES_VALIDACION]
+        },
+        'resultados':resultados_test
+    }
 
     # Agregar nueva iteración
-    datos_existentes.append(resultados_test)
+    datos_existentes.append(iteracion_data)
   
     # Guardar todas las iteraciones en el archivo
     with open(archivo, 'w') as f:

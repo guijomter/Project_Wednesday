@@ -273,7 +273,7 @@ def feature_engineering_rank(df: pd.DataFrame, columnas: list[str]) -> pd.DataFr
     # Agregar los rankings para los atributos especificados
     for attr in columnas:
         if attr in df.columns:
-            sql += f"\n, (DENSE_RANK() OVER (PARTITION BY foto_mes ORDER BY {attr}) - 1) * 1.0 / (COUNT(*) OVER (PARTITION BY foto_mes) - 1) AS rank_norm_{attr}"
+            sql += f"\n, (DENSE_RANK() OVER (PARTITION BY foto_mes ORDER BY {attr}) - 1) * 1.0 / (COUNT(*) OVER (PARTITION BY foto_mes) - 1) AS {attr}_rank"
         else:
             logger.warning(f"El atributo {attr} no existe en el DataFrame")
 

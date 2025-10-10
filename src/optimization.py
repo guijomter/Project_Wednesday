@@ -333,8 +333,7 @@ def evaluar_en_test(df, mejores_params, semilla=SEMILLA[0]) -> dict:
         #num_boost_round=1000,
         #valid_sets=[test_data],
         #feval=ganancia_lgb_binary,
-        feval=ganancia_evaluator,
-        seed = semilla
+        feval=ganancia_evaluator
       #  callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
 
@@ -403,14 +402,19 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     
     tz = timezone(timedelta(hours=-3))
 
+    if isinstance(MES_TRAIN, list):
+        periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
+    else:
+        periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
+
     iteracion_data = {
-        'Mes_test'= MES_TEST,
+        'Mes_test': MES_TEST,
         'ganancia_test': float(resultados_test['ganancia_test']),
         'date_time': datetime.now(tz).isoformat(),
         'state': 'COMPLETE',
         'configuracion':{
             'semilla': resultados_test['semilla'],
-            'meses_train': MES_TRAIN + [MES_VALIDACION]
+            'meses_train': periodos_entrenamiento
         },
         'resultados':resultados_test
     }

@@ -242,6 +242,91 @@ def feature_engineering_percentil(df: pd.DataFrame, columnas: list[str]) -> pd.D
     logger.info(f"Feature engineering completado. DataFrame resultante con {df.shape[1]} columnas")
 
     return df
+
+
+#######################################################################################
+def feature_engineering_rank(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
+    """
+    Genera variables de ranking normalizado (0 a 1) para los atributos especificados utilizando SQL.
+    Parameters:
+    -----------
+    df : pd.DataFrame
+
+        DataFrame con los datos
+    columnas : list 
+        Lista de atributos para los cuales generar los rankings. Si es None, no se generan.
+    Returns:
+    --------
+    pd.DataFrame    
+        DataFrame con las variables de ranking agregadas
+    """
+
+    logger.info(f"Realizando feature engineering con ranking normalizado para {len(columnas) if columnas else 0} atributos")
+
+    if columnas is None or len(columnas) == 0:
+        logger.warning("No se especificaron atributos para generar rankings")
+        return df
+
+    # Construir la consulta SQL
+    sql = "SELECT *"
+
+    # Agregar los rankings para los atributos especificados
+    for attr in columnas:
+        if attr in df.columns:
+            sql += f"\n, (DENSE_RANK() OVER (PARTITION BY foto_mes ORDER BY {attr}) - 1) * 1.0 / (COUNT(*) OVER (PARTITION BY foto_mes) - 1) AS rank_norm_{attr}"
+        else:
+            logger.warning(f"El atributo {attr} no existe en el DataFrame")
+
+    # Completar la consulta
+    sql += " FROM df"
+
+    logger.debug(f"Consulta SQL: {sql}")
+
+    # Ejecutar la consulta SQL
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df = con.execute(sql).df()
+    con.close()
+
+    logger.info(f"Feature engineering completado. DataFrame resultante con {df.shape[1]} columnas")
+
+    return df
+###################################################################################
+
+def feature_engineering_drop(df: pd.DataFrame, columnas_a_eliminar: list[str]) -> pd.DataFrame:
+    """
+    Elimina las columnas especificadas del DataFrame.
+  
+    Parameters:
+    -----------
+    df : pd.DataFrame
+        DataFrame con los datos
+    columnas_a_eliminar : list
+        Lista de nombres de columnas a eliminar
+  
+    Returns:
+    --------
+    pd.DataFrame
+        DataFrame con las columnas eliminadas
+    """
+  
+    logger.info(f"Eliminando {len(columnas_a_eliminar) if columnas_a_eliminar else 0} columnas")
+  
+    if not columnas_a_eliminar:
+        logger.warning("No se especificaron columnas para eliminar")
+        return df
+  
+    columnas_existentes = [col for col in columnas_a_eliminar if col in df.columns]
+    columnas_no_existentes = [col for col in columnas_a_eliminar if col not in df.columns]
+  
+    if columnas_no_existentes:
+        logger.warning(f"Las siguientes columnas no existen en el DataFrame y no se pueden eliminar: {columnas_no_existentes}")
+  
+    df = df.drop(columns=columnas_existentes)
+  
+    logger.info(f"Columnas eliminadas. DataFrame resultante con {df.shape[1]} columnas")
+  
+    return df
 ####################################################################################
 
 def feature_engineering_max_ultimos_n_meses(df: pd.DataFrame, columnas: list[str], n_meses: int = 3) -> pd.DataFrame:
@@ -571,9 +656,13 @@ def feature_engineering(
                 total_nuevas_columnas += len(columnas)
             elif op == "percentil":
                 total_nuevas_columnas += len(columnas)
+            elif op == "rank":
+                total_nuevas_columnas += len(columnas)
             elif op == "delta_lag":
                 cant_lag = cfg.get("cant_lag", 1) if isinstance(cfg, dict) else 1
                 total_nuevas_columnas += len(columnas) * cant_lag
+            elif op == "drop":
+                total_nuevas_columnas -= len(columnas)
             elif op == "cambio_estado":
                 cant_lag = cfg.get("cant_lag", 1) if isinstance(cfg, dict) else 1
                 total_nuevas_columnas += len(columnas) * cant_lag
@@ -639,6 +728,9 @@ def feature_engineering(
             elif op == "percentil":
                 df_result = feature_engineering_percentil(df_result, columnas)
                 logger.info(f"Operación '{op}' aplicada. Nombre de nuevas variables: {[f'{col}_percentil' for col in columnas]}")
+            elif op == "rank":
+                df_result = feature_engineering_rank(df_result, columnas)
+                logger.info(f"Operación '{op}' aplicada. Nombre de nuevas variables: {[f'{col}_rank' for col in columnas]}")
             elif op == "max":
                 n_meses = cfg.get("n_meses", 3) if isinstance(cfg, dict) else 3
                 df_result = feature_engineering_max_ultimos_n_meses(df_result, columnas, n_meses)
@@ -651,6 +743,9 @@ def feature_engineering(
                 cant_lag = cfg.get("cant_lag", 1) if isinstance(cfg, dict) else 1
                 df_result = feature_engineering_cambio_estado(df_result, columnas, cant_lag)
                 logger.info(f"Operación '{op}' aplicada. Nombre de nuevas variables: {[f'{col}_cambio_lag_{i}' for col in columnas for i in range(1, cant_lag + 1)]}")
+            elif op == "drop": 
+                df_result = feature_engineering_drop(df_result, columnas)
+                logger.info(f"Operación '{op}' aplicada. Columnas eliminadas: {columnas}")
             else:
                 logger.warning(f"Operación '{op}' no reconocida. Se omite.")
 

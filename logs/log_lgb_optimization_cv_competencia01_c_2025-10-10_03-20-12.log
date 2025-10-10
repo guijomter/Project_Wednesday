@@ -1,0 +1,274 @@
+2025-10-10 03:20:12,491 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-10 03:20:12,492 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-10-10 03:20:12,493 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-10 03:20:22,767 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-10 03:20:22,767 - INFO - __main__ 52 - Archivo de features no encontrado. Ejecutando feature engineering.
+2025-10-10 03:20:23,131 - INFO - __name__ 30 - Realizando feature engineering con 2 lags para 137 atributos
+2025-10-10 03:20:23,132 - WARNING - __name__ 45 - El atributo mtarjeta_visa_debitos_automaticos no existe en el DataFrame
+2025-10-10 03:20:44,927 - INFO - __name__ 60 - Feature engineering completado. DataFrame resultante con 427 columnas
+2025-10-10 03:20:44,993 - INFO - __name__ 634 - Operación 'lag' aplicada. Nombre de nuevas variables: ['cproductos_lag_1', 'cproductos_lag_2', 'ccuenta_corriente_lag_1', 'ccuenta_corriente_lag_2', 'ccaja_ahorro_lag_1', 'ccaja_ahorro_lag_2', 'ctarjeta_debito_lag_1', 'ctarjeta_debito_lag_2', 'ctarjeta_debito_transacciones_lag_1', 'ctarjeta_debito_transacciones_lag_2', 'ctarjeta_visa_lag_1', 'ctarjeta_visa_lag_2', 'ctarjeta_visa_transacciones_lag_1', 'ctarjeta_visa_transacciones_lag_2', 'ctarjeta_master_lag_1', 'ctarjeta_master_lag_2', 'ctarjeta_master_transacciones_lag_1', 'ctarjeta_master_transacciones_lag_2', 'cprestamos_personales_lag_1', 'cprestamos_personales_lag_2', 'cprestamos_prendarios_lag_1', 'cprestamos_prendarios_lag_2', 'cprestamos_hipotecarios_lag_1', 'cprestamos_hipotecarios_lag_2', 'cplazo_fijo_lag_1', 'cplazo_fijo_lag_2', 'cinversion1_lag_1', 'cinversion1_lag_2', 'cinversion2_lag_1', 'cinversion2_lag_2', 'cseguro_vida_lag_1', 'cseguro_vida_lag_2', 'cseguro_auto_lag_1', 'cseguro_auto_lag_2', 'cseguro_vivienda_lag_1', 'cseguro_vivienda_lag_2', 'cseguro_accidentes_personales_lag_1', 'cseguro_accidentes_personales_lag_2', 'cpayroll_trx_lag_1', 'cpayroll_trx_lag_2', 'cpayroll2_trx_lag_1', 'cpayroll2_trx_lag_2', 'ccuenta_debitos_automaticos_lag_1', 'ccuenta_debitos_automaticos_lag_2', 'ctarjeta_visa_debitos_automaticos_lag_1', 'ctarjeta_visa_debitos_automaticos_lag_2', 'ctarjeta_master_debitos_automaticos_lag_1', 'ctarjeta_master_debitos_automaticos_lag_2', 'cpagodeservicios_lag_1', 'cpagodeservicios_lag_2', 'cpagomiscuentas_lag_1', 'cpagomiscuentas_lag_2', 'ccajeros_propios_descuentos_lag_1', 'ccajeros_propios_descuentos_lag_2', 'ctarjeta_visa_descuentos_lag_1', 'ctarjeta_visa_descuentos_lag_2', 'ctarjeta_master_descuentos_lag_1', 'ctarjeta_master_descuentos_lag_2', 'ccomisiones_mantenimiento_lag_1', 'ccomisiones_mantenimiento_lag_2', 'ccomisiones_otras_lag_1', 'ccomisiones_otras_lag_2', 'cforex_lag_1', 'cforex_lag_2', 'cforex_buy_lag_1', 'cforex_buy_lag_2', 'ctransferencias_recibidas_lag_1', 'ctransferencias_recibidas_lag_2', 'ctransferencias_emitidas_lag_1', 'ctransferencias_emitidas_lag_2', 'cextraccion_autoservicio_lag_1', 'cextraccion_autoservicio_lag_2', 'ccheques_depositados_lag_1', 'ccheques_depositados_lag_2', 'ccheques_emitidos_lag_1', 'ccheques_emitidos_lag_2', 'ccheques_depositados_rechazados_lag_1', 'ccheques_depositados_rechazados_lag_2', 'ccheques_emitidos_rechazados_lag_1', 'ccheques_emitidos_rechazados_lag_2', 'ccallcenter_transacciones_lag_1', 'ccallcenter_transacciones_lag_2', 'chomebanking_transacciones_lag_1', 'chomebanking_transacciones_lag_2', 'ccajas_transacciones_lag_1', 'ccajas_transacciones_lag_2', 'ccajas_consultas_lag_1', 'ccajas_consultas_lag_2', 'ccajas_depositos_lag_1', 'ccajas_depositos_lag_2', 'ccajas_extracciones_lag_1', 'ccajas_extracciones_lag_2', 'ccajas_otras_lag_1', 'ccajas_otras_lag_2', 'catm_trx_lag_1', 'catm_trx_lag_2', 'catm_trx_other_lag_1', 'catm_trx_other_lag_2', 'ctrx_quarter_lag_1', 'ctrx_quarter_lag_2', 'cmobile_app_trx_lag_1', 'cmobile_app_trx_lag_2', 'Master_cconsumos_lag_1', 'Master_cconsumos_lag_2', 'Master_cadelantosefectivo_lag_1', 'Master_cadelantosefectivo_lag_2', 'Visa_cconsumos_lag_1', 'Visa_cconsumos_lag_2', 'Visa_cadelantosefectivo_lag_1', 'Visa_cadelantosefectivo_lag_2', 'Master_Fvencimiento_lag_1', 'Master_Fvencimiento_lag_2', 'Master_Finiciomora_lag_1', 'Master_Finiciomora_lag_2', 'Master_fultimo_cierre_lag_1', 'Master_fultimo_cierre_lag_2', 'Master_fechaalta_lag_1', 'Master_fechaalta_lag_2', 'Visa_Fvencimiento_lag_1', 'Visa_Fvencimiento_lag_2', 'Visa_Finiciomora_lag_1', 'Visa_Finiciomora_lag_2', 'Visa_fultimo_cierre_lag_1', 'Visa_fultimo_cierre_lag_2', 'Visa_fechaalta_lag_1', 'Visa_fechaalta_lag_2', 'mrentabilidad_lag_1', 'mrentabilidad_lag_2', 'mrentabilidad_annual_lag_1', 'mrentabilidad_annual_lag_2', 'mcomisiones_lag_1', 'mcomisiones_lag_2', 'mactivos_margen_lag_1', 'mactivos_margen_lag_2', 'mpasivos_margen_lag_1', 'mpasivos_margen_lag_2', 'mcuenta_corriente_adicional_lag_1', 'mcuenta_corriente_adicional_lag_2', 'mcuenta_corriente_lag_1', 'mcuenta_corriente_lag_2', 'mcaja_ahorro_lag_1', 'mcaja_ahorro_lag_2', 'mcaja_ahorro_adicional_lag_1', 'mcaja_ahorro_adicional_lag_2', 'mcaja_ahorro_dolares_lag_1', 'mcaja_ahorro_dolares_lag_2', 'mcuentas_saldo_lag_1', 'mcuentas_saldo_lag_2', 'mautoservicio_lag_1', 'mautoservicio_lag_2', 'mtarjeta_visa_consumo_lag_1', 'mtarjeta_visa_consumo_lag_2', 'mtarjeta_master_consumo_lag_1', 'mtarjeta_master_consumo_lag_2', 'mprestamos_personales_lag_1', 'mprestamos_personales_lag_2', 'mprestamos_prendarios_lag_1', 'mprestamos_prendarios_lag_2', 'mprestamos_hipotecarios_lag_1', 'mprestamos_hipotecarios_lag_2', 'mplazo_fijo_dolares_lag_1', 'mplazo_fijo_dolares_lag_2', 'mplazo_fijo_pesos_lag_1', 'mplazo_fijo_pesos_lag_2', 'minversion1_pesos_lag_1', 'minversion1_pesos_lag_2', 'minversion1_dolares_lag_1', 'minversion1_dolares_lag_2', 'minversion2_lag_1', 'minversion2_lag_2', 'mpayroll_lag_1', 'mpayroll_lag_2', 'mpayroll2_lag_1', 'mpayroll2_lag_2', 'mcuenta_debitos_automaticos_lag_1', 'mcuenta_debitos_automaticos_lag_2', 'mtarjeta_visa_debitos_automaticos_lag_1', 'mtarjeta_visa_debitos_automaticos_lag_2', 'mttarjeta_master_debitos_automaticos_lag_1', 'mttarjeta_master_debitos_automaticos_lag_2', 'mpagodeservicios_lag_1', 'mpagodeservicios_lag_2', 'mpagomiscuentas_lag_1', 'mpagomiscuentas_lag_2', 'mcajeros_propios_descuentos_lag_1', 'mcajeros_propios_descuentos_lag_2', 'mtarjeta_visa_descuentos_lag_1', 'mtarjeta_visa_descuentos_lag_2', 'mtarjeta_master_descuentos_lag_1', 'mtarjeta_master_descuentos_lag_2', 'mcomisiones_mantenimiento_lag_1', 'mcomisiones_mantenimiento_lag_2', 'mcomisiones_otras_lag_1', 'mcomisiones_otras_lag_2', 'mforex_buy_lag_1', 'mforex_buy_lag_2', 'mforex_sell_lag_1', 'mforex_sell_lag_2', 'mtransferencias_recibidas_lag_1', 'mtransferencias_recibidas_lag_2', 'mtransferencias_emitidas_lag_1', 'mtransferencias_emitidas_lag_2', 'mextraccion_autoservicio_lag_1', 'mextraccion_autoservicio_lag_2', 'mcheques_depositados_lag_1', 'mcheques_depositados_lag_2', 'mcheques_emitidos_lag_1', 'mcheques_emitidos_lag_2', 'mcheques_depositados_rechazados_lag_1', 'mcheques_depositados_rechazados_lag_2', 'mcheques_emitidos_rechazados_lag_1', 'mcheques_emitidos_rechazados_lag_2', 'matm_lag_1', 'matm_lag_2', 'matm_other_lag_1', 'matm_other_lag_2', 'Master_mfinanciacion_limite_lag_1', 'Master_mfinanciacion_limite_lag_2', 'Master_msaldototal_lag_1', 'Master_msaldototal_lag_2', 'Master_msaldopesos_lag_1', 'Master_msaldopesos_lag_2', 'Master_msaldodolares_lag_1', 'Master_msaldodolares_lag_2', 'Master_mconsumospesos_lag_1', 'Master_mconsumospesos_lag_2', 'Master_mconsumosdolares_lag_1', 'Master_mconsumosdolares_lag_2', 'Master_mlimitecompra_lag_1', 'Master_mlimitecompra_lag_2', 'Master_madelantopesos_lag_1', 'Master_madelantopesos_lag_2', 'Master_madelantodolares_lag_1', 'Master_madelantodolares_lag_2', 'Master_mpagado_lag_1', 'Master_mpagado_lag_2', 'Master_mpagospesos_lag_1', 'Master_mpagospesos_lag_2', 'Master_mpagosdolares_lag_1', 'Master_mpagosdolares_lag_2', 'Master_mconsumototal_lag_1', 'Master_mconsumototal_lag_2', 'Master_mpagominimo_lag_1', 'Master_mpagominimo_lag_2', 'Visa_mfinanciacion_limite_lag_1', 'Visa_mfinanciacion_limite_lag_2', 'Visa_msaldototal_lag_1', 'Visa_msaldototal_lag_2', 'Visa_msaldopesos_lag_1', 'Visa_msaldopesos_lag_2', 'Visa_msaldodolares_lag_1', 'Visa_msaldodolares_lag_2', 'Visa_mconsumospesos_lag_1', 'Visa_mconsumospesos_lag_2', 'Visa_mconsumosdolares_lag_1', 'Visa_mconsumosdolares_lag_2', 'Visa_mlimitecompra_lag_1', 'Visa_mlimitecompra_lag_2', 'Visa_madelantopesos_lag_1', 'Visa_madelantopesos_lag_2', 'Visa_madelantodolares_lag_1', 'Visa_madelantodolares_lag_2', 'Visa_mpagado_lag_1', 'Visa_mpagado_lag_2', 'Visa_mpagospesos_lag_1', 'Visa_mpagospesos_lag_2', 'Visa_mpagosdolares_lag_1', 'Visa_mpagosdolares_lag_2', 'Visa_mconsumototal_lag_1', 'Visa_mconsumototal_lag_2', 'Visa_mpagominimo_lag_1', 'Visa_mpagominimo_lag_2', 'cforex_sell_lag_1', 'cforex_sell_lag_2']
+2025-10-10 03:20:44,996 - INFO - __name__ 84 - Realizando feature engineering de delta lag con 2 lags para 137 atributos
+2025-10-10 03:20:45,005 - WARNING - __name__ 102 - El atributo mtarjeta_visa_debitos_automaticos no existe en el DataFrame
+2025-10-10 03:21:42,049 - INFO - __name__ 115 - Feature engineering de delta lag completado. DataFrame resultante con 699 columnas
+2025-10-10 03:21:42,268 - INFO - __name__ 638 - Operación 'delta_lag' aplicada. Nombre de nuevas variables: ['cproductos_delta_lag_1', 'cproductos_delta_lag_2', 'ccuenta_corriente_delta_lag_1', 'ccuenta_corriente_delta_lag_2', 'ccaja_ahorro_delta_lag_1', 'ccaja_ahorro_delta_lag_2', 'ctarjeta_debito_delta_lag_1', 'ctarjeta_debito_delta_lag_2', 'ctarjeta_debito_transacciones_delta_lag_1', 'ctarjeta_debito_transacciones_delta_lag_2', 'ctarjeta_visa_delta_lag_1', 'ctarjeta_visa_delta_lag_2', 'ctarjeta_visa_transacciones_delta_lag_1', 'ctarjeta_visa_transacciones_delta_lag_2', 'ctarjeta_master_delta_lag_1', 'ctarjeta_master_delta_lag_2', 'ctarjeta_master_transacciones_delta_lag_1', 'ctarjeta_master_transacciones_delta_lag_2', 'cprestamos_personales_delta_lag_1', 'cprestamos_personales_delta_lag_2', 'cprestamos_prendarios_delta_lag_1', 'cprestamos_prendarios_delta_lag_2', 'cprestamos_hipotecarios_delta_lag_1', 'cprestamos_hipotecarios_delta_lag_2', 'cplazo_fijo_delta_lag_1', 'cplazo_fijo_delta_lag_2', 'cinversion1_delta_lag_1', 'cinversion1_delta_lag_2', 'cinversion2_delta_lag_1', 'cinversion2_delta_lag_2', 'cseguro_vida_delta_lag_1', 'cseguro_vida_delta_lag_2', 'cseguro_auto_delta_lag_1', 'cseguro_auto_delta_lag_2', 'cseguro_vivienda_delta_lag_1', 'cseguro_vivienda_delta_lag_2', 'cseguro_accidentes_personales_delta_lag_1', 'cseguro_accidentes_personales_delta_lag_2', 'cpayroll_trx_delta_lag_1', 'cpayroll_trx_delta_lag_2', 'cpayroll2_trx_delta_lag_1', 'cpayroll2_trx_delta_lag_2', 'ccuenta_debitos_automaticos_delta_lag_1', 'ccuenta_debitos_automaticos_delta_lag_2', 'ctarjeta_visa_debitos_automaticos_delta_lag_1', 'ctarjeta_visa_debitos_automaticos_delta_lag_2', 'ctarjeta_master_debitos_automaticos_delta_lag_1', 'ctarjeta_master_debitos_automaticos_delta_lag_2', 'cpagodeservicios_delta_lag_1', 'cpagodeservicios_delta_lag_2', 'cpagomiscuentas_delta_lag_1', 'cpagomiscuentas_delta_lag_2', 'ccajeros_propios_descuentos_delta_lag_1', 'ccajeros_propios_descuentos_delta_lag_2', 'ctarjeta_visa_descuentos_delta_lag_1', 'ctarjeta_visa_descuentos_delta_lag_2', 'ctarjeta_master_descuentos_delta_lag_1', 'ctarjeta_master_descuentos_delta_lag_2', 'ccomisiones_mantenimiento_delta_lag_1', 'ccomisiones_mantenimiento_delta_lag_2', 'ccomisiones_otras_delta_lag_1', 'ccomisiones_otras_delta_lag_2', 'cforex_delta_lag_1', 'cforex_delta_lag_2', 'cforex_buy_delta_lag_1', 'cforex_buy_delta_lag_2', 'ctransferencias_recibidas_delta_lag_1', 'ctransferencias_recibidas_delta_lag_2', 'ctransferencias_emitidas_delta_lag_1', 'ctransferencias_emitidas_delta_lag_2', 'cextraccion_autoservicio_delta_lag_1', 'cextraccion_autoservicio_delta_lag_2', 'ccheques_depositados_delta_lag_1', 'ccheques_depositados_delta_lag_2', 'ccheques_emitidos_delta_lag_1', 'ccheques_emitidos_delta_lag_2', 'ccheques_depositados_rechazados_delta_lag_1', 'ccheques_depositados_rechazados_delta_lag_2', 'ccheques_emitidos_rechazados_delta_lag_1', 'ccheques_emitidos_rechazados_delta_lag_2', 'ccallcenter_transacciones_delta_lag_1', 'ccallcenter_transacciones_delta_lag_2', 'chomebanking_transacciones_delta_lag_1', 'chomebanking_transacciones_delta_lag_2', 'ccajas_transacciones_delta_lag_1', 'ccajas_transacciones_delta_lag_2', 'ccajas_consultas_delta_lag_1', 'ccajas_consultas_delta_lag_2', 'ccajas_depositos_delta_lag_1', 'ccajas_depositos_delta_lag_2', 'ccajas_extracciones_delta_lag_1', 'ccajas_extracciones_delta_lag_2', 'ccajas_otras_delta_lag_1', 'ccajas_otras_delta_lag_2', 'catm_trx_delta_lag_1', 'catm_trx_delta_lag_2', 'catm_trx_other_delta_lag_1', 'catm_trx_other_delta_lag_2', 'ctrx_quarter_delta_lag_1', 'ctrx_quarter_delta_lag_2', 'cmobile_app_trx_delta_lag_1', 'cmobile_app_trx_delta_lag_2', 'Master_cconsumos_delta_lag_1', 'Master_cconsumos_delta_lag_2', 'Master_cadelantosefectivo_delta_lag_1', 'Master_cadelantosefectivo_delta_lag_2', 'Visa_cconsumos_delta_lag_1', 'Visa_cconsumos_delta_lag_2', 'Visa_cadelantosefectivo_delta_lag_1', 'Visa_cadelantosefectivo_delta_lag_2', 'Master_Fvencimiento_delta_lag_1', 'Master_Fvencimiento_delta_lag_2', 'Master_Finiciomora_delta_lag_1', 'Master_Finiciomora_delta_lag_2', 'Master_fultimo_cierre_delta_lag_1', 'Master_fultimo_cierre_delta_lag_2', 'Master_fechaalta_delta_lag_1', 'Master_fechaalta_delta_lag_2', 'Visa_Fvencimiento_delta_lag_1', 'Visa_Fvencimiento_delta_lag_2', 'Visa_Finiciomora_delta_lag_1', 'Visa_Finiciomora_delta_lag_2', 'Visa_fultimo_cierre_delta_lag_1', 'Visa_fultimo_cierre_delta_lag_2', 'Visa_fechaalta_delta_lag_1', 'Visa_fechaalta_delta_lag_2', 'mrentabilidad_delta_lag_1', 'mrentabilidad_delta_lag_2', 'mrentabilidad_annual_delta_lag_1', 'mrentabilidad_annual_delta_lag_2', 'mcomisiones_delta_lag_1', 'mcomisiones_delta_lag_2', 'mactivos_margen_delta_lag_1', 'mactivos_margen_delta_lag_2', 'mpasivos_margen_delta_lag_1', 'mpasivos_margen_delta_lag_2', 'mcuenta_corriente_adicional_delta_lag_1', 'mcuenta_corriente_adicional_delta_lag_2', 'mcuenta_corriente_delta_lag_1', 'mcuenta_corriente_delta_lag_2', 'mcaja_ahorro_delta_lag_1', 'mcaja_ahorro_delta_lag_2', 'mcaja_ahorro_adicional_delta_lag_1', 'mcaja_ahorro_adicional_delta_lag_2', 'mcaja_ahorro_dolares_delta_lag_1', 'mcaja_ahorro_dolares_delta_lag_2', 'mcuentas_saldo_delta_lag_1', 'mcuentas_saldo_delta_lag_2', 'mautoservicio_delta_lag_1', 'mautoservicio_delta_lag_2', 'mtarjeta_visa_consumo_delta_lag_1', 'mtarjeta_visa_consumo_delta_lag_2', 'mtarjeta_master_consumo_delta_lag_1', 'mtarjeta_master_consumo_delta_lag_2', 'mprestamos_personales_delta_lag_1', 'mprestamos_personales_delta_lag_2', 'mprestamos_prendarios_delta_lag_1', 'mprestamos_prendarios_delta_lag_2', 'mprestamos_hipotecarios_delta_lag_1', 'mprestamos_hipotecarios_delta_lag_2', 'mplazo_fijo_dolares_delta_lag_1', 'mplazo_fijo_dolares_delta_lag_2', 'mplazo_fijo_pesos_delta_lag_1', 'mplazo_fijo_pesos_delta_lag_2', 'minversion1_pesos_delta_lag_1', 'minversion1_pesos_delta_lag_2', 'minversion1_dolares_delta_lag_1', 'minversion1_dolares_delta_lag_2', 'minversion2_delta_lag_1', 'minversion2_delta_lag_2', 'mpayroll_delta_lag_1', 'mpayroll_delta_lag_2', 'mpayroll2_delta_lag_1', 'mpayroll2_delta_lag_2', 'mcuenta_debitos_automaticos_delta_lag_1', 'mcuenta_debitos_automaticos_delta_lag_2', 'mtarjeta_visa_debitos_automaticos_delta_lag_1', 'mtarjeta_visa_debitos_automaticos_delta_lag_2', 'mttarjeta_master_debitos_automaticos_delta_lag_1', 'mttarjeta_master_debitos_automaticos_delta_lag_2', 'mpagodeservicios_delta_lag_1', 'mpagodeservicios_delta_lag_2', 'mpagomiscuentas_delta_lag_1', 'mpagomiscuentas_delta_lag_2', 'mcajeros_propios_descuentos_delta_lag_1', 'mcajeros_propios_descuentos_delta_lag_2', 'mtarjeta_visa_descuentos_delta_lag_1', 'mtarjeta_visa_descuentos_delta_lag_2', 'mtarjeta_master_descuentos_delta_lag_1', 'mtarjeta_master_descuentos_delta_lag_2', 'mcomisiones_mantenimiento_delta_lag_1', 'mcomisiones_mantenimiento_delta_lag_2', 'mcomisiones_otras_delta_lag_1', 'mcomisiones_otras_delta_lag_2', 'mforex_buy_delta_lag_1', 'mforex_buy_delta_lag_2', 'mforex_sell_delta_lag_1', 'mforex_sell_delta_lag_2', 'mtransferencias_recibidas_delta_lag_1', 'mtransferencias_recibidas_delta_lag_2', 'mtransferencias_emitidas_delta_lag_1', 'mtransferencias_emitidas_delta_lag_2', 'mextraccion_autoservicio_delta_lag_1', 'mextraccion_autoservicio_delta_lag_2', 'mcheques_depositados_delta_lag_1', 'mcheques_depositados_delta_lag_2', 'mcheques_emitidos_delta_lag_1', 'mcheques_emitidos_delta_lag_2', 'mcheques_depositados_rechazados_delta_lag_1', 'mcheques_depositados_rechazados_delta_lag_2', 'mcheques_emitidos_rechazados_delta_lag_1', 'mcheques_emitidos_rechazados_delta_lag_2', 'matm_delta_lag_1', 'matm_delta_lag_2', 'matm_other_delta_lag_1', 'matm_other_delta_lag_2', 'Master_mfinanciacion_limite_delta_lag_1', 'Master_mfinanciacion_limite_delta_lag_2', 'Master_msaldototal_delta_lag_1', 'Master_msaldototal_delta_lag_2', 'Master_msaldopesos_delta_lag_1', 'Master_msaldopesos_delta_lag_2', 'Master_msaldodolares_delta_lag_1', 'Master_msaldodolares_delta_lag_2', 'Master_mconsumospesos_delta_lag_1', 'Master_mconsumospesos_delta_lag_2', 'Master_mconsumosdolares_delta_lag_1', 'Master_mconsumosdolares_delta_lag_2', 'Master_mlimitecompra_delta_lag_1', 'Master_mlimitecompra_delta_lag_2', 'Master_madelantopesos_delta_lag_1', 'Master_madelantopesos_delta_lag_2', 'Master_madelantodolares_delta_lag_1', 'Master_madelantodolares_delta_lag_2', 'Master_mpagado_delta_lag_1', 'Master_mpagado_delta_lag_2', 'Master_mpagospesos_delta_lag_1', 'Master_mpagospesos_delta_lag_2', 'Master_mpagosdolares_delta_lag_1', 'Master_mpagosdolares_delta_lag_2', 'Master_mconsumototal_delta_lag_1', 'Master_mconsumototal_delta_lag_2', 'Master_mpagominimo_delta_lag_1', 'Master_mpagominimo_delta_lag_2', 'Visa_mfinanciacion_limite_delta_lag_1', 'Visa_mfinanciacion_limite_delta_lag_2', 'Visa_msaldototal_delta_lag_1', 'Visa_msaldototal_delta_lag_2', 'Visa_msaldopesos_delta_lag_1', 'Visa_msaldopesos_delta_lag_2', 'Visa_msaldodolares_delta_lag_1', 'Visa_msaldodolares_delta_lag_2', 'Visa_mconsumospesos_delta_lag_1', 'Visa_mconsumospesos_delta_lag_2', 'Visa_mconsumosdolares_delta_lag_1', 'Visa_mconsumosdolares_delta_lag_2', 'Visa_mlimitecompra_delta_lag_1', 'Visa_mlimitecompra_delta_lag_2', 'Visa_madelantopesos_delta_lag_1', 'Visa_madelantopesos_delta_lag_2', 'Visa_madelantodolares_delta_lag_1', 'Visa_madelantodolares_delta_lag_2', 'Visa_mpagado_delta_lag_1', 'Visa_mpagado_delta_lag_2', 'Visa_mpagospesos_delta_lag_1', 'Visa_mpagospesos_delta_lag_2', 'Visa_mpagosdolares_delta_lag_1', 'Visa_mpagosdolares_delta_lag_2', 'Visa_mconsumototal_delta_lag_1', 'Visa_mconsumototal_delta_lag_2', 'Visa_mpagominimo_delta_lag_1', 'Visa_mpagominimo_delta_lag_2', 'cforex_sell_delta_lag_1', 'cforex_sell_delta_lag_2']
+2025-10-10 03:21:42,272 - INFO - __name__ 193 - Realizando feature engineering con percentiles aproximados para 1 atributos
+2025-10-10 03:21:42,277 - WARNING - __name__ 202 - El atributo mcuentas_saldomcuentas_saldo no existe en el DataFrame
+2025-10-10 03:21:42,278 - INFO - __name__ 242 - Feature engineering completado. DataFrame resultante con 699 columnas
+2025-10-10 03:21:42,278 - INFO - __name__ 641 - Operación 'percentil' aplicada. Nombre de nuevas variables: ['mcuentas_saldomcuentas_saldo_percentil']
+2025-10-10 03:21:42,279 - INFO - __name__ 428 - Realizando feature engineering de cambio categórico con 2 lags para 13 atributos
+2025-10-10 03:23:30,288 - INFO - __name__ 455 - Feature engineering de cambio categórico completado. DataFrame resultante con 725 columnas
+2025-10-10 03:23:30,624 - INFO - __name__ 653 - Operación 'cambio_estado' aplicada. Nombre de nuevas variables: ['active_quarter_cambio_lag_1', 'active_quarter_cambio_lag_2', 'cliente_vip_cambio_lag_1', 'cliente_vip_cambio_lag_2', 'internet_cambio_lag_1', 'internet_cambio_lag_2', 'tcuentas_cambio_lag_1', 'tcuentas_cambio_lag_2', 'cdescubierto_preacordado_cambio_lag_1', 'cdescubierto_preacordado_cambio_lag_2', 'ccaja_seguridad_cambio_lag_1', 'ccaja_seguridad_cambio_lag_2', 'tcallcenter_cambio_lag_1', 'tcallcenter_cambio_lag_2', 'thomebanking_cambio_lag_1', 'thomebanking_cambio_lag_2', 'tmobile_app_cambio_lag_1', 'tmobile_app_cambio_lag_2', 'Master_delinquency_cambio_lag_1', 'Master_delinquency_cambio_lag_2', 'Master_status_cambio_lag_1', 'Master_status_cambio_lag_2', 'Visa_delinquency_cambio_lag_1', 'Visa_delinquency_cambio_lag_2', 'Visa_status_cambio_lag_1', 'Visa_status_cambio_lag_2']
+2025-10-10 03:28:50,185 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-10 03:28:56,716 - INFO - __name__ 54 - Conversión completada:
+2025-10-10 03:28:56,721 - INFO - __name__ 55 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-10 03:28:56,722 - INFO - __name__ 56 -   Binario - 0: 642830, 1: 8513
+2025-10-10 03:28:56,723 - INFO - __name__ 57 -   Distribución: 1.31% casos positivos
+2025-10-10 03:28:57,492 - INFO - src.optimization_cv 161 - Iniciando optimización con CV - 75 trials
+2025-10-10 03:28:57,493 - INFO - src.optimization_cv 162 - Configuración CV: períodos=['202102', '202103']
+2025-10-10 03:32:10,464 - INFO - src.optimization_cv 90 - Trial 0: Ganancia CV = 337,394,805 ± 18,511,789 
+2025-10-10 03:32:10,469 - INFO - src.optimization_cv 91 - Trial 0: Mejor iteración en CV: 394 
+2025-10-10 03:32:10,489 - INFO - src.optimization_cv 146 - Iteración 0 guardada. Ganancia promedio CV: 337,394,805 
+2025-10-10 03:33:35,824 - INFO - src.optimization_cv 90 - Trial 1: Ganancia CV = 349,052,571 ± 12,750,555 
+2025-10-10 03:33:35,829 - INFO - src.optimization_cv 91 - Trial 1: Mejor iteración en CV: 69 
+2025-10-10 03:33:35,844 - INFO - src.optimization_cv 146 - Iteración 1 guardada. Ganancia promedio CV: 349,052,571 
+2025-10-10 03:35:40,274 - INFO - src.optimization_cv 90 - Trial 2: Ganancia CV = 344,748,571 ± 18,702,461 
+2025-10-10 03:35:40,281 - INFO - src.optimization_cv 91 - Trial 2: Mejor iteración en CV: 160 
+2025-10-10 03:35:40,300 - INFO - src.optimization_cv 146 - Iteración 2 guardada. Ganancia promedio CV: 344,748,571 
+2025-10-10 03:40:02,739 - INFO - src.optimization_cv 90 - Trial 3: Ganancia CV = 335,314,307 ± 17,403,081 
+2025-10-10 03:40:02,744 - INFO - src.optimization_cv 91 - Trial 3: Mejor iteración en CV: 521 
+2025-10-10 03:40:02,759 - INFO - src.optimization_cv 146 - Iteración 3 guardada. Ganancia promedio CV: 335,314,307 
+2025-10-10 03:41:32,273 - INFO - src.optimization_cv 90 - Trial 4: Ganancia CV = 337,346,540 ± 16,846,335 
+2025-10-10 03:41:32,280 - INFO - src.optimization_cv 91 - Trial 4: Mejor iteración en CV: 136 
+2025-10-10 03:41:32,300 - INFO - src.optimization_cv 146 - Iteración 4 guardada. Ganancia promedio CV: 337,346,540 
+2025-10-10 03:43:32,979 - INFO - src.optimization_cv 90 - Trial 5: Ganancia CV = 348,552,786 ± 15,934,696 
+2025-10-10 03:43:32,986 - INFO - src.optimization_cv 91 - Trial 5: Mejor iteración en CV: 116 
+2025-10-10 03:43:33,001 - INFO - src.optimization_cv 146 - Iteración 5 guardada. Ganancia promedio CV: 348,552,786 
+2025-10-10 03:44:47,057 - INFO - src.optimization_cv 90 - Trial 6: Ganancia CV = 335,168,960 ± 16,357,407 
+2025-10-10 03:44:47,064 - INFO - src.optimization_cv 91 - Trial 6: Mejor iteración en CV: 49 
+2025-10-10 03:44:47,082 - INFO - src.optimization_cv 146 - Iteración 6 guardada. Ganancia promedio CV: 335,168,960 
+2025-10-10 03:46:37,463 - INFO - src.optimization_cv 90 - Trial 7: Ganancia CV = 328,398,800 ± 14,901,262 
+2025-10-10 03:46:37,469 - INFO - src.optimization_cv 91 - Trial 7: Mejor iteración en CV: 189 
+2025-10-10 03:46:37,487 - INFO - src.optimization_cv 146 - Iteración 7 guardada. Ganancia promedio CV: 328,398,800 
+2025-10-10 03:48:29,767 - INFO - src.optimization_cv 90 - Trial 8: Ganancia CV = 346,491,000 ± 11,755,622 
+2025-10-10 03:48:29,770 - INFO - src.optimization_cv 91 - Trial 8: Mejor iteración en CV: 103 
+2025-10-10 03:48:29,782 - INFO - src.optimization_cv 146 - Iteración 8 guardada. Ganancia promedio CV: 346,491,000 
+2025-10-10 03:50:23,246 - INFO - src.optimization_cv 90 - Trial 9: Ganancia CV = 335,939,831 ± 17,231,247 
+2025-10-10 03:50:23,252 - INFO - src.optimization_cv 91 - Trial 9: Mejor iteración en CV: 283 
+2025-10-10 03:50:23,275 - INFO - src.optimization_cv 146 - Iteración 9 guardada. Ganancia promedio CV: 335,939,831 
+2025-10-10 03:51:49,389 - INFO - src.optimization_cv 90 - Trial 10: Ganancia CV = 336,677,128 ± 10,640,537 
+2025-10-10 03:51:49,392 - INFO - src.optimization_cv 91 - Trial 10: Mejor iteración en CV: 38 
+2025-10-10 03:51:49,404 - INFO - src.optimization_cv 146 - Iteración 10 guardada. Ganancia promedio CV: 336,677,128 
+2025-10-10 03:53:25,613 - INFO - src.optimization_cv 90 - Trial 11: Ganancia CV = 348,548,562 ± 12,487,714 
+2025-10-10 03:53:25,620 - INFO - src.optimization_cv 91 - Trial 11: Mejor iteración en CV: 63 
+2025-10-10 03:53:25,642 - INFO - src.optimization_cv 146 - Iteración 11 guardada. Ganancia promedio CV: 348,548,562 
+2025-10-10 03:54:44,940 - INFO - src.optimization_cv 90 - Trial 12: Ganancia CV = 343,013,039 ± 18,429,326 
+2025-10-10 03:54:44,946 - INFO - src.optimization_cv 91 - Trial 12: Mejor iteración en CV: 76 
+2025-10-10 03:54:44,965 - INFO - src.optimization_cv 146 - Iteración 12 guardada. Ganancia promedio CV: 343,013,039 
+2025-10-10 03:56:08,827 - INFO - src.optimization_cv 90 - Trial 13: Ganancia CV = 343,671,615 ± 11,427,676 
+2025-10-10 03:56:08,837 - INFO - src.optimization_cv 91 - Trial 13: Mejor iteración en CV: 51 
+2025-10-10 03:56:08,859 - INFO - src.optimization_cv 146 - Iteración 13 guardada. Ganancia promedio CV: 343,671,615 
+2025-10-10 03:57:42,096 - INFO - src.optimization_cv 90 - Trial 14: Ganancia CV = 348,050,944 ± 12,859,658 
+2025-10-10 03:57:42,100 - INFO - src.optimization_cv 91 - Trial 14: Mejor iteración en CV: 71 
+2025-10-10 03:57:42,115 - INFO - src.optimization_cv 146 - Iteración 14 guardada. Ganancia promedio CV: 348,050,944 
+2025-10-10 03:58:52,871 - INFO - src.optimization_cv 90 - Trial 15: Ganancia CV = 331,493,818 ± 21,269,516 
+2025-10-10 03:58:52,875 - INFO - src.optimization_cv 91 - Trial 15: Mejor iteración en CV: 76 
+2025-10-10 03:58:52,914 - INFO - src.optimization_cv 146 - Iteración 15 guardada. Ganancia promedio CV: 331,493,818 
+2025-10-10 04:00:00,289 - INFO - src.optimization_cv 90 - Trial 16: Ganancia CV = 342,317,463 ± 16,322,638 
+2025-10-10 04:00:00,292 - INFO - src.optimization_cv 91 - Trial 16: Mejor iteración en CV: 40 
+2025-10-10 04:00:00,308 - INFO - src.optimization_cv 146 - Iteración 16 guardada. Ganancia promedio CV: 342,317,463 
+2025-10-10 04:01:00,288 - INFO - src.optimization_cv 90 - Trial 17: Ganancia CV = 345,676,522 ± 15,644,731 
+2025-10-10 04:01:00,291 - INFO - src.optimization_cv 91 - Trial 17: Mejor iteración en CV: 68 
+2025-10-10 04:01:00,310 - INFO - src.optimization_cv 146 - Iteración 17 guardada. Ganancia promedio CV: 345,676,522 
+2025-10-10 04:03:18,473 - INFO - src.optimization_cv 90 - Trial 18: Ganancia CV = 325,323,575 ± 17,797,294 
+2025-10-10 04:03:18,479 - INFO - src.optimization_cv 91 - Trial 18: Mejor iteración en CV: 291 
+2025-10-10 04:03:18,501 - INFO - src.optimization_cv 146 - Iteración 18 guardada. Ganancia promedio CV: 325,323,575 
+2025-10-10 04:04:43,999 - INFO - src.optimization_cv 90 - Trial 19: Ganancia CV = 341,691,263 ± 13,721,447 
+2025-10-10 04:04:44,007 - INFO - src.optimization_cv 91 - Trial 19: Mejor iteración en CV: 37 
+2025-10-10 04:04:44,028 - INFO - src.optimization_cv 146 - Iteración 19 guardada. Ganancia promedio CV: 341,691,263 
+2025-10-10 04:06:25,594 - INFO - src.optimization_cv 90 - Trial 20: Ganancia CV = 342,914,135 ± 18,105,953 
+2025-10-10 04:06:25,601 - INFO - src.optimization_cv 91 - Trial 20: Mejor iteración en CV: 147 
+2025-10-10 04:06:25,621 - INFO - src.optimization_cv 146 - Iteración 20 guardada. Ganancia promedio CV: 342,914,135 
+2025-10-10 04:08:09,509 - INFO - src.optimization_cv 90 - Trial 21: Ganancia CV = 350,055,789 ± 13,288,424 
+2025-10-10 04:08:09,514 - INFO - src.optimization_cv 91 - Trial 21: Mejor iteración en CV: 75 
+2025-10-10 04:08:09,534 - INFO - src.optimization_cv 146 - Iteración 21 guardada. Ganancia promedio CV: 350,055,789 
+2025-10-10 04:09:41,439 - INFO - src.optimization_cv 90 - Trial 22: Ganancia CV = 346,804,769 ± 15,963,497 
+2025-10-10 04:09:41,446 - INFO - src.optimization_cv 91 - Trial 22: Mejor iteración en CV: 51 
+2025-10-10 04:09:41,472 - INFO - src.optimization_cv 146 - Iteración 22 guardada. Ganancia promedio CV: 346,804,769 
+2025-10-10 04:11:26,356 - INFO - src.optimization_cv 90 - Trial 23: Ganancia CV = 343,923,933 ± 16,753,428 
+2025-10-10 04:11:26,364 - INFO - src.optimization_cv 91 - Trial 23: Mejor iteración en CV: 119 
+2025-10-10 04:11:26,387 - INFO - src.optimization_cv 146 - Iteración 23 guardada. Ganancia promedio CV: 343,923,933 
+2025-10-10 04:12:52,255 - INFO - src.optimization_cv 90 - Trial 24: Ganancia CV = 345,907,379 ± 11,775,900 
+2025-10-10 04:12:52,264 - INFO - src.optimization_cv 91 - Trial 24: Mejor iteración en CV: 57 
+2025-10-10 04:12:52,290 - INFO - src.optimization_cv 146 - Iteración 24 guardada. Ganancia promedio CV: 345,907,379 
+2025-10-10 04:14:37,315 - INFO - src.optimization_cv 90 - Trial 25: Ganancia CV = 344,521,722 ± 13,629,216 
+2025-10-10 04:14:37,322 - INFO - src.optimization_cv 91 - Trial 25: Mejor iteración en CV: 78 
+2025-10-10 04:14:37,343 - INFO - src.optimization_cv 146 - Iteración 25 guardada. Ganancia promedio CV: 344,521,722 
+2025-10-10 04:16:17,784 - INFO - src.optimization_cv 90 - Trial 26: Ganancia CV = 347,980,000 ± 14,868,423 
+2025-10-10 04:16:17,787 - INFO - src.optimization_cv 91 - Trial 26: Mejor iteración en CV: 92 
+2025-10-10 04:16:17,810 - INFO - src.optimization_cv 146 - Iteración 26 guardada. Ganancia promedio CV: 347,980,000 
+2025-10-10 04:18:12,493 - INFO - src.optimization_cv 90 - Trial 27: Ganancia CV = 347,043,200 ± 10,821,364 
+2025-10-10 04:18:12,501 - INFO - src.optimization_cv 91 - Trial 27: Mejor iteración en CV: 104 
+2025-10-10 04:18:12,528 - INFO - src.optimization_cv 146 - Iteración 27 guardada. Ganancia promedio CV: 347,043,200 
+2025-10-10 04:19:39,034 - INFO - src.optimization_cv 90 - Trial 28: Ganancia CV = 346,320,395 ± 16,568,864 
+2025-10-10 04:19:39,042 - INFO - src.optimization_cv 91 - Trial 28: Mejor iteración en CV: 80 
+2025-10-10 04:19:39,065 - INFO - src.optimization_cv 146 - Iteración 28 guardada. Ganancia promedio CV: 346,320,395 
+2025-10-10 04:21:06,914 - INFO - src.optimization_cv 90 - Trial 29: Ganancia CV = 347,634,108 ± 18,715,592 
+2025-10-10 04:21:06,925 - INFO - src.optimization_cv 91 - Trial 29: Mejor iteración en CV: 73 
+2025-10-10 04:21:06,949 - INFO - src.optimization_cv 146 - Iteración 29 guardada. Ganancia promedio CV: 347,634,108 
+2025-10-10 04:22:37,443 - INFO - src.optimization_cv 90 - Trial 30: Ganancia CV = 342,196,667 ± 14,483,642 
+2025-10-10 04:22:37,452 - INFO - src.optimization_cv 91 - Trial 30: Mejor iteración en CV: 71 
+2025-10-10 04:22:37,475 - INFO - src.optimization_cv 146 - Iteración 30 guardada. Ganancia promedio CV: 342,196,667 
+2025-10-10 04:24:43,237 - INFO - src.optimization_cv 90 - Trial 31: Ganancia CV = 352,830,545 ± 11,646,603 
+2025-10-10 04:24:43,247 - INFO - src.optimization_cv 91 - Trial 31: Mejor iteración en CV: 98 
+2025-10-10 04:24:43,277 - INFO - src.optimization_cv 146 - Iteración 31 guardada. Ganancia promedio CV: 352,830,545 
+2025-10-10 04:26:16,259 - INFO - src.optimization_cv 90 - Trial 32: Ganancia CV = 346,044,825 ± 14,669,374 
+2025-10-10 04:26:16,269 - INFO - src.optimization_cv 91 - Trial 32: Mejor iteración en CV: 62 
+2025-10-10 04:26:16,293 - INFO - src.optimization_cv 146 - Iteración 32 guardada. Ganancia promedio CV: 346,044,825 
+2025-10-10 04:27:48,408 - INFO - src.optimization_cv 90 - Trial 33: Ganancia CV = 345,346,167 ± 12,689,323 
+2025-10-10 04:27:48,415 - INFO - src.optimization_cv 91 - Trial 33: Mejor iteración en CV: 47 
+2025-10-10 04:27:48,443 - INFO - src.optimization_cv 146 - Iteración 33 guardada. Ganancia promedio CV: 345,346,167 
+2025-10-10 04:29:12,430 - INFO - src.optimization_cv 90 - Trial 34: Ganancia CV = 334,618,267 ± 11,471,690 
+2025-10-10 04:29:12,437 - INFO - src.optimization_cv 91 - Trial 34: Mejor iteración en CV: 29 
+2025-10-10 04:29:12,461 - INFO - src.optimization_cv 146 - Iteración 34 guardada. Ganancia promedio CV: 334,618,267 
+2025-10-10 04:30:45,014 - INFO - src.optimization_cv 90 - Trial 35: Ganancia CV = 348,261,263 ± 15,134,976 
+2025-10-10 04:30:45,020 - INFO - src.optimization_cv 91 - Trial 35: Mejor iteración en CV: 75 
+2025-10-10 04:30:45,041 - INFO - src.optimization_cv 146 - Iteración 35 guardada. Ganancia promedio CV: 348,261,263 
+2025-10-10 04:32:37,205 - INFO - src.optimization_cv 90 - Trial 36: Ganancia CV = 347,298,089 ± 15,834,312 
+2025-10-10 04:32:37,212 - INFO - src.optimization_cv 91 - Trial 36: Mejor iteración en CV: 89 
+2025-10-10 04:32:37,233 - INFO - src.optimization_cv 146 - Iteración 36 guardada. Ganancia promedio CV: 347,298,089 
+2025-10-10 04:33:55,338 - INFO - src.optimization_cv 90 - Trial 37: Ganancia CV = 344,232,485 ± 16,358,109 
+2025-10-10 04:33:55,344 - INFO - src.optimization_cv 91 - Trial 37: Mejor iteración en CV: 65 
+2025-10-10 04:33:55,374 - INFO - src.optimization_cv 146 - Iteración 37 guardada. Ganancia promedio CV: 344,232,485 
+2025-10-10 04:36:13,075 - INFO - src.optimization_cv 90 - Trial 38: Ganancia CV = 348,623,459 ± 15,013,598 
+2025-10-10 04:36:13,084 - INFO - src.optimization_cv 91 - Trial 38: Mejor iteración en CV: 147 
+2025-10-10 04:36:13,114 - INFO - src.optimization_cv 146 - Iteración 38 guardada. Ganancia promedio CV: 348,623,459 
+2025-10-10 04:38:03,829 - INFO - src.optimization_cv 90 - Trial 39: Ganancia CV = 346,790,678 ± 15,265,190 
+2025-10-10 04:38:03,839 - INFO - src.optimization_cv 91 - Trial 39: Mejor iteración en CV: 120 
+2025-10-10 04:38:03,870 - INFO - src.optimization_cv 146 - Iteración 39 guardada. Ganancia promedio CV: 346,790,678 
+2025-10-10 04:40:22,032 - INFO - src.optimization_cv 90 - Trial 40: Ganancia CV = 339,464,950 ± 15,669,114 
+2025-10-10 04:40:22,036 - INFO - src.optimization_cv 91 - Trial 40: Mejor iteración en CV: 159 
+2025-10-10 04:40:22,054 - INFO - src.optimization_cv 146 - Iteración 40 guardada. Ganancia promedio CV: 339,464,950 
+2025-10-10 04:42:05,387 - INFO - src.optimization_cv 90 - Trial 41: Ganancia CV = 347,921,714 ± 12,332,209 
+2025-10-10 04:42:05,396 - INFO - src.optimization_cv 91 - Trial 41: Mejor iteración en CV: 104 
+2025-10-10 04:42:05,431 - INFO - src.optimization_cv 146 - Iteración 41 guardada. Ganancia promedio CV: 347,921,714 
+2025-10-10 04:44:30,208 - INFO - src.optimization_cv 90 - Trial 42: Ganancia CV = 351,573,494 ± 11,295,325 
+2025-10-10 04:44:30,212 - INFO - src.optimization_cv 91 - Trial 42: Mejor iteración en CV: 82 
+2025-10-10 04:44:30,238 - INFO - src.optimization_cv 146 - Iteración 42 guardada. Ganancia promedio CV: 351,573,494 
+2025-10-10 04:46:32,378 - INFO - src.optimization_cv 90 - Trial 43: Ganancia CV = 350,955,710 ± 11,132,150 
+2025-10-10 04:46:32,385 - INFO - src.optimization_cv 91 - Trial 43: Mejor iteración en CV: 68 
+2025-10-10 04:46:32,411 - INFO - src.optimization_cv 146 - Iteración 43 guardada. Ganancia promedio CV: 350,955,710 
+2025-10-10 04:48:36,595 - INFO - src.optimization_cv 90 - Trial 44: Ganancia CV = 350,802,187 ± 11,131,488 
+2025-10-10 04:48:36,602 - INFO - src.optimization_cv 91 - Trial 44: Mejor iteración en CV: 74 
+2025-10-10 04:48:36,632 - INFO - src.optimization_cv 146 - Iteración 44 guardada. Ganancia promedio CV: 350,802,187 
+2025-10-10 04:50:30,337 - INFO - src.optimization_cv 90 - Trial 45: Ganancia CV = 348,477,684 ± 11,525,779 
+2025-10-10 04:50:30,343 - INFO - src.optimization_cv 91 - Trial 45: Mejor iteración en CV: 56 
+2025-10-10 04:50:30,368 - INFO - src.optimization_cv 146 - Iteración 45 guardada. Ganancia promedio CV: 348,477,684 
+2025-10-10 04:52:05,206 - INFO - src.optimization_cv 90 - Trial 46: Ganancia CV = 342,098,875 ± 15,473,316 
+2025-10-10 04:52:05,211 - INFO - src.optimization_cv 91 - Trial 46: Mejor iteración en CV: 31 
+2025-10-10 04:52:05,243 - INFO - src.optimization_cv 146 - Iteración 46 guardada. Ganancia promedio CV: 342,098,875 
+2025-10-10 04:54:02,680 - INFO - src.optimization_cv 90 - Trial 47: Ganancia CV = 349,470,078 ± 11,247,512 
+2025-10-10 04:54:02,684 - INFO - src.optimization_cv 91 - Trial 47: Mejor iteración en CV: 76 
+2025-10-10 04:54:02,714 - INFO - src.optimization_cv 146 - Iteración 47 guardada. Ganancia promedio CV: 349,470,078 
+2025-10-10 04:56:16,359 - INFO - src.optimization_cv 90 - Trial 48: Ganancia CV = 352,029,208 ± 11,253,204 
+2025-10-10 04:56:16,370 - INFO - src.optimization_cv 91 - Trial 48: Mejor iteración en CV: 95 
+2025-10-10 04:56:16,407 - INFO - src.optimization_cv 146 - Iteración 48 guardada. Ganancia promedio CV: 352,029,208 
+2025-10-10 04:58:23,293 - INFO - src.optimization_cv 90 - Trial 49: Ganancia CV = 351,355,027 ± 11,301,754 
+2025-10-10 04:58:23,301 - INFO - src.optimization_cv 91 - Trial 49: Mejor iteración en CV: 73 
+2025-10-10 04:58:23,331 - INFO - src.optimization_cv 146 - Iteración 49 guardada. Ganancia promedio CV: 351,355,027 
+2025-10-10 05:00:10,592 - INFO - src.optimization_cv 90 - Trial 50: Ganancia CV = 347,870,985 ± 11,899,500 
+2025-10-10 05:00:10,598 - INFO - src.optimization_cv 91 - Trial 50: Mejor iteración en CV: 66 
+2025-10-10 05:00:10,630 - INFO - src.optimization_cv 146 - Iteración 50 guardada. Ganancia promedio CV: 347,870,985 
+2025-10-10 05:01:54,808 - INFO - src.optimization_cv 90 - Trial 51: Ganancia CV = 348,730,204 ± 12,317,411 
+2025-10-10 05:01:54,815 - INFO - src.optimization_cv 91 - Trial 51: Mejor iteración en CV: 48 
+2025-10-10 05:01:54,852 - INFO - src.optimization_cv 146 - Iteración 51 guardada. Ganancia promedio CV: 348,730,204 
+2025-10-10 05:04:09,919 - INFO - src.optimization_cv 90 - Trial 52: Ganancia CV = 348,952,282 ± 11,498,465 
+2025-10-10 05:04:09,924 - INFO - src.optimization_cv 91 - Trial 52: Mejor iteración en CV: 84 
+2025-10-10 05:04:09,955 - INFO - src.optimization_cv 146 - Iteración 52 guardada. Ganancia promedio CV: 348,952,282 
+2025-10-10 05:05:53,932 - INFO - src.optimization_cv 90 - Trial 53: Ganancia CV = 346,119,922 ± 12,271,404 
+2025-10-10 05:05:53,943 - INFO - src.optimization_cv 91 - Trial 53: Mejor iteración en CV: 50 
+2025-10-10 05:05:53,973 - INFO - src.optimization_cv 146 - Iteración 53 guardada. Ganancia promedio CV: 346,119,922 
+2025-10-10 05:08:00,680 - INFO - src.optimization_cv 90 - Trial 54: Ganancia CV = 351,223,958 ± 12,127,089 
+2025-10-10 05:08:00,685 - INFO - src.optimization_cv 91 - Trial 54: Mejor iteración en CV: 95 
+2025-10-10 05:08:00,712 - INFO - src.optimization_cv 146 - Iteración 54 guardada. Ganancia promedio CV: 351,223,958 
+2025-10-10 05:10:04,384 - INFO - src.optimization_cv 90 - Trial 55: Ganancia CV = 350,116,000 ± 11,774,421 
+2025-10-10 05:10:04,392 - INFO - src.optimization_cv 91 - Trial 55: Mejor iteración en CV: 84 
+2025-10-10 05:10:04,423 - INFO - src.optimization_cv 146 - Iteración 55 guardada. Ganancia promedio CV: 350,116,000 
+2025-10-10 05:12:29,559 - INFO - src.optimization_cv 90 - Trial 56: Ganancia CV = 349,526,656 ± 12,323,603 
+2025-10-10 05:12:29,565 - INFO - src.optimization_cv 91 - Trial 56: Mejor iteración en CV: 127 
+2025-10-10 05:12:29,596 - INFO - src.optimization_cv 146 - Iteración 56 guardada. Ganancia promedio CV: 349,526,656 
+2025-10-10 05:14:14,738 - INFO - src.optimization_cv 90 - Trial 57: Ganancia CV = 347,368,471 ± 11,974,756 
+2025-10-10 05:14:14,742 - INFO - src.optimization_cv 91 - Trial 57: Mejor iteración en CV: 50 
+2025-10-10 05:14:14,774 - INFO - src.optimization_cv 146 - Iteración 57 guardada. Ganancia promedio CV: 347,368,471 
+2025-10-10 05:15:53,521 - INFO - src.optimization_cv 90 - Trial 58: Ganancia CV = 344,428,765 ± 13,363,800 
+2025-10-10 05:15:53,532 - INFO - src.optimization_cv 91 - Trial 58: Mejor iteración en CV: 67 
+2025-10-10 05:15:53,560 - INFO - src.optimization_cv 146 - Iteración 58 guardada. Ganancia promedio CV: 344,428,765 
+2025-10-10 05:17:40,670 - INFO - src.optimization_cv 90 - Trial 59: Ganancia CV = 349,177,588 ± 12,002,852 
+2025-10-10 05:17:40,681 - INFO - src.optimization_cv 91 - Trial 59: Mejor iteración en CV: 67 
+2025-10-10 05:17:40,716 - INFO - src.optimization_cv 146 - Iteración 59 guardada. Ganancia promedio CV: 349,177,588 
+2025-10-10 05:19:57,519 - INFO - src.optimization_cv 90 - Trial 60: Ganancia CV = 335,424,469 ± 18,970,523 
+2025-10-10 05:19:57,523 - INFO - src.optimization_cv 91 - Trial 60: Mejor iteración en CV: 212 
+2025-10-10 05:19:57,552 - INFO - src.optimization_cv 146 - Iteración 60 guardada. Ganancia promedio CV: 335,424,469 
+2025-10-10 05:21:58,702 - INFO - src.optimization_cv 90 - Trial 61: Ganancia CV = 347,577,587 ± 11,227,073 
+2025-10-10 05:21:58,713 - INFO - src.optimization_cv 91 - Trial 61: Mejor iteración en CV: 62 
+2025-10-10 05:21:58,745 - INFO - src.optimization_cv 146 - Iteración 61 guardada. Ganancia promedio CV: 347,577,587 
+2025-10-10 05:24:08,405 - INFO - src.optimization_cv 90 - Trial 62: Ganancia CV = 351,168,253 ± 11,805,205 
+2025-10-10 05:24:08,416 - INFO - src.optimization_cv 91 - Trial 62: Mejor iteración en CV: 78 
+2025-10-10 05:24:08,452 - INFO - src.optimization_cv 146 - Iteración 62 guardada. Ganancia promedio CV: 351,168,253 
+2025-10-10 05:25:52,524 - INFO - src.optimization_cv 90 - Trial 63: Ganancia CV = 347,604,741 ± 11,458,125 
+2025-10-10 05:25:52,527 - INFO - src.optimization_cv 91 - Trial 63: Mejor iteración en CV: 53 
+2025-10-10 05:25:52,550 - INFO - src.optimization_cv 146 - Iteración 63 guardada. Ganancia promedio CV: 347,604,741 
+2025-10-10 05:29:45,416 - INFO - src.optimization_cv 90 - Trial 64: Ganancia CV = 343,124,527 ± 9,955,458 
+2025-10-10 05:29:45,427 - INFO - src.optimization_cv 91 - Trial 64: Mejor iteración en CV: 181 
+2025-10-10 05:29:45,462 - INFO - src.optimization_cv 146 - Iteración 64 guardada. Ganancia promedio CV: 343,124,527 
+2025-10-10 05:31:58,917 - INFO - src.optimization_cv 90 - Trial 65: Ganancia CV = 342,987,098 ± 20,374,384 
+2025-10-10 05:31:58,924 - INFO - src.optimization_cv 91 - Trial 65: Mejor iteración en CV: 172 
+2025-10-10 05:31:58,952 - INFO - src.optimization_cv 146 - Iteración 65 guardada. Ganancia promedio CV: 342,987,098 
+2025-10-10 05:33:54,055 - INFO - src.optimization_cv 90 - Trial 66: Ganancia CV = 348,487,457 ± 11,361,466 
+2025-10-10 05:33:54,060 - INFO - src.optimization_cv 91 - Trial 66: Mejor iteración en CV: 80 
+2025-10-10 05:33:54,092 - INFO - src.optimization_cv 146 - Iteración 66 guardada. Ganancia promedio CV: 348,487,457 
+2025-10-10 05:35:26,337 - INFO - src.optimization_cv 90 - Trial 67: Ganancia CV = 348,479,918 ± 11,926,144 
+2025-10-10 05:35:26,346 - INFO - src.optimization_cv 91 - Trial 67: Mejor iteración en CV: 48 
+2025-10-10 05:35:26,380 - INFO - src.optimization_cv 146 - Iteración 67 guardada. Ganancia promedio CV: 348,479,918 
+2025-10-10 05:36:58,131 - INFO - src.optimization_cv 90 - Trial 68: Ganancia CV = 347,873,224 ± 13,484,558 
+2025-10-10 05:36:58,139 - INFO - src.optimization_cv 91 - Trial 68: Mejor iteración en CV: 48 
+2025-10-10 05:36:58,173 - INFO - src.optimization_cv 146 - Iteración 68 guardada. Ganancia promedio CV: 347,873,224 
+2025-10-10 05:39:17,890 - INFO - src.optimization_cv 90 - Trial 69: Ganancia CV = 337,270,857 ± 10,461,271 
+2025-10-10 05:39:17,898 - INFO - src.optimization_cv 91 - Trial 69: Mejor iteración en CV: 118 
+2025-10-10 05:39:17,933 - INFO - src.optimization_cv 146 - Iteración 69 guardada. Ganancia promedio CV: 337,270,857 
+2025-10-10 05:41:23,712 - INFO - src.optimization_cv 90 - Trial 70: Ganancia CV = 351,045,486 ± 12,227,205 
+2025-10-10 05:41:23,718 - INFO - src.optimization_cv 91 - Trial 70: Mejor iteración en CV: 69 
+2025-10-10 05:41:23,749 - INFO - src.optimization_cv 146 - Iteración 70 guardada. Ganancia promedio CV: 351,045,486 
+2025-10-10 05:43:34,829 - INFO - src.optimization_cv 90 - Trial 71: Ganancia CV = 352,419,038 ± 11,055,803 
+2025-10-10 05:43:34,834 - INFO - src.optimization_cv 91 - Trial 71: Mejor iteración en CV: 103 
+2025-10-10 05:43:34,864 - INFO - src.optimization_cv 146 - Iteración 71 guardada. Ganancia promedio CV: 352,419,038 
+2025-10-10 05:45:54,769 - INFO - src.optimization_cv 90 - Trial 72: Ganancia CV = 353,123,593 ± 10,478,155 
+2025-10-10 05:45:54,772 - INFO - src.optimization_cv 91 - Trial 72: Mejor iteración en CV: 117 
+2025-10-10 05:45:54,799 - INFO - src.optimization_cv 146 - Iteración 72 guardada. Ganancia promedio CV: 353,123,593 
+2025-10-10 05:47:59,683 - INFO - src.optimization_cv 90 - Trial 73: Ganancia CV = 351,798,500 ± 10,770,672 
+2025-10-10 05:47:59,692 - INFO - src.optimization_cv 91 - Trial 73: Mejor iteración en CV: 111 
+2025-10-10 05:47:59,731 - INFO - src.optimization_cv 146 - Iteración 73 guardada. Ganancia promedio CV: 351,798,500 
+2025-10-10 05:49:52,278 - INFO - src.optimization_cv 90 - Trial 74: Ganancia CV = 350,926,973 ± 10,272,408 
+2025-10-10 05:49:52,285 - INFO - src.optimization_cv 91 - Trial 74: Mejor iteración en CV: 112 
+2025-10-10 05:49:52,329 - INFO - src.optimization_cv 146 - Iteración 74 guardada. Ganancia promedio CV: 350,926,973 
+2025-10-10 05:49:53,343 - INFO - src.optimization_cv 175 - === OPTIMIZACIÓN CON CV COMPLETADA ===
+2025-10-10 05:49:53,375 - INFO - src.optimization_cv 176 - Número de trials completados: 75
+2025-10-10 05:49:53,377 - INFO - src.optimization_cv 177 - Mejor ganancia promedio = 353,123,593
+2025-10-10 05:49:53,377 - INFO - src.optimization_cv 178 - Mejores parámetros: {'num_iterations': 549, 'num_leaves': 1656, 'learn_rate': 0.08357316215639495, 'feature_fraction': 0.8437359211810707, 'bagging_fraction': 0.4771318585702, 'min_child_samples': 308, 'max_depth': 9, 'reg_lambda': 5.107421374163707, 'reg_alpha': 3.9726811427968167, 'min_gain_to_split': 0.07424014953201251}
+2025-10-10 05:49:53,379 - INFO - __main__ 67 - === ANÁLISIS DE RESULTADOS ===
+2025-10-10 05:49:53,598 - INFO - __main__ 71 - Top 5 mejores trials:
+2025-10-10 05:49:53,608 - INFO - __main__ 73 -   Trial 72: 353,123,593
+2025-10-10 05:49:53,609 - INFO - __main__ 73 -   Trial 31: 352,830,545
+2025-10-10 05:49:53,609 - INFO - __main__ 73 -   Trial 71: 352,419,038
+2025-10-10 05:49:53,610 - INFO - __main__ 73 -   Trial 48: 352,029,208
+2025-10-10 05:49:53,610 - INFO - __main__ 73 -   Trial 73: 351,798,500
+2025-10-10 05:49:53,610 - INFO - __main__ 75 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-10 05:49:53,610 - INFO - __main__ 78 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-10 05:49:53,616 - INFO - src.best_params 34 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_cv_competencia01_c_iteraciones.json
+2025-10-10 05:49:53,617 - INFO - src.best_params 35 - Mejor ganancia encontrada: 353,123,593
+2025-10-10 05:49:53,617 - INFO - src.best_params 36 - Trial número: 72
+2025-10-10 05:49:53,618 - INFO - src.best_params 37 - Parámetros: {'num_iterations': 549, 'num_leaves': 1656, 'learn_rate': 0.08357316215639495, 'feature_fraction': 0.8437359211810707, 'bagging_fraction': 0.4771318585702, 'min_child_samples': 308, 'max_depth': 9, 'reg_lambda': 5.107421374163707, 'reg_alpha': 3.9726811427968167, 'min_gain_to_split': 0.07424014953201251}
+2025-10-10 05:49:53,619 - INFO - src.optimization 301 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-10 05:49:53,619 - INFO - src.optimization 302 - Período de test: 202104
+2025-10-10 05:50:04,911 - INFO - src.optimization 319 - Entrenando modelo con mejores hiperparámetros...
+2025-10-10 05:50:04,911 - INFO - src.optimization 320 - Dimensiones df_train_completo: (325264, 725), Dimensiones df_test: (163418, 725)
+2025-10-10 05:50:06,031 - INFO - src.optimization 327 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Dimensiones de train_data: (325264, 724)

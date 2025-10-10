@@ -1,5 +1,5 @@
 # config.yaml
-STUDY_NAME : "lgb_optimization_cv_competencia01_c"
+STUDY_NAME : "lgb_optimization_cv_competencia01_f"  ## con rank de mcuenta_saldo y lags de la misma, eliminando la original
 
 competencia01:
     DATA_PATH: "./data/competencia_01.csv"
@@ -15,7 +15,7 @@ competencia01:
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 parametros_lgb:
-    n_trial: 75
+    n_trial: 10
     num_leaves: [8, 2048]
     num_iterations: [50, 1000]
     feature_fraction: [0.1, 1.0]

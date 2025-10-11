@@ -212,3 +212,27 @@ def generar_reporte_visual_completo(y_true: np.ndarray, y_pred_proba: np.ndarray
     logger.info(f"Ganancia máxima encontrada: {reporte_completo['estadisticas_clave']['ganancia_maxima']:,.0f}")
   
     return reporte_completo
+
+# Función que recibe un dataframe con predicciones de probabilidad y valores verdaderos y genera el gráfico de test completo
+def generar_grafico_test_completo(df: pd.DataFrame) -> str:
+    """
+    Genera el gráfico de test completo a partir de un DataFrame con predicciones y valores verdaderos.
+  
+    Args:
+        df: DataFrame que contiene las columnas 'clase_ternaria' y 'probabilidad'
+  
+    Returns:
+        str: Ruta del archivo del gráfico generado
+    """
+    if 'clase_ternaria' not in df.columns or 'probabilidad' not in df.columns:
+        raise ValueError("El DataFrame debe contener las columnas 'clase_ternaria' y 'probabilidad'.")
+  
+    y_true = df['clase_ternaria'].values
+    y_pred_proba = df['probabilidad'].values
+  
+    titulo = f"Gráfico de Test Completo - {conf.STUDY_NAME}"
+  
+    ruta_grafico = crear_grafico_ganancia_avanzado(y_true, y_pred_proba, titulo)
+  
+    return ruta_grafico
+    

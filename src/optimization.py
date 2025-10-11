@@ -487,6 +487,17 @@ def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
 
     y_pred_proba = model.predict(X_test)
 
+    predicciones_test = pd.DataFrame({
+        'probabilidad': y_pred_proba,
+        'clase_ternaria': y_test
+    })
+
+    # Ordenar por probabilidad descendente
+    predicciones_test = predicciones_test.sort_values(by='probabilidad', ascending=False).reset_index(drop=True)
+
+    # Guardar predicciones ordenadas en CSV
+    predicciones_test.to_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_{semilla}.csv', index=False)
+
     # Buscar el umbral que maximiza la ganancia
     mejor_ganancia = -np.inf
     mejor_umbral = 0.5

@@ -1,0 +1,5 @@
+2025-10-10 23:36:44,443 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-10 23:36:44,443 - INFO - __main__ 39 - Número de trials por estudio: 2
+2025-10-10 23:36:44,444 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-10 23:36:54,660 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-10 23:36:54,661 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_cv_competencia01_i.csv. Cargando desde disco.

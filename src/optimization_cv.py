@@ -230,7 +230,7 @@ def objetivo_ganancia_cv_pesos(trial, df) -> float:
 
     X = df_cv.drop(columns=['clase_ternaria', 'clase_peso'])
     y = df_cv['clase_ternaria'].values  
-    weiwghts = df_cv['clase_peso'].values  # Pesos para cada instancia
+    weights = df_cv['clase_peso'].values  # Pesos para cada instancia
     
     logger.debug(f"Trial {trial.number}: CV con {len(df_cv)} registros,  {len(X.columns)} features \n - Parámetros: {params}")
    

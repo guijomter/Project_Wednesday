@@ -6,7 +6,7 @@ import json
 import os
 import logging
 from .config import *
-from .gain_function import ganancia_evaluator
+from .gain_function import ganancia_evaluator, lgb_gan_eval
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -96,6 +96,9 @@ def objetivo_ganancia_cv(trial, df) -> float:
 
     return ganancia_promedio
 
+##################################################################
+
+
 def guardar_iteracion_cv(trial, ganancia_promedio, ganancias_cv, ganancia_std, archivo_base=None):
     """
     Guarda los resultados de cada iteración de Optuna con CV en un archivo JSON.
@@ -170,6 +173,128 @@ def optimizar_con_cv(df, n_trials=50) -> optuna.Study:
   
     # Ejecutar optimización
     study.optimize(lambda trial: objetivo_ganancia_cv(trial, df), n_trials=n_trials)
+  
+    # Resultados
+    logger.info("=== OPTIMIZACIÓN CON CV COMPLETADA ===")
+    logger.info(f"Número de trials completados: {len(study.trials)}")
+    logger.info(f"Mejor ganancia promedio = {study.best_value:,.0f}")
+    logger.info(f"Mejores parámetros: {study.best_params}")
+
+    return study
+##############################################################################
+
+def objetivo_ganancia_cv_pesos(trial, df) -> float:
+    """
+    Función objetivo para Optuna con Cross Validation.
+    Utiliza SEMILLA[0] desde configuración para reproducibilidad.
+  
+    Args:
+        trial: Trial de Optuna
+        df: DataFrame con datos y pesos
+  
+    Returns:
+        float: Ganancia promedio del CV
+    """
+    # Hiperparámetros a optimizar (desde configuración YAML)
+    params = {
+        'objective': 'binary',
+        'metric': 'None',
+        'num_iterations' : trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
+        'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
+        'learning_rate': trial.suggest_float('learn_rate', conf.parametros_lgb.learn_rate[0], conf.parametros_lgb.learn_rate[1], log=True),
+        'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
+        'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
+        'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
+        'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
+        'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
+        'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
+        'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
+        'verbosity': -1,
+        #'silent': True,
+        #'bin': trial.suggest_int('bin', conf.parametros_lgb.bin[0], conf.parametros_lgb.bin[1]),
+        'bin': 31,
+        'random_state': SEMILLA[0]  # Desde configuración YAML
+     }
+  
+    # Preparar datos para CV
+   # combino los meses de train y validacion
+
+    meses_train = MES_TRAIN if isinstance(MES_TRAIN, list) else [MES_TRAIN]
+    meses_validacion = [MES_VALIDACION] if not isinstance(MES_VALIDACION, list) else MES_VALIDACION
+    meses_cv = meses_train + meses_validacion
+
+    df_cv = df[df['foto_mes'].astype(str).isin(meses_cv)]
+
+
+    # Features y target
+
+    X = df_cv.drop(columns=['clase_ternaria', 'clase_peso'])
+    y = df_cv['clase_ternaria'].values  
+    weiwghts = df_cv['clase_peso'].values  # Pesos para cada instancia
+    
+    logger.debug(f"Trial {trial.number}: CV con {len(df_cv)} registros,  {len(X.columns)} features \n - Parámetros: {params}")
+   
+    # Crear dataset de LightGBM
+    train_data = lgb.Dataset(X, label=y, weight=weights)
+
+    # Configurar CV con semilla desde configuración
+    cv_results = lgb.cv(
+        params,
+        train_data,
+        num_boost_round=100,
+        nfold=5,
+        stratified=True,
+        shuffle=True,
+        seed=SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
+        feval=lgb_gan_eval,
+        callbacks=[lgb.early_stopping(10), lgb.log_evaluation(0)]
+    )
+  
+    # Extraer ganancia promedio y maxima
+    ganancias_cv= cv_results['valid gan_eval-mean']
+    #ganancia_maxima = np.max(ganancias_cv)
+    ganancia_std = np.std(ganancias_cv)
+    ganancia_promedio = np.mean(ganancias_cv)
+    
+    # Obtener el mejor número de iteraciones
+    best_iteration = len(ganancias_cv) - 1 # Early stopping ya selecciona la mejor iteración
+    logger.info(f"Trial {trial.number}: Ganancia CV = {ganancia_promedio:,.0f} ± {ganancia_std:,.0f} ")
+    logger.info(f"Trial {trial.number}: Mejor iteración en CV: {best_iteration} ")
+
+    # Guardar iteración para análisis posterior
+
+    guardar_iteracion_cv(trial, ganancia_promedio, ganancias_cv, ganancia_std, conf.STUDY_NAME)
+
+    return ganancia_promedio
+
+
+###################################################################
+
+def optimizar_con_cv_pesos(df, n_trials=50) -> optuna.Study:
+    """
+    Ejecuta optimización bayesiana con Cross Validation.
+  
+    Args:
+        df: DataFrame con datos
+        n_trials: Número de trials a ejecutar
+  
+    Returns:
+        optuna.Study: Estudio de Optuna con resultados de CV
+    """
+    study_name = f"{conf.STUDY_NAME}"
+  
+    logger.info(f"Iniciando optimización con CV - {n_trials} trials")
+    logger.info(f"Configuración CV: períodos={MES_TRAIN + [MES_VALIDACION] if isinstance(MES_TRAIN, list) else [MES_TRAIN, MES_VALIDACION]}")
+  
+    # Crear estudio
+    study = optuna.create_study(
+        direction='maximize',
+        study_name=study_name,
+        sampler=optuna.samplers.TPESampler(seed=SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA)
+    )
+  
+    # Ejecutar optimización
+    study.optimize(lambda trial: objetivo_ganancia_cv_pesos(trial, df), n_trials=n_trials)
   
     # Resultados
     logger.info("=== OPTIMIZACIÓN CON CV COMPLETADA ===")

@@ -128,3 +128,26 @@ def ganancia_evaluator(y_pred, y_true) -> float:
     ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()
   
     return 'ganancia', ganancia_maxima, True
+
+####################################################################################################################################
+## Función de ganancia para LightGBM usando el peso de las muestras 
+
+def lgb_gan_eval(y_pred, data):
+
+    weight = data.get_weight()
+    #y_true = data.get_label()
+
+    # Convertir a DataFrame de Polars para procesamiento eficiente
+    df_eval = pl.DataFrame({'y_true_weight': weight,'y_pred_proba': y_pred})
+
+    # Ordenar por probabilidad descendente
+    df_ordenado = df_eval.sort('y_pred_proba', descending=True)
+
+    # Calcular ganancia individual para cada cliente
+    df_ordenado = df_ordenado.with_columns([pl.when(pl.col('y_true_weight') == 1.00002).then(GANANCIA_ACIERTO).otherwise(-COSTO_ESTIMULO).alias('ganancia_individual')])
+  
+    # Encontrar la ganancia máxima
+    ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()
+  
+    return 'gan_eval', ganancia_maxima , True
+

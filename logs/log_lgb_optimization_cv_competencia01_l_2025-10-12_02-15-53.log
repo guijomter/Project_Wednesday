@@ -1,0 +1,12 @@
+2025-10-12 02:15:53,019 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-12 02:15:53,019 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-10-12 02:15:53,020 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-12 02:16:03,039 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-12 02:16:03,040 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_cv_competencia01_l.csv. Cargando desde disco.
+2025-10-12 02:17:22,651 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-12 02:17:27,997 - INFO - __name__ 101 - Conversión completada:
+2025-10-12 02:17:28,004 - INFO - __name__ 102 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-12 02:17:28,005 - INFO - __name__ 103 -   Binario - 0: 642830, 1: 8513
+2025-10-12 02:17:28,005 - INFO - __name__ 104 -   Distribución: 1.31% casos positivos
+2025-10-12 02:17:29,021 - INFO - src.optimization_cv 291 - Iniciando optimización con CV - 75 trials
+2025-10-12 02:17:29,023 - INFO - src.optimization_cv 292 - Configuración CV: períodos=['202101', '202102', '202103']

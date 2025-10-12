@@ -30,7 +30,22 @@ def cargar_mejores_hiperparametros(archivo_base: str = None) -> dict:
         mejor_iteracion = max(iteraciones, key=lambda x: x['value'])
         mejores_params = mejor_iteracion['params']
         mejor_ganancia = mejor_iteracion['value']
-  
+
+        # Parámetros fijos
+        params_fijos = {
+            'scale_pos_weight': 97,
+            'bagging_fraction': 1.0,
+            'pos_bagging_fraction': 1.0,
+            'neg_bagging_fraction': 0.01,
+            'bagging_freq': 1,
+            'objective': 'binary',
+            'metric': 'None',
+            'random_state': SEMILLA[0]
+        }
+
+        # Agregar los fijos al diccionario de Optuna
+        mejores_params.update(params_fijos)
+
         logger.info(f"Mejores hiperparámetros cargados desde {archivo}")
         logger.info(f"Mejor ganancia encontrada: {mejor_ganancia:,.0f}")
         logger.info(f"Trial número: {mejor_iteracion['trial_number']}")

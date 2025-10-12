@@ -66,9 +66,6 @@ def objetivo_ganancia(trial, df) -> float:
     
     df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
 
-    # logger.info(f"Dimensiones df_train: {df_train.shape}, Dimensiones df_val: {df_val.shape}")
-    # logger.info(f"Dimensiones df: {df.shape}")
-
     # Usar target (con clase ternaria ya convertida a binaria)
     
     y_train = df_train['clase_ternaria'].values
@@ -322,10 +319,10 @@ def evaluar_en_test(df, mejores_params, semilla=SEMILLA[0]) -> dict:
     # Preparar datasets
 
     train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
-    #test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
-  # chequeo si train_data y test_data estan bien formados
+  
+    # chequeo si train_data está ok
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
-    #logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {df_test.shape}")
+
 
     model = lgb.train(
         mejores_params,
@@ -356,7 +353,7 @@ def evaluar_en_test(df, mejores_params, semilla=SEMILLA[0]) -> dict:
             y_pred_binary = y_pred_bin  # Guardar predicción óptima
 
     ganancia_test = mejor_ganancia
-    # Si se desea, guardar mejor_umbral en resultados
+
     # Estadísticas básicas
     total_predicciones = len(y_pred_binary)
     predicciones_positivas = np.sum(y_pred_binary == 1)
@@ -431,7 +428,7 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
 
 
 
-    ###################################################################################
+#####################################################################################
 
 def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
     """
@@ -512,8 +509,7 @@ def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
             y_pred_binary = y_pred_bin  # Guardar predicción óptima
 
     ganancia_test = mejor_ganancia
-    # Si se desea, guardar mejor_umbral en resultados
-    # Estadísticas básicas
+
     total_predicciones = len(y_pred_binary)
     predicciones_positivas = np.sum(y_pred_binary == 1)
     porcentaje_positivas = (predicciones_positivas / total_predicciones) * 100

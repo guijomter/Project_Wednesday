@@ -9,7 +9,7 @@ from src.features import feature_engineering_lag, feature_engineering_percentil,
 from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros
-from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos
+from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
 from src.output_manager import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
 from src.config import *
@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 ## Funcion principal
 def main():
-      
+    
     logger.info("Inicio de ejecucion.")
    
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
@@ -56,15 +56,14 @@ def main():
     logger.info(f"Feature Engineering completado: {df_fe.shape}")
 
     #02 Convertir clase_ternaria a target binario
-    # df_fe = convertir_clase_ternaria_a_target(df_fe)  ### por última vez se usó en el estudio lgb_optimization_cv_competencia01_h
-    df_fe = convertir_clase_ternaria_a_target_peso(df_fe)  # nueva función que convierte y agrega el peso
+    
+    df_fe = convertir_clase_ternaria_a_target_peso(df_fe)  
   
     #03 Ejecutar optimizacion de hiperparametros
-    #study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial)  # Usar el valor de n_trials del archivo de configuración
+    
     study = optimizar_con_cv_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
 
-  
-    #04 Análisis adicional
+    # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")
     trials_df = study.trials_dataframe()
     if len(trials_df) > 0:
@@ -77,6 +76,7 @@ def main():
   
     #05 Test en mes desconocido
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
+  
     # Cargar mejores hiperparámetros
     mejores_params = cargar_mejores_hiperparametros()
   
@@ -96,25 +96,16 @@ def main():
     #06 Entrenar modelo final
     logger.info("=== ENTRENAMIENTO FINAL ===")
     logger.info("Preparar datos para entrenamiento final")
-    #X_train, y_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final(df_fe)
+ 
     X_train, y_train, pesos_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(df_fe)
-
-
-    # # Grafico de test
-    # logger.info("=== GRAFICO DE TEST ===")
-    # ruta_grafico = generar_grafico_test_completo(df_fe)
-    # logger.info(f"✅ Gráfico generado: {ruta_grafico}")
-
 
     # Entrenar modelo final
     logger.info("Entrenar modelo final")
-    #modelo_final = entrenar_modelo_final(X_train, y_train, mejores_params)
-    modelo_final = entrenar_modelo_final_pesos(X_train, y_train, pesos_train, mejores_params)
-  
+    modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params)
+
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
-    #resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict, UMBRAL)
-    resultados = generar_predicciones_finales(modelo_final, X_predict, clientes_predict, resultados_test['porcentaje_positivas']/100)
+    resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, 0.08093)
   
     # Guardar predicciones
     logger.info("Guardar predicciones")

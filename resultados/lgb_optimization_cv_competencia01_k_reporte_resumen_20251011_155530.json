@@ -1,0 +1,23 @@
+{
+  "metadata": {
+    "timestamp": "20251011_155530",
+    "titulo_estudio": "Reporte Completo - lgb_optimization_cv_competencia01_k",
+    "total_clientes": 163418,
+    "distribucion_target": {
+      "positivos": 1130,
+      "negativos": 162288,
+      "porcentaje_positivos": 0.6914782949246717
+    }
+  },
+  "archivos_generados": {
+    "grafico_ganancia": "resultados/lgb_optimization_cv_competencia01_k_ganancia_avanzado_20251011_155529.png",
+    "resumen_json": "resultados/lgb_optimization_cv_competencia01_k_reporte_resumen_20251011_155530.json"
+  },
+  "analisis_polars": "   ganancia_maxima  umbral_optimo  mejora_vs_025  clientes_optimos\n0        359200000       0.049378              0              9280",
+  "estadisticas_clave": {
+    "ganancia_maxima": "0    359200000\nName: ganancia_maxima, dtype: int64",
+    "umbral_optimo": "0    0.049378\nName: umbral_optimo, dtype: float64",
+    "clientes_optimos": "0    9280\nName: clientes_optimos, dtype: int64",
+    "mejora_vs_025": "0    0\nName: mejora_vs_025, dtype: int64"
+  }
+}

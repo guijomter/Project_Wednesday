@@ -1,5 +1,10 @@
 # config.yaml
 STUDY_NAME : "lgb_optimization_competencia01b"
+#STUDY_NAME : "lgb_optimization_cv_competencia01_h"  ## con rank de mcuenta_saldo y lags de la misma, eliminando la original (igual a g) + MES TRAIN 202101
+#STUDY_NAME : "lgb_optimization_cv_competencia01_i"  ## igual a h (pero sacando MES TRAIN 202101) + agregando pesos para evaluar ganancia
+#STUDY_NAME : "lgb_optimization_cv_competencia01_j"  ## igual a i pero con más iteraciones 
+#STUDY_NAME : "lgb_optimization_cv_competencia01_k"  ## igual a j pero se suma 202101 a train 
+
 
 competencia01:
     DATA_PATH: "./data/competencia_01.csv"
@@ -31,3 +36,24 @@ parametros_lgb:
     # lambda_l2: 0.0
     # verbosity: -1
     # seed: 42
+
+
+  #percentil:
+    #  columnas: [ 'mcuentas_saldo']
+ 
+
+#'mrentabilidad', 'mrentabilidad_annual', 'mcomisiones', 'mcuenta_corriente', 'mcaja_ahorro', 'mcaja_ahorro_dolares', 'mcuentas_saldo', 'mautoservicio', 'mtarjeta_visa_consumo', 'mtarjeta_master_consumo', 'mprestamos_personales', 'mprestamos_prendarios', 'mprestamos_hipotecarios', 'mplazo_fijo_dolares', 'mplazo_fijo_pesos', 'minversion1_pesos', 'minversion1_dolares', 'minversion2', 'mcuenta_debitos_automaticos', 'mtarjeta_visa_debitos_automaticos', 'mttarjeta_master_debitos_automaticos'
+    # #'mpagodeservicios', 'mpagomiscuentas', 'mcajeros_propios_descuentos', 'mtarjeta_visa_descuentos', 'mtarjeta_master_descuentos', 'mcomisiones_mantenimiento', 'mcomisiones_otras', 'mforex_buy', 'mforex_sell', 'mtransferencias_recibidas', 'mtransferencias_emitidas', 'mextraccion_autoservicio', 'mcheques_depositados', 'mcheques_emitidos', 'mcheques_depositados_rechazados', 'mcheques_emitidos_rechazados', 'matm', 'matm_other', 'Master_mfinanciacion_limite', 'Master_msaldototal', 'Master_msaldopesos', 'Master_msaldodolares', 'Master_mconsumospesos', 'Master_mconsumosdolares', 'Master_mlimitecompra', 'Master_madelantopesos', 'Master_madelantodolares', 'Master_mpagado', 'Master_mpagospesos', 'Master_mpagosdolares', 'Master_mconsumototal', 'Master_mpagominimo', 'Visa_mfinanciacion_limite', 'Visa_msaldototal', 'Visa_msaldopesos', 'Visa_msaldodolares', 'Visa_mconsumospesos', 'Visa_mconsumosdolares', 'Visa_mlimitecompra', 'Visa_madelantopesos', 'Visa_madelantodolares', 'Visa_mpagado', 'Visa_mpagospesos', 'Visa_mpagosdolares', 'Visa_mconsumototal', 'Visa_mpagominimo', 'cforex_sell'      
+    # #'mactivos_margen', 'mpasivos_margen'          , 'mcuenta_corriente_adicional', 'mcaja_ahorro_adicional'
+    #   #'cproductos', 'ccuenta_corriente', 'ccaja_ahorro', 'ctarjeta_debito', 'ctarjeta_debito_transacciones', 'ctarjeta_visa', 'ctarjeta_visa_transacciones', 'ctarjeta_master', 'ctarjeta_master_transacciones', 'cprestamos_personales', 'cprestamos_prendarios', 'cprestamos_hipotecarios', 'cplazo_fijo', 'cinversion1', 'cinversion2', 'cseguro_vida', 'cseguro_auto', 'cseguro_vivienda', 'cseguro_accidentes_personales', 'cpayroll_trx', 'cpayroll2_trx', 'ccuenta_debitos_automaticos', 'ctarjeta_visa_debitos_automaticos', 'ctarjeta_master_debitos_automaticos', 'cpagodeservicios', 'cpagomiscuentas', 'ccajeros_propios_descuentos', 'ctarjeta_visa_descuentos', 'ctarjeta_master_descuentos', 'ccomisiones_mantenimiento', 'ccomisiones_otras', 'cforex', 'cforex_buy', 'ctransferencias_recibidas', 'ctransferencias_emitidas', 'cextraccion_autoservicio', 'ccheques_depositados', 'ccheques_emitidos', 'ccheques_depositados_rechazados', 'ccheques_emitidos_rechazados', 'ccallcenter_transacciones', 'chomebanking_transacciones', 'ccajas_transacciones', 'ccajas_consultas', 'ccajas_depositos', 'ccajas_extracciones', 'ccajas_otras', 'catm_trx', 'catm_trx_other', 'ctrx_quarter', 'cmobile_app_trx', 'Master_cconsumos', 'Master_cadelantosefectivo', 'Visa_cconsumos', 'Visa_cadelantosefectivo', 'Master_Fvencimiento', 'Master_Finiciomora', 'Master_fultimo_cierre', 'Master_fechaalta', 'Visa_Fvencimiento', 'Visa_Finiciomora', 'Visa_fultimo_cierre', 'Visa_fechaalta'
+    # max:
+    #   columnas: ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
+    #   n_meses: 3
+    # min:
+    #   columnas: ['mrentabilidad','mactivos_margen', 'mcomisiones_mantenimiento','mcuentas_saldo','mtarjeta_visa_consumo','mtarjeta_master_consumo','mpasivos_margen','mttarjeta_visa_debitos_automaticos','mttarjeta_master_debitos_automaticos']
+    #   n_meses: 2
+    # ratios:
+    #   numerador: ['mrentabilidad', 'mtransferencias_emitidas']
+    #   denominador: ['mrentabilidad_annual', 'ctransferencias_emitidas']
+    #   nombre: ['prop_rentabilidad_anual', 'monto_promedio_transferencias_emitidas']
+    #rolling_mean:

@@ -8,6 +8,7 @@ import os
 from datetime import datetime
 from .config import *
 #from .gain_function_polars import calcular_ganancia_maxima_polars
+from .gain_function import analisis_ganancia_completo_polars
 
 logger = logging.getLogger(__name__)
 
@@ -148,7 +149,7 @@ def crear_grafico_ganancia_avanzado(y_true: np.ndarray, y_pred_proba: np.ndarray
   
     return ruta_archivo
 
-def generar_reporte_visual_completo(y_true: np.ndarray, y_pred_proba: np.ndarray, 
+def generar_reporte_visual_completo(y_true: np.ndarray, y_pred_proba: np.ndarray,
                                    titulo_estudio: str = None) -> dict:
     """
     Genera un reporte visual completo con todos los gráficos y análisis.
@@ -169,7 +170,7 @@ def generar_reporte_visual_completo(y_true: np.ndarray, y_pred_proba: np.ndarray
     ruta_ganancia = crear_grafico_ganancia_avanzado(y_true, y_pred_proba, titulo)
   
     # 2. Análisis con Polars para estadísticas precisas
-    from .gain_function_polars import analisis_ganancia_completo_polars
+
     analisis_polars = analisis_ganancia_completo_polars(y_true, y_pred_proba)
   
     # 3. Guardar resumen del reporte
@@ -193,10 +194,10 @@ def generar_reporte_visual_completo(y_true: np.ndarray, y_pred_proba: np.ndarray
         },
         'analisis_polars': analisis_polars,
         'estadisticas_clave': {
-            'ganancia_maxima': analisis_polars['ganancia_maxima']['ganancia_maxima'],
-            'umbral_optimo': analisis_polars['ganancia_maxima']['umbral_optimo'],
-            'clientes_optimos': analisis_polars['ganancia_maxima']['clientes_seleccionados'],
-            'mejora_vs_025': analisis_polars['resumen']['mejora_vs_025']
+            'ganancia_maxima': analisis_polars['ganancia_maxima'],
+            'umbral_optimo': analisis_polars['umbral_optimo'],
+            'clientes_optimos': analisis_polars['clientes_optimos'],
+            'mejora_vs_025': analisis_polars['mejora_vs_025']
         }
     }
   
@@ -209,7 +210,7 @@ def generar_reporte_visual_completo(y_true: np.ndarray, y_pred_proba: np.ndarray
     logger.info(f"Archivos generados:")
     logger.info(f"  - Gráfico ganancia: {ruta_ganancia}")
     logger.info(f"  - Resumen JSON: {ruta_resumen}")
-    logger.info(f"Ganancia máxima encontrada: {reporte_completo['estadisticas_clave']['ganancia_maxima']:,.0f}")
+ #   logger.info(f"Ganancia máxima encontrada: {reporte_completo['estadisticas_clave']['ganancia_maxima']:,.0f}")
   
     return reporte_completo
 
@@ -235,4 +236,132 @@ def generar_grafico_test_completo(df: pd.DataFrame) -> str:
     ruta_grafico = crear_grafico_ganancia_avanzado(y_true, y_pred_proba, titulo)
   
     return ruta_grafico
+
+# Generar gráfico de test avanzado sin guardar en disco 
+def crear_grafico_ganancia_avanzado_multi(y_true, y_pred_proba_list, seeds=None, labels=None, titulo_personalizado=None):
+    """
+    Grafica múltiples curvas de ganancia acumulada en el mismo gráfico.
+
+    Args:
+        y_true: array de valores verdaderos (0/1), común para todas las curvas
+        y_pred_proba_list: lista de arrays de probabilidades predichas
+        seeds: lista de identificadores (ej: semillas) para cada curva (opcional)
+        labels: lista de etiquetas para cada curva (opcional, si se provee seeds, se ignora labels)
+        titulo_personalizado: título personalizado para el gráfico (opcional)
+
+    Returns:
+        fig: objeto matplotlib Figure
+    """
+    plt.style.use('seaborn-v0_8')
+    fig, ax = plt.subplots(figsize=(15, 7))
+
+    n_curvas = len(y_pred_proba_list)
+    colores = plt.cm.get_cmap('tab10', n_curvas)
+
+    # Construir etiquetas usando seeds si están presentes
+    if seeds is not None:
+        etiquetas = [f"Seed {seed}" for seed in seeds]
+    elif labels is not None:
+        etiquetas = labels
+    else:
+        etiquetas = [f"Curva {i+1}" for i in range(n_curvas)]
+
+    indices_maximos = []
+    ganancias_maximas = []
+
+    for idx, y_pred_proba in enumerate(y_pred_proba_list):
+        ganancias_acumuladas, indices_ordenados, umbral_optimo = calcular_ganancia_acumulada_optimizada(
+            np.array(y_true), np.array(y_pred_proba)
+        )
+        ganancia_maxima = np.max(ganancias_acumuladas)
+        indice_maximo = np.argmax(ganancias_acumuladas)
+        indices_maximos.append(indice_maximo)
+        ganancias_maximas.append(ganancia_maxima)
+
+        umbral_ganancia = ganancia_maxima * 0.6  # Mostrar desde 60% de la ganancia máxima
+        indices_relevantes = ganancias_acumuladas >= umbral_ganancia
+        x_relevante = np.where(indices_relevantes)[0]
+        y_relevante = ganancias_acumuladas[indices_relevantes]
+
+
+        ax.plot(
+            x_relevante, #range(len(ganancias_acumuladas)),
+            y_relevante,  #ganancias_acumuladas,
+            label=f"{etiquetas[idx]} (max: {ganancia_maxima:,.0f})",
+            linewidth=2,
+            color=colores(idx)
+        )
+
+    resultados = pd.DataFrame({
+        'seed': seeds,
+        'indice_maximo': indices_maximos,
+        'ganancia_maxima': ganancias_maximas    
+    }).sort_values(by='ganancia_maxima', ascending=False)
+    print(resultados)
+       
+    ax.set_xlabel('Clientes ordenados por probabilidad', fontsize=12)
+    ax.set_ylabel('Ganancia Acumulada', fontsize=12)
+    titulo = titulo_personalizado or f'Ganancia Acumulada Optimizada - {conf.STUDY_NAME}'
+    ax.set_title(titulo, fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=10)
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+    plt.show()
+ 
+
+    #plt.tight_layout()
+    return resultados
+
+################################################################
+
+def crear_grafico_ganancia_envios(y_true: np.ndarray, y_pred_proba: np.ndarray, 
+                                   titulo_personalizado: str = None) -> str:
+    """
+    Crea un gráfico de ganancia acumulada por cantidad de envios
+  
+    Args:
+        y_true: Valores verdaderos
+        y_pred_proba: Probabilidades predichas
+        titulo_personalizado: Título personalizado para el gráfico
+  
+    Returns:
+        str: Ruta del archivo del gráfico guardado
+    """
+    logger.info("Generando gráfico de ganancia por envíos...")
+  
+    ganancias_acumuladas, indices_ordenados, umbral_optimo = calcular_ganancia_acumulada_optimizada(
+            np.array(y_true), np.array(y_pred_proba)
+        )
+    ganancia_maxima = np.max(ganancias_acumuladas)
+    indice_maximo = np.argmax(ganancias_acumuladas)
     
+    umbral_ganancia = ganancia_maxima * 0.6  # Mostrar desde 60% de la ganancia máxima
+    indices_relevantes = ganancias_acumuladas >= umbral_ganancia
+    x_relevante = np.where(indices_relevantes)[0]
+    y_relevante = ganancias_acumuladas[indices_relevantes]
+
+    plt.style.use('seaborn-v0_8')
+    fig, ax = plt.subplots(figsize=(15, 7))
+
+    ax.plot(
+        x_relevante, #range(len(ganancias_acumuladas)),
+        y_relevante,  #ganancias_acumuladas,
+    #    label=f"{etiquetas[idx]} (max: {ganancia_maxima:,.0f})",
+        linewidth=2
+    #    color=colores(idx)
+    )
+
+    # Configurar primer gráfico
+    ax.set_xlabel('Clientes ordenados por probabilidad', fontsize=12)
+    ax.set_ylabel('Ganancia Acumulada', fontsize=12)
+    titulo = titulo_personalizado or f'Ganancia Acumulada Optimizada - {conf.STUDY_NAME}'
+    ax.set_title(titulo, fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3)
+    ax.legend(fontsize=10)
+    ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
+  
+    plt.show()
+  
+    return fig

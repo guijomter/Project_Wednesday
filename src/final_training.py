@@ -37,12 +37,6 @@ def preparar_datos_entrenamiento_final(df: pd.DataFrame) -> tuple:
     logger.info(f"Registros de entrenamiento: {len(df_train):,}")
     logger.info(f"Registros de predicción: {len(df_predict):,}")
   
-    #df_predict = feature_engineering(df_predict, competencia="competencia01") #, cant_lag=2, n_meses=3)
-    #logger.info(f"Feature Engineering completado sobre DF_predict: {df_predict.shape}")
-    
-    #df_train = feature_engineering(df_train, competencia="competencia01") #, cant_lag=2, n_meses=3)
-    #logger.info(f"Feature Engineering completado sobre DF_train: {df_train.shape}")
-
     # Preparar features y target para entrenamiento
     X_predict = df_predict.drop(columns=['clase_ternaria'])
     X_train = df_train.drop(columns=['clase_ternaria'])
@@ -188,11 +182,12 @@ def entrenar_modelo_final_pesos(X_train: pd.DataFrame, y_train: pd.Series, pesos
   
     # Configurar parámetros del modelo
     params = {
+        **mejores_params, 
         'objective': 'binary',
         'metric': 'None',  # Usamos nuestra métrica personalizada
         'random_state': SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
-        'verbose': -1,
-        **mejores_params  # Agregar los mejores hiperparámetros
+        'verbose': -1
+         # Agregar los mejores hiperparámetros
     }
   
     logger.info(f"Parámetros del modelo: {params}")
@@ -224,6 +219,69 @@ def entrenar_modelo_final_pesos(X_train: pd.DataFrame, y_train: pd.Series, pesos
 
     logger.info("Entrenamiento del modelo final completado")
     return modelo
+
+
+###########################################################################################################################
+
+
+def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame, y_train: pd.Series, pesos:  pd.Series , mejores_params: dict) -> list:
+    """
+    Entrena el modelo final con los mejores hiperparámetros.
+  
+    Args:
+        X_train: Features de entrenamiento
+        y_train: Target de entrenamiento
+        mejores_params: Mejores hiperparámetros de Optuna
+  
+    Returns:
+        lgb.Booster: Modelo entrenado
+    """
+    logger.info("Iniciando entrenamiento del modelo final")
+    
+    # Crear dataset de LightGBM
+  
+    train_data = lgb.Dataset(X_train, label=y_train, weight=pesos)
+    
+    modelos_finales = []
+
+    for seed in SEMILLA:
+    
+        mejores_params['random_state'] = seed  # Asegurarse de que la semilla está en los parámetros
+        
+        params = {
+        'objective': 'binary',
+        'metric': 'None',  # Usamos nuestra métrica personalizada
+        #    'random_state': SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
+        'verbose': -1,
+        **mejores_params  # Agregar los mejores hiperparámetros
+        }
+
+    # Entrenar modelo con la semilla actual
+        modelo = lgb.train(
+            params,
+            train_data,
+            valid_sets=None,
+            feval=lgb_gan_eval
+        )
+
+     # guardar el modelo entrenado a un archivo en la carpeta de resultados
+
+        os.makedirs(f"resultados/{conf.STUDY_NAME}", exist_ok=True)
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        modelo_path = f"resultados/{conf.STUDY_NAME}/modelo_final_semilla_{seed}_{timestamp}.txt"
+
+        modelo.save_model(modelo_path)
+        logger.info(f"Modelo final (semilla {seed}) guardado en: {modelo_path}")
+
+    # Agregar el modelo a la lista de modelos
+        modelos_finales.append(modelo)
+
+    logger.info("Entrenamiento de modelos finales completado")
+    return modelos_finales
+
+
+
+###########################################################################################################################
 
 def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, clientes_predict: np.ndarray, porcentaje_positivas: float) -> pd.DataFrame:
     """
@@ -280,6 +338,73 @@ def generar_predicciones_finales(modelo: lgb.Booster, X_predict: pd.DataFrame, c
     logger.info(f"  Porcentaje solicitado: {porcentaje_positivas:.4f}")
 
     return resultados
+#########################################################################################################################
+
+
+def generar_predicciones_finales_seeds(modelos_finales: list, X_predict: pd.DataFrame, clientes_predict: np.ndarray, porcentaje_positivas: float) -> pd.DataFrame:
+    """
+    Genera las predicciones finales para el período objetivo, seleccionando el porcentaje de predicciones positivas esperado.
+
+    Args:
+        modelo: Modelo entrenado
+        X_predict: Features para predicción
+        clientes_predict: IDs de clientes
+        porcentaje_positivas: Porcentaje de predicciones positivas deseado (entre 0 y 1)
+
+    Returns:
+        pd.DataFrame: DataFrame con numero_cliente y predict
+    """
+    logger.info("Generando predicciones finales")
+
+    # Generar probabilidades con los distintos modelos entrenados
+    
+    y_pred_prob_list =[]
+    
+    for modelo in modelos_finales:
+        y_pred_prob_seed = modelo.predict(X_predict)
+        y_pred_prob_list.append(y_pred_prob_seed)
+
+    y_pred_prob = np.mean(y_pred_prob_list, axis=0)
+
+    # Guardar probabilidades con su respectivo id de cliente
+    prob_df = pd.DataFrame({
+        'numero_de_cliente': clientes_predict,
+        'probabilidad': y_pred_prob
+    })
+    os.makedirs("resultados", exist_ok=True)
+    prob_path = f"resultados/predicciones_probabilidad_{conf.STUDY_NAME}_varias_seeds_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    prob_df.to_csv(prob_path, index=False)
+    logger.info(f"Predicciones de probabilidad guardadas en: {prob_path}")
+
+    # Calcular la cantidad de positivos a predecir
+    total_predicciones = len(y_pred_prob)
+    cantidad_positivas = int(np.round(total_predicciones * porcentaje_positivas))
+
+    # Ordenar probabilidades y asignar 1 a las de mayor probabilidad
+    indices_ordenados = np.argsort(-y_pred_prob)  # Descendente
+    y_pred_binary = np.zeros(total_predicciones, dtype=int)
+    if cantidad_positivas > 0:
+        y_pred_binary[indices_ordenados[:cantidad_positivas]] = 1
+
+    # Crear DataFrame de resultados
+    resultados = pd.DataFrame({
+        'numero_de_cliente': clientes_predict,
+        'predict': y_pred_binary
+    })
+
+    # Estadísticas de predicciones
+    predicciones_positivas = y_pred_binary.sum()
+    porcentaje_real = (predicciones_positivas / total_predicciones) * 100
+
+    logger.info(f"Predicciones generadas:")
+    logger.info(f"  Total clientes: {total_predicciones:,}")
+    logger.info(f"  Predicciones positivas: {predicciones_positivas:,} ({porcentaje_real:.2f}%)")
+    logger.info(f"  Predicciones negativas: {total_predicciones - predicciones_positivas:,}")
+    logger.info(f"  Porcentaje solicitado: {porcentaje_positivas:.4f}")
+
+    return resultados
+
+
 
 ##########################################################################################################################
 
@@ -308,12 +433,6 @@ def preparar_datos_entrenamiento_final_pesos(df: pd.DataFrame) -> tuple:
     logger.info(f"Registros de entrenamiento: {len(df_train):,}")
     logger.info(f"Registros de predicción: {len(df_predict):,}")
   
-    #df_predict = feature_engineering(df_predict, competencia="competencia01") #, cant_lag=2, n_meses=3)
-    #logger.info(f"Feature Engineering completado sobre DF_predict: {df_predict.shape}")
-    
-    #df_train = feature_engineering(df_train, competencia="competencia01") #, cant_lag=2, n_meses=3)
-    #logger.info(f"Feature Engineering completado sobre DF_train: {df_train.shape}")
-
     # Preparar features y target para entrenamiento
     X_predict = df_predict.drop(columns=['clase_ternaria','clase_peso'])
     X_train = df_train.drop(columns=['clase_ternaria','clase_peso'])

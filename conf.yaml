@@ -1,6 +1,6 @@
 # config.yaml
 
-STUDY_NAME : "lgb_optimization_cv_competencia01_l"  
+STUDY_NAME : "lgb_optimization_cv_competencia01_exp5"  
 
 competencia01:
     DATA_PATH: "./data/competencia_01.csv"

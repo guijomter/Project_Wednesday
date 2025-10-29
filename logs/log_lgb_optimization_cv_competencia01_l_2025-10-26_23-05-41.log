@@ -1,0 +1,314 @@
+2025-10-26 23:05:41,392 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-26 23:05:41,393 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-10-26 23:05:41,393 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-26 23:05:54,437 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-26 23:05:54,453 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_cv_competencia01_l.csv. Cargando desde disco.
+2025-10-26 23:07:53,267 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-26 23:08:11,528 - INFO - __name__ 101 - Conversión completada:
+2025-10-26 23:08:11,545 - INFO - __name__ 102 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-26 23:08:11,546 - INFO - __name__ 103 -   Binario - 0: 642830, 1: 8513
+2025-10-26 23:08:11,547 - INFO - __name__ 104 -   Distribución: 1.31% casos positivos
+2025-10-26 23:08:12,481 - INFO - src.optimization_cv 291 - Iniciando optimización con CV - 75 trials
+2025-10-26 23:08:12,484 - INFO - src.optimization_cv 292 - Configuración CV: períodos=['202101', '202102', '202103']
+2025-10-26 23:11:59,104 - INFO - src.optimization_cv 266 - Trial 0: Ganancia CV = 161,303,863 ± 6,025,618 
+2025-10-26 23:11:59,110 - INFO - src.optimization_cv 267 - Trial 0: Mejor iteración en CV: 174 
+2025-10-26 23:11:59,129 - INFO - src.optimization_cv 149 - Iteración 0 guardada. Ganancia promedio CV: 161,303,863 
+2025-10-26 23:14:56,855 - INFO - src.optimization_cv 266 - Trial 1: Ganancia CV = 162,626,848 ± 7,640,024 
+2025-10-26 23:14:56,864 - INFO - src.optimization_cv 267 - Trial 1: Mejor iteración en CV: 65 
+2025-10-26 23:14:56,893 - INFO - src.optimization_cv 149 - Iteración 1 guardada. Ganancia promedio CV: 162,626,848 
+2025-10-26 23:17:44,014 - INFO - src.optimization_cv 266 - Trial 2: Ganancia CV = 157,047,722 ± 5,771,216 
+2025-10-26 23:17:44,028 - INFO - src.optimization_cv 267 - Trial 2: Mejor iteración en CV: 114 
+2025-10-26 23:17:44,070 - INFO - src.optimization_cv 149 - Iteración 2 guardada. Ganancia promedio CV: 157,047,722 
+2025-10-26 23:19:21,350 - INFO - src.optimization_cv 266 - Trial 3: Ganancia CV = 136,091,467 ± 8,507,737 
+2025-10-26 23:19:21,362 - INFO - src.optimization_cv 267 - Trial 3: Mejor iteración en CV: 14 
+2025-10-26 23:19:21,396 - INFO - src.optimization_cv 149 - Iteración 3 guardada. Ganancia promedio CV: 136,091,467 
+2025-10-26 23:21:11,702 - INFO - src.optimization_cv 266 - Trial 4: Ganancia CV = 152,305,544 ± 5,549,230 
+2025-10-26 23:21:11,712 - INFO - src.optimization_cv 267 - Trial 4: Mejor iteración en CV: 56 
+2025-10-26 23:21:11,753 - INFO - src.optimization_cv 149 - Iteración 4 guardada. Ganancia promedio CV: 152,305,544 
+2025-10-26 23:23:44,550 - INFO - src.optimization_cv 266 - Trial 5: Ganancia CV = 154,963,947 ± 6,801,385 
+2025-10-26 23:23:44,569 - INFO - src.optimization_cv 267 - Trial 5: Mejor iteración en CV: 75 
+2025-10-26 23:23:44,617 - INFO - src.optimization_cv 149 - Iteración 5 guardada. Ganancia promedio CV: 154,963,947 
+2025-10-26 23:25:30,352 - INFO - src.optimization_cv 266 - Trial 6: Ganancia CV = 145,737,600 ± 7,008,966 
+2025-10-26 23:25:30,363 - INFO - src.optimization_cv 267 - Trial 6: Mejor iteración en CV: 39 
+2025-10-26 23:25:30,401 - INFO - src.optimization_cv 149 - Iteración 6 guardada. Ganancia promedio CV: 145,737,600 
+2025-10-26 23:27:20,752 - INFO - src.optimization_cv 266 - Trial 7: Ganancia CV = 154,123,459 ± 6,496,239 
+2025-10-26 23:27:20,763 - INFO - src.optimization_cv 267 - Trial 7: Mejor iteración en CV: 36 
+2025-10-26 23:27:20,800 - INFO - src.optimization_cv 149 - Iteración 7 guardada. Ganancia promedio CV: 154,123,459 
+2025-10-26 23:29:25,612 - INFO - src.optimization_cv 266 - Trial 8: Ganancia CV = 155,729,754 ± 5,653,110 
+2025-10-26 23:29:25,621 - INFO - src.optimization_cv 267 - Trial 8: Mejor iteración en CV: 56 
+2025-10-26 23:29:25,723 - INFO - src.optimization_cv 149 - Iteración 8 guardada. Ganancia promedio CV: 155,729,754 
+2025-10-26 23:32:04,218 - INFO - src.optimization_cv 266 - Trial 9: Ganancia CV = 150,728,216 ± 8,483,942 
+2025-10-26 23:32:04,234 - INFO - src.optimization_cv 267 - Trial 9: Mejor iteración en CV: 73 
+2025-10-26 23:32:04,274 - INFO - src.optimization_cv 149 - Iteración 9 guardada. Ganancia promedio CV: 150,728,216 
+2025-10-26 23:35:35,062 - INFO - src.optimization_cv 266 - Trial 10: Ganancia CV = 161,058,024 ± 5,980,160 
+2025-10-26 23:35:35,072 - INFO - src.optimization_cv 267 - Trial 10: Mejor iteración en CV: 82 
+2025-10-26 23:35:35,204 - INFO - src.optimization_cv 149 - Iteración 10 guardada. Ganancia promedio CV: 161,058,024 
+2025-10-26 23:39:25,300 - INFO - src.optimization_cv 266 - Trial 11: Ganancia CV = 158,729,543 ± 6,309,639 
+2025-10-26 23:39:25,306 - INFO - src.optimization_cv 267 - Trial 11: Mejor iteración en CV: 69 
+2025-10-26 23:39:25,325 - INFO - src.optimization_cv 149 - Iteración 11 guardada. Ganancia promedio CV: 158,729,543 
+2025-10-26 23:41:23,755 - INFO - src.optimization_cv 266 - Trial 12: Ganancia CV = 165,566,513 ± 7,910,421 
+2025-10-26 23:41:23,760 - INFO - src.optimization_cv 267 - Trial 12: Mejor iteración en CV: 77 
+2025-10-26 23:41:23,779 - INFO - src.optimization_cv 149 - Iteración 12 guardada. Ganancia promedio CV: 165,566,513 
+2025-10-26 23:43:07,344 - INFO - src.optimization_cv 266 - Trial 13: Ganancia CV = 159,753,462 ± 7,683,413 
+2025-10-26 23:43:07,348 - INFO - src.optimization_cv 267 - Trial 13: Mejor iteración en CV: 51 
+2025-10-26 23:43:07,371 - INFO - src.optimization_cv 149 - Iteración 13 guardada. Ganancia promedio CV: 159,753,462 
+2025-10-26 23:44:38,729 - INFO - src.optimization_cv 266 - Trial 14: Ganancia CV = 150,395,806 ± 6,265,627 
+2025-10-26 23:44:38,733 - INFO - src.optimization_cv 267 - Trial 14: Mejor iteración en CV: 61 
+2025-10-26 23:44:38,753 - INFO - src.optimization_cv 149 - Iteración 14 guardada. Ganancia promedio CV: 150,395,806 
+2025-10-26 23:47:30,549 - INFO - src.optimization_cv 266 - Trial 15: Ganancia CV = 164,257,293 ± 6,133,688 
+2025-10-26 23:47:30,554 - INFO - src.optimization_cv 267 - Trial 15: Mejor iteración en CV: 166 
+2025-10-26 23:47:30,578 - INFO - src.optimization_cv 149 - Iteración 15 guardada. Ganancia promedio CV: 164,257,293 
+2025-10-26 23:49:59,083 - INFO - src.optimization_cv 266 - Trial 16: Ganancia CV = 160,581,026 ± 7,682,551 
+2025-10-26 23:49:59,088 - INFO - src.optimization_cv 267 - Trial 16: Mejor iteración en CV: 116 
+2025-10-26 23:49:59,109 - INFO - src.optimization_cv 149 - Iteración 16 guardada. Ganancia promedio CV: 160,581,026 
+2025-10-26 23:51:35,646 - INFO - src.optimization_cv 266 - Trial 17: Ganancia CV = 150,143,222 ± 7,039,897 
+2025-10-26 23:51:35,651 - INFO - src.optimization_cv 267 - Trial 17: Mejor iteración en CV: 107 
+2025-10-26 23:51:35,674 - INFO - src.optimization_cv 149 - Iteración 17 guardada. Ganancia promedio CV: 150,143,222 
+2025-10-26 23:54:07,304 - INFO - src.optimization_cv 266 - Trial 18: Ganancia CV = 160,672,991 ± 5,537,205 
+2025-10-26 23:54:07,309 - INFO - src.optimization_cv 267 - Trial 18: Mejor iteración en CV: 116 
+2025-10-26 23:54:07,333 - INFO - src.optimization_cv 149 - Iteración 18 guardada. Ganancia promedio CV: 160,672,991 
+2025-10-26 23:58:07,416 - INFO - src.optimization_cv 266 - Trial 19: Ganancia CV = 169,468,095 ± 6,865,915 
+2025-10-26 23:58:07,421 - INFO - src.optimization_cv 267 - Trial 19: Mejor iteración en CV: 209 
+2025-10-26 23:58:07,442 - INFO - src.optimization_cv 149 - Iteración 19 guardada. Ganancia promedio CV: 169,468,095 
+2025-10-27 00:01:36,542 - INFO - src.optimization_cv 266 - Trial 20: Ganancia CV = 160,491,478 ± 7,379,583 
+2025-10-27 00:01:36,553 - INFO - src.optimization_cv 267 - Trial 20: Mejor iteración en CV: 114 
+2025-10-27 00:01:36,588 - INFO - src.optimization_cv 149 - Iteración 20 guardada. Ganancia promedio CV: 160,491,478 
+2025-10-27 00:03:58,625 - INFO - src.optimization_cv 266 - Trial 21: Ganancia CV = 162,943,795 ± 6,902,051 
+2025-10-27 00:03:58,632 - INFO - src.optimization_cv 267 - Trial 21: Mejor iteración en CV: 77 
+2025-10-27 00:03:58,658 - INFO - src.optimization_cv 149 - Iteración 21 guardada. Ganancia promedio CV: 162,943,795 
+2025-10-27 00:07:35,086 - INFO - src.optimization_cv 266 - Trial 22: Ganancia CV = 164,393,532 ± 6,397,342 
+2025-10-27 00:07:35,091 - INFO - src.optimization_cv 267 - Trial 22: Mejor iteración en CV: 140 
+2025-10-27 00:07:35,115 - INFO - src.optimization_cv 149 - Iteración 22 guardada. Ganancia promedio CV: 164,393,532 
+2025-10-27 00:09:59,822 - INFO - src.optimization_cv 266 - Trial 23: Ganancia CV = 160,205,952 ± 6,184,103 
+2025-10-27 00:09:59,827 - INFO - src.optimization_cv 267 - Trial 23: Mejor iteración en CV: 83 
+2025-10-27 00:09:59,852 - INFO - src.optimization_cv 149 - Iteración 23 guardada. Ganancia promedio CV: 160,205,952 
+2025-10-27 00:13:09,293 - INFO - src.optimization_cv 266 - Trial 24: Ganancia CV = 163,950,909 ± 6,726,144 
+2025-10-27 00:13:09,298 - INFO - src.optimization_cv 267 - Trial 24: Mejor iteración en CV: 109 
+2025-10-27 00:13:09,322 - INFO - src.optimization_cv 149 - Iteración 24 guardada. Ganancia promedio CV: 163,950,909 
+2025-10-27 00:16:07,170 - INFO - src.optimization_cv 266 - Trial 25: Ganancia CV = 163,661,262 ± 5,709,067 
+2025-10-27 00:16:07,175 - INFO - src.optimization_cv 267 - Trial 25: Mejor iteración en CV: 129 
+2025-10-27 00:16:07,198 - INFO - src.optimization_cv 149 - Iteración 25 guardada. Ganancia promedio CV: 163,661,262 
+2025-10-27 00:17:59,419 - INFO - src.optimization_cv 266 - Trial 26: Ganancia CV = 158,458,522 ± 6,405,001 
+2025-10-27 00:17:59,424 - INFO - src.optimization_cv 267 - Trial 26: Mejor iteración en CV: 45 
+2025-10-27 00:17:59,448 - INFO - src.optimization_cv 149 - Iteración 26 guardada. Ganancia promedio CV: 158,458,522 
+2025-10-27 00:20:53,566 - INFO - src.optimization_cv 266 - Trial 27: Ganancia CV = 163,628,436 ± 9,116,538 
+2025-10-27 00:20:53,571 - INFO - src.optimization_cv 267 - Trial 27: Mejor iteración en CV: 100 
+2025-10-27 00:20:53,599 - INFO - src.optimization_cv 149 - Iteración 27 guardada. Ganancia promedio CV: 163,628,436 
+2025-10-27 00:22:52,314 - INFO - src.optimization_cv 266 - Trial 28: Ganancia CV = 158,772,138 ± 4,219,751 
+2025-10-27 00:22:52,319 - INFO - src.optimization_cv 267 - Trial 28: Mejor iteración en CV: 86 
+2025-10-27 00:22:52,345 - INFO - src.optimization_cv 149 - Iteración 28 guardada. Ganancia promedio CV: 158,772,138 
+2025-10-27 00:27:15,163 - INFO - src.optimization_cv 266 - Trial 29: Ganancia CV = 164,571,550 ± 6,313,617 
+2025-10-27 00:27:15,169 - INFO - src.optimization_cv 267 - Trial 29: Mejor iteración en CV: 221 
+2025-10-27 00:27:15,194 - INFO - src.optimization_cv 149 - Iteración 29 guardada. Ganancia promedio CV: 164,571,550 
+2025-10-27 00:28:46,760 - INFO - src.optimization_cv 266 - Trial 30: Ganancia CV = 153,537,077 ± 5,954,803 
+2025-10-27 00:28:46,766 - INFO - src.optimization_cv 267 - Trial 30: Mejor iteración en CV: 25 
+2025-10-27 00:28:46,793 - INFO - src.optimization_cv 149 - Iteración 30 guardada. Ganancia promedio CV: 153,537,077 
+2025-10-27 00:32:32,803 - INFO - src.optimization_cv 266 - Trial 31: Ganancia CV = 159,985,207 ± 5,809,576 
+2025-10-27 00:32:32,809 - INFO - src.optimization_cv 267 - Trial 31: Mejor iteración en CV: 168 
+2025-10-27 00:32:32,837 - INFO - src.optimization_cv 149 - Iteración 31 guardada. Ganancia promedio CV: 159,985,207 
+2025-10-27 00:36:20,869 - INFO - src.optimization_cv 266 - Trial 32: Ganancia CV = 163,146,965 ± 5,741,355 
+2025-10-27 00:36:20,876 - INFO - src.optimization_cv 267 - Trial 32: Mejor iteración en CV: 200 
+2025-10-27 00:36:20,906 - INFO - src.optimization_cv 149 - Iteración 32 guardada. Ganancia promedio CV: 163,146,965 
+2025-10-27 00:40:18,521 - INFO - src.optimization_cv 266 - Trial 33: Ganancia CV = 166,172,313 ± 6,349,812 
+2025-10-27 00:40:18,525 - INFO - src.optimization_cv 267 - Trial 33: Mejor iteración en CV: 165 
+2025-10-27 00:40:18,552 - INFO - src.optimization_cv 149 - Iteración 33 guardada. Ganancia promedio CV: 166,172,313 
+2025-10-27 00:45:29,835 - INFO - src.optimization_cv 266 - Trial 34: Ganancia CV = 168,913,763 ± 6,326,805 
+2025-10-27 00:45:29,840 - INFO - src.optimization_cv 267 - Trial 34: Mejor iteración en CV: 235 
+2025-10-27 00:45:29,873 - INFO - src.optimization_cv 149 - Iteración 34 guardada. Ganancia promedio CV: 168,913,763 
+2025-10-27 00:48:17,739 - INFO - src.optimization_cv 266 - Trial 35: Ganancia CV = 160,589,892 ± 6,738,527 
+2025-10-27 00:48:17,746 - INFO - src.optimization_cv 267 - Trial 35: Mejor iteración en CV: 73 
+2025-10-27 00:48:17,776 - INFO - src.optimization_cv 149 - Iteración 35 guardada. Ganancia promedio CV: 160,589,892 
+2025-10-27 00:51:12,947 - INFO - src.optimization_cv 266 - Trial 36: Ganancia CV = 163,387,307 ± 6,889,596 
+2025-10-27 00:51:12,952 - INFO - src.optimization_cv 267 - Trial 36: Mejor iteración en CV: 74 
+2025-10-27 00:51:12,980 - INFO - src.optimization_cv 149 - Iteración 36 guardada. Ganancia promedio CV: 163,387,307 
+2025-10-27 00:55:36,201 - INFO - src.optimization_cv 266 - Trial 37: Ganancia CV = 169,373,768 ± 6,905,224 
+2025-10-27 00:55:36,208 - INFO - src.optimization_cv 267 - Trial 37: Mejor iteración en CV: 137 
+2025-10-27 00:55:36,242 - INFO - src.optimization_cv 149 - Iteración 37 guardada. Ganancia promedio CV: 169,373,768 
+2025-10-27 01:02:36,237 - INFO - src.optimization_cv 266 - Trial 38: Ganancia CV = 169,798,884 ± 6,866,422 
+2025-10-27 01:02:36,243 - INFO - src.optimization_cv 267 - Trial 38: Mejor iteración en CV: 171 
+2025-10-27 01:02:36,276 - INFO - src.optimization_cv 149 - Iteración 38 guardada. Ganancia promedio CV: 169,798,884 
+2025-10-27 01:08:11,929 - INFO - src.optimization_cv 266 - Trial 39: Ganancia CV = 168,051,775 ± 7,507,540 
+2025-10-27 01:08:11,934 - INFO - src.optimization_cv 267 - Trial 39: Mejor iteración en CV: 141 
+2025-10-27 01:08:11,963 - INFO - src.optimization_cv 149 - Iteración 39 guardada. Ganancia promedio CV: 168,051,775 
+2025-10-27 01:12:25,454 - INFO - src.optimization_cv 266 - Trial 40: Ganancia CV = 166,794,973 ± 6,994,487 
+2025-10-27 01:12:25,461 - INFO - src.optimization_cv 267 - Trial 40: Mejor iteración en CV: 73 
+2025-10-27 01:12:25,490 - INFO - src.optimization_cv 149 - Iteración 40 guardada. Ganancia promedio CV: 166,794,973 
+2025-10-27 01:17:02,128 - INFO - src.optimization_cv 266 - Trial 41: Ganancia CV = 163,708,036 ± 6,616,450 
+2025-10-27 01:17:02,133 - INFO - src.optimization_cv 267 - Trial 41: Mejor iteración en CV: 110 
+2025-10-27 01:17:02,161 - INFO - src.optimization_cv 149 - Iteración 41 guardada. Ganancia promedio CV: 163,708,036 
+2025-10-27 01:23:56,962 - INFO - src.optimization_cv 266 - Trial 42: Ganancia CV = 170,196,621 ± 7,437,311 
+2025-10-27 01:23:56,967 - INFO - src.optimization_cv 267 - Trial 42: Mejor iteración en CV: 160 
+2025-10-27 01:23:57,003 - INFO - src.optimization_cv 149 - Iteración 42 guardada. Ganancia promedio CV: 170,196,621 
+2025-10-27 01:26:57,274 - INFO - src.optimization_cv 266 - Trial 43: Ganancia CV = 161,928,778 ± 6,892,586 
+2025-10-27 01:26:57,280 - INFO - src.optimization_cv 267 - Trial 43: Mejor iteración en CV: 71 
+2025-10-27 01:26:57,313 - INFO - src.optimization_cv 149 - Iteración 43 guardada. Ganancia promedio CV: 161,928,778 
+2025-10-27 01:30:42,941 - INFO - src.optimization_cv 266 - Trial 44: Ganancia CV = 166,722,536 ± 6,942,921 
+2025-10-27 01:30:42,946 - INFO - src.optimization_cv 267 - Trial 44: Mejor iteración en CV: 111 
+2025-10-27 01:30:42,980 - INFO - src.optimization_cv 149 - Iteración 44 guardada. Ganancia promedio CV: 166,722,536 
+2025-10-27 01:33:42,829 - INFO - src.optimization_cv 266 - Trial 45: Ganancia CV = 164,828,185 ± 7,282,847 
+2025-10-27 01:33:42,835 - INFO - src.optimization_cv 267 - Trial 45: Mejor iteración en CV: 64 
+2025-10-27 01:33:42,869 - INFO - src.optimization_cv 149 - Iteración 45 guardada. Ganancia promedio CV: 164,828,185 
+2025-10-27 01:37:19,162 - INFO - src.optimization_cv 266 - Trial 46: Ganancia CV = 158,699,293 ± 10,318,455 
+2025-10-27 01:37:19,167 - INFO - src.optimization_cv 267 - Trial 46: Mejor iteración en CV: 214 
+2025-10-27 01:37:19,202 - INFO - src.optimization_cv 149 - Iteración 46 guardada. Ganancia promedio CV: 158,699,293 
+2025-10-27 01:41:12,672 - INFO - src.optimization_cv 266 - Trial 47: Ganancia CV = 168,193,197 ± 7,343,434 
+2025-10-27 01:41:12,678 - INFO - src.optimization_cv 267 - Trial 47: Mejor iteración en CV: 116 
+2025-10-27 01:41:12,709 - INFO - src.optimization_cv 149 - Iteración 47 guardada. Ganancia promedio CV: 168,193,197 
+2025-10-27 01:44:04,099 - INFO - src.optimization_cv 266 - Trial 48: Ganancia CV = 164,478,037 ± 7,124,751 
+2025-10-27 01:44:04,104 - INFO - src.optimization_cv 267 - Trial 48: Mejor iteración en CV: 107 
+2025-10-27 01:44:04,135 - INFO - src.optimization_cv 149 - Iteración 48 guardada. Ganancia promedio CV: 164,478,037 
+2025-10-27 01:46:18,940 - INFO - src.optimization_cv 266 - Trial 49: Ganancia CV = 161,126,500 ± 6,330,780 
+2025-10-27 01:46:18,947 - INFO - src.optimization_cv 267 - Trial 49: Mejor iteración en CV: 87 
+2025-10-27 01:46:18,978 - INFO - src.optimization_cv 149 - Iteración 49 guardada. Ganancia promedio CV: 161,126,500 
+2025-10-27 01:48:37,229 - INFO - src.optimization_cv 266 - Trial 50: Ganancia CV = 162,452,370 ± 9,020,658 
+2025-10-27 01:48:37,234 - INFO - src.optimization_cv 267 - Trial 50: Mejor iteración en CV: 53 
+2025-10-27 01:48:37,267 - INFO - src.optimization_cv 149 - Iteración 50 guardada. Ganancia promedio CV: 162,452,370 
+2025-10-27 01:52:53,710 - INFO - src.optimization_cv 266 - Trial 51: Ganancia CV = 169,160,474 ± 7,026,306 
+2025-10-27 01:52:53,715 - INFO - src.optimization_cv 267 - Trial 51: Mejor iteración en CV: 134 
+2025-10-27 01:52:53,751 - INFO - src.optimization_cv 149 - Iteración 51 guardada. Ganancia promedio CV: 169,160,474 
+2025-10-27 01:57:04,185 - INFO - src.optimization_cv 266 - Trial 52: Ganancia CV = 166,136,833 ± 7,828,686 
+2025-10-27 01:57:04,190 - INFO - src.optimization_cv 267 - Trial 52: Mejor iteración en CV: 95 
+2025-10-27 01:57:04,223 - INFO - src.optimization_cv 149 - Iteración 52 guardada. Ganancia promedio CV: 166,136,833 
+2025-10-27 01:59:19,131 - INFO - src.optimization_cv 266 - Trial 53: Ganancia CV = 162,498,540 ± 7,103,228 
+2025-10-27 01:59:19,136 - INFO - src.optimization_cv 267 - Trial 53: Mejor iteración en CV: 62 
+2025-10-27 01:59:19,167 - INFO - src.optimization_cv 149 - Iteración 53 guardada. Ganancia promedio CV: 162,498,540 
+2025-10-27 02:01:25,615 - INFO - src.optimization_cv 266 - Trial 54: Ganancia CV = 160,420,490 ± 7,112,848 
+2025-10-27 02:01:25,621 - INFO - src.optimization_cv 267 - Trial 54: Mejor iteración en CV: 48 
+2025-10-27 02:01:25,654 - INFO - src.optimization_cv 149 - Iteración 54 guardada. Ganancia promedio CV: 160,420,490 
+2025-10-27 02:05:02,970 - INFO - src.optimization_cv 266 - Trial 55: Ganancia CV = 167,679,395 ± 7,058,843 
+2025-10-27 02:05:02,975 - INFO - src.optimization_cv 267 - Trial 55: Mejor iteración en CV: 151 
+2025-10-27 02:05:03,009 - INFO - src.optimization_cv 149 - Iteración 55 guardada. Ganancia promedio CV: 167,679,395 
+2025-10-27 02:07:48,644 - INFO - src.optimization_cv 266 - Trial 56: Ganancia CV = 162,073,391 ± 6,442,189 
+2025-10-27 02:07:48,649 - INFO - src.optimization_cv 267 - Trial 56: Mejor iteración en CV: 68 
+2025-10-27 02:07:48,681 - INFO - src.optimization_cv 149 - Iteración 56 guardada. Ganancia promedio CV: 162,073,391 
+2025-10-27 02:10:14,323 - INFO - src.optimization_cv 266 - Trial 57: Ganancia CV = 160,427,154 ± 7,621,594 
+2025-10-27 02:10:14,329 - INFO - src.optimization_cv 267 - Trial 57: Mejor iteración en CV: 51 
+2025-10-27 02:10:14,364 - INFO - src.optimization_cv 149 - Iteración 57 guardada. Ganancia promedio CV: 160,427,154 
+2025-10-27 02:13:41,174 - INFO - src.optimization_cv 266 - Trial 58: Ganancia CV = 165,753,922 ± 6,725,053 
+2025-10-27 02:13:41,180 - INFO - src.optimization_cv 267 - Trial 58: Mejor iteración en CV: 153 
+2025-10-27 02:13:41,213 - INFO - src.optimization_cv 149 - Iteración 58 guardada. Ganancia promedio CV: 165,753,922 
+2025-10-27 02:15:39,655 - INFO - src.optimization_cv 266 - Trial 59: Ganancia CV = 156,832,179 ± 8,679,815 
+2025-10-27 02:15:39,662 - INFO - src.optimization_cv 267 - Trial 59: Mejor iteración en CV: 66 
+2025-10-27 02:15:39,698 - INFO - src.optimization_cv 149 - Iteración 59 guardada. Ganancia promedio CV: 156,832,179 
+2025-10-27 02:20:08,961 - INFO - src.optimization_cv 266 - Trial 60: Ganancia CV = 164,535,379 ± 6,665,462 
+2025-10-27 02:20:08,968 - INFO - src.optimization_cv 267 - Trial 60: Mejor iteración en CV: 115 
+2025-10-27 02:20:09,004 - INFO - src.optimization_cv 149 - Iteración 60 guardada. Ganancia promedio CV: 164,535,379 
+2025-10-27 02:23:13,038 - INFO - src.optimization_cv 266 - Trial 61: Ganancia CV = 164,625,813 ± 6,755,357 
+2025-10-27 02:23:13,043 - INFO - src.optimization_cv 267 - Trial 61: Mejor iteración en CV: 74 
+2025-10-27 02:23:13,075 - INFO - src.optimization_cv 149 - Iteración 61 guardada. Ganancia promedio CV: 164,625,813 
+2025-10-27 02:27:43,880 - INFO - src.optimization_cv 266 - Trial 62: Ganancia CV = 165,514,542 ± 6,952,012 
+2025-10-27 02:27:43,886 - INFO - src.optimization_cv 267 - Trial 62: Mejor iteración en CV: 117 
+2025-10-27 02:27:43,927 - INFO - src.optimization_cv 149 - Iteración 62 guardada. Ganancia promedio CV: 165,514,542 
+2025-10-27 02:31:35,485 - INFO - src.optimization_cv 266 - Trial 63: Ganancia CV = 167,708,338 ± 7,037,364 
+2025-10-27 02:31:35,490 - INFO - src.optimization_cv 267 - Trial 63: Mejor iteración en CV: 153 
+2025-10-27 02:31:35,523 - INFO - src.optimization_cv 149 - Iteración 63 guardada. Ganancia promedio CV: 167,708,338 
+2025-10-27 02:33:36,522 - INFO - src.optimization_cv 266 - Trial 64: Ganancia CV = 160,845,333 ± 5,715,421 
+2025-10-27 02:33:36,527 - INFO - src.optimization_cv 267 - Trial 64: Mejor iteración en CV: 83 
+2025-10-27 02:33:36,562 - INFO - src.optimization_cv 149 - Iteración 64 guardada. Ganancia promedio CV: 160,845,333 
+2025-10-27 02:36:37,383 - INFO - src.optimization_cv 266 - Trial 65: Ganancia CV = 157,818,109 ± 7,634,274 
+2025-10-27 02:36:37,390 - INFO - src.optimization_cv 267 - Trial 65: Mejor iteración en CV: 128 
+2025-10-27 02:36:37,426 - INFO - src.optimization_cv 149 - Iteración 65 guardada. Ganancia promedio CV: 157,818,109 
+2025-10-27 02:41:25,035 - INFO - src.optimization_cv 266 - Trial 66: Ganancia CV = 167,801,260 ± 7,419,216 
+2025-10-27 02:41:25,042 - INFO - src.optimization_cv 267 - Trial 66: Mejor iteración en CV: 145 
+2025-10-27 02:41:25,081 - INFO - src.optimization_cv 149 - Iteración 66 guardada. Ganancia promedio CV: 167,801,260 
+2025-10-27 02:43:47,294 - INFO - src.optimization_cv 266 - Trial 67: Ganancia CV = 163,230,730 ± 7,280,316 
+2025-10-27 02:43:47,299 - INFO - src.optimization_cv 267 - Trial 67: Mejor iteración en CV: 62 
+2025-10-27 02:43:47,332 - INFO - src.optimization_cv 149 - Iteración 67 guardada. Ganancia promedio CV: 163,230,730 
+2025-10-27 02:47:36,482 - INFO - src.optimization_cv 266 - Trial 68: Ganancia CV = 166,666,174 ± 6,890,719 
+2025-10-27 02:47:36,487 - INFO - src.optimization_cv 267 - Trial 68: Mejor iteración en CV: 148 
+2025-10-27 02:47:36,521 - INFO - src.optimization_cv 149 - Iteración 68 guardada. Ganancia promedio CV: 166,666,174 
+2025-10-27 02:49:14,371 - INFO - src.optimization_cv 266 - Trial 69: Ganancia CV = 161,724,898 ± 7,574,466 
+2025-10-27 02:49:14,376 - INFO - src.optimization_cv 267 - Trial 69: Mejor iteración en CV: 48 
+2025-10-27 02:49:14,412 - INFO - src.optimization_cv 149 - Iteración 69 guardada. Ganancia promedio CV: 161,724,898 
+2025-10-27 02:54:21,345 - INFO - src.optimization_cv 266 - Trial 70: Ganancia CV = 164,758,379 ± 6,414,796 
+2025-10-27 02:54:21,350 - INFO - src.optimization_cv 267 - Trial 70: Mejor iteración en CV: 189 
+2025-10-27 02:54:21,398 - INFO - src.optimization_cv 149 - Iteración 70 guardada. Ganancia promedio CV: 164,758,379 
+2025-10-27 02:57:17,279 - INFO - src.optimization_cv 266 - Trial 71: Ganancia CV = 159,500,376 ± 5,850,184 
+2025-10-27 02:57:17,285 - INFO - src.optimization_cv 267 - Trial 71: Mejor iteración en CV: 84 
+2025-10-27 02:57:17,323 - INFO - src.optimization_cv 149 - Iteración 71 guardada. Ganancia promedio CV: 159,500,376 
+2025-10-27 03:03:34,067 - INFO - src.optimization_cv 266 - Trial 72: Ganancia CV = 167,080,712 ± 7,560,057 
+2025-10-27 03:03:34,072 - INFO - src.optimization_cv 267 - Trial 72: Mejor iteración en CV: 145 
+2025-10-27 03:03:34,108 - INFO - src.optimization_cv 149 - Iteración 72 guardada. Ganancia promedio CV: 167,080,712 
+2025-10-27 03:07:18,366 - INFO - src.optimization_cv 266 - Trial 73: Ganancia CV = 162,381,020 ± 6,734,652 
+2025-10-27 03:07:18,371 - INFO - src.optimization_cv 267 - Trial 73: Mejor iteración en CV: 97 
+2025-10-27 03:07:18,411 - INFO - src.optimization_cv 149 - Iteración 73 guardada. Ganancia promedio CV: 162,381,020 
+2025-10-27 03:12:09,959 - INFO - src.optimization_cv 266 - Trial 74: Ganancia CV = 166,832,218 ± 5,972,148 
+2025-10-27 03:12:09,964 - INFO - src.optimization_cv 267 - Trial 74: Mejor iteración en CV: 146 
+2025-10-27 03:12:09,998 - INFO - src.optimization_cv 149 - Iteración 74 guardada. Ganancia promedio CV: 166,832,218 
+2025-10-27 03:12:10,711 - INFO - src.optimization_cv 305 - === OPTIMIZACIÓN CON CV COMPLETADA ===
+2025-10-27 03:12:10,728 - INFO - src.optimization_cv 306 - Número de trials completados: 75
+2025-10-27 03:12:10,728 - INFO - src.optimization_cv 307 - Mejor ganancia promedio = 170,196,621
+2025-10-27 03:12:10,729 - INFO - src.optimization_cv 308 - Mejores parámetros: {'num_iterations': 860, 'num_leaves': 131, 'learning_rate': 0.04536858497675322, 'feature_fraction': 0.7665953861452947, 'bagging_fraction': 0.10165073896881809, 'min_child_samples': 5, 'max_depth': 19, 'reg_lambda': 3.405707427513456, 'reg_alpha': 1.0519803666671308, 'min_gain_to_split': 0.009693678100272189}
+2025-10-27 03:12:10,731 - INFO - __main__ 67 - === ANÁLISIS DE RESULTADOS ===
+2025-10-27 03:12:10,896 - INFO - __main__ 71 - Top 5 mejores trials:
+2025-10-27 03:12:10,904 - INFO - __main__ 73 -   Trial 42: 170,196,621
+2025-10-27 03:12:10,905 - INFO - __main__ 73 -   Trial 38: 169,798,884
+2025-10-27 03:12:10,905 - INFO - __main__ 73 -   Trial 19: 169,468,095
+2025-10-27 03:12:10,906 - INFO - __main__ 73 -   Trial 37: 169,373,768
+2025-10-27 03:12:10,906 - INFO - __main__ 73 -   Trial 51: 169,160,474
+2025-10-27 03:12:10,906 - INFO - __main__ 75 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-27 03:12:10,906 - INFO - __main__ 78 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-27 03:12:10,913 - INFO - src.best_params 49 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_cv_competencia01_l_iteraciones.json
+2025-10-27 03:12:10,913 - INFO - src.best_params 50 - Mejor ganancia encontrada: 170,196,621
+2025-10-27 03:12:10,914 - INFO - src.best_params 51 - Trial número: 42
+2025-10-27 03:12:10,914 - INFO - src.best_params 52 - Parámetros: {'num_iterations': 860, 'num_leaves': 131, 'learning_rate': 0.04536858497675322, 'feature_fraction': 0.7665953861452947, 'bagging_fraction': 1.0, 'min_child_samples': 5, 'max_depth': 19, 'reg_lambda': 3.405707427513456, 'reg_alpha': 1.0519803666671308, 'min_gain_to_split': 0.009693678100272189, 'scale_pos_weight': 97, 'pos_bagging_fraction': 1.0, 'neg_bagging_fraction': 0.01, 'bagging_freq': 1, 'objective': 'binary', 'metric': 'None', 'random_state': 839071}
+2025-10-27 03:12:10,915 - INFO - src.optimization 445 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-27 03:12:10,915 - INFO - src.optimization 446 - Período de test: 202104
+2025-10-27 03:12:26,964 - INFO - src.optimization 458 - Entrenando modelo con mejores hiperparámetros...
+2025-10-27 03:12:26,974 - INFO - src.optimization 459 - Dimensiones df_train_completo: (486791, 726), Dimensiones df_test: (163418, 726)
+2025-10-27 03:12:37,098 - INFO - src.optimization 468 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Dimensiones de train_data: (486791, 724)
+2025-10-27 03:14:22,533 - INFO - src.optimization 427 - Ganancia: 363,280,000---Total Predicciones positivas: 11,716
+2025-10-27 03:14:22,534 - INFO - __main__ 90 - === RESUMEN DE EVALUACIÓN EN TEST ===
+2025-10-27 03:14:22,534 - INFO - __main__ 91 - ✅ Ganancia en test: 363,280,000
+2025-10-27 03:14:22,535 - INFO - __main__ 92 - 🔍 Umbral óptimo encontrado: 0.6100
+2025-10-27 03:14:22,535 - INFO - __main__ 93 - 🎯 Predicciones positivas: 11,716 (7.17%)
+2025-10-27 03:14:22,536 - INFO - __main__ 97 - === ENTRENAMIENTO FINAL ===
+2025-10-27 03:14:22,536 - INFO - __main__ 98 - Preparar datos para entrenamiento final
+2025-10-27 03:14:22,537 - INFO - src.final_training 421 - Preparando datos para entrenamiento final
+2025-10-27 03:14:22,537 - INFO - src.final_training 422 - Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-27 03:14:22,537 - INFO - src.final_training 423 - Período de predicción: 202106
+2025-10-27 03:14:39,600 - INFO - src.final_training 433 - Registros de entrenamiento: 650,209
+2025-10-27 03:14:39,619 - INFO - src.final_training 434 - Registros de predicción: 164,313
+2025-10-27 03:14:56,467 - INFO - src.final_training 446 - Features utilizadas: 724
+2025-10-27 03:14:56,546 - INFO - src.final_training 447 - Distribución del target - 0: 642,830, 1: 7,379
+2025-10-27 03:14:56,995 - INFO - __main__ 103 - Entrenar modelo final
+2025-10-27 03:14:56,996 - INFO - src.final_training 239 - Iniciando entrenamiento del modelo final
+2025-10-27 03:16:55,806 - INFO - src.final_training 274 - Modelo final (semilla 839071) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_839071_2025-10-27_03-16-55.txt
+2025-10-27 03:18:37,200 - INFO - src.final_training 274 - Modelo final (semilla 666557) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_666557_2025-10-27_03-18-37.txt
+2025-10-27 03:20:20,498 - INFO - src.final_training 274 - Modelo final (semilla 390653) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_390653_2025-10-27_03-20-20.txt
+2025-10-27 03:22:01,435 - INFO - src.final_training 274 - Modelo final (semilla 408341) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_408341_2025-10-27_03-22-01.txt
+2025-10-27 03:23:43,735 - INFO - src.final_training 274 - Modelo final (semilla 858577) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_858577_2025-10-27_03-23-43.txt
+2025-10-27 03:25:26,071 - INFO - src.final_training 274 - Modelo final (semilla 156893) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_156893_2025-10-27_03-25-26.txt
+2025-10-27 03:27:07,116 - INFO - src.final_training 274 - Modelo final (semilla 220481) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_220481_2025-10-27_03-27-07.txt
+2025-10-27 03:28:47,873 - INFO - src.final_training 274 - Modelo final (semilla 557412) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_557412_2025-10-27_03-28-47.txt
+2025-10-27 03:30:28,690 - INFO - src.final_training 274 - Modelo final (semilla 111058) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_111058_2025-10-27_03-30-28.txt
+2025-10-27 03:32:10,026 - INFO - src.final_training 274 - Modelo final (semilla 401171) guardado en: resultados/lgb_optimization_cv_competencia01_l/modelo_final_semilla_401171_2025-10-27_03-32-09.txt
+2025-10-27 03:32:10,027 - INFO - src.final_training 279 - Entrenamiento de modelos finales completado
+2025-10-27 03:32:10,233 - INFO - __main__ 107 - Generar predicciones finales
+2025-10-27 03:32:10,233 - INFO - src.final_training 357 - Generando predicciones finales
+2025-10-27 03:32:57,793 - INFO - src.final_training 377 - Predicciones de probabilidad guardadas en: resultados/predicciones_probabilidad_lgb_optimization_cv_competencia01_l_varias_seeds_2025-10-27_03-32-57.csv
+2025-10-27 03:32:57,805 - INFO - src.final_training 399 - Predicciones generadas:
+2025-10-27 03:32:57,806 - INFO - src.final_training 400 -   Total clientes: 164,313
+2025-10-27 03:32:57,806 - INFO - src.final_training 401 -   Predicciones positivas: 13,298 (8.09%)
+2025-10-27 03:32:57,806 - INFO - src.final_training 402 -   Predicciones negativas: 151,015
+2025-10-27 03:32:57,807 - INFO - src.final_training 403 -   Porcentaje solicitado: 0.0809
+2025-10-27 03:32:57,809 - INFO - __main__ 111 - Guardar predicciones
+2025-10-27 03:32:57,906 - INFO - src.output_manager 42 - Predicciones guardadas en: predict/lgb_optimization_cv_competencia01_l_20251027_033257.csv
+2025-10-27 03:32:57,906 - INFO - src.output_manager 43 - Formato del archivo:
+2025-10-27 03:32:57,907 - INFO - src.output_manager 44 -   Columnas: ['numero_de_cliente', 'predict']
+2025-10-27 03:32:57,907 - INFO - src.output_manager 45 -   Registros: 164,313
+2025-10-27 03:32:57,907 - INFO - src.output_manager 46 -   Primeras filas:
+2025-10-27 03:32:57,956 - INFO - src.output_manager 47 -    numero_de_cliente  predict
+0          249350768        0
+1          249432306        0
+2          249565688        0
+3          249596175        0
+4          249695645        0
+2025-10-27 03:32:57,957 - INFO - __main__ 115 - === RESUMEN FINAL ===
+2025-10-27 03:32:57,958 - INFO - __main__ 116 - ✅ Entrenamiento final completado exitosamente
+2025-10-27 03:32:57,958 - INFO - __main__ 117 - 📊 Mejores hiperparámetros utilizados: {'num_iterations': 860, 'num_leaves': 131, 'learning_rate': 0.04536858497675322, 'feature_fraction': 0.7665953861452947, 'bagging_fraction': 1.0, 'min_child_samples': 5, 'max_depth': 19, 'reg_lambda': 3.405707427513456, 'reg_alpha': 1.0519803666671308, 'min_gain_to_split': 0.009693678100272189, 'scale_pos_weight': 97, 'pos_bagging_fraction': 1.0, 'neg_bagging_fraction': 0.01, 'bagging_freq': 1, 'objective': 'binary', 'metric': 'None', 'random_state': 401171}
+2025-10-27 03:32:57,959 - INFO - __main__ 118 - 🎯 Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-27 03:32:57,959 - INFO - __main__ 119 - 🔮 Período de predicción: 202106
+2025-10-27 03:32:57,959 - INFO - __main__ 122 - 📁 Archivo de salida: predict/lgb_optimization_cv_competencia01_l_20251027_033257.csv
+2025-10-27 03:32:57,960 - INFO - __main__ 123 - 📝 Log detallado: logs/log_lgb_optimization_cv_competencia01_l_2025-10-26_23-05-41.log
+2025-10-27 03:32:57,960 - INFO - __main__ 126 - >>> Ejecución finalizada. Revisar logs para mas detalles.

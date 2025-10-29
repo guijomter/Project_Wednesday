@@ -130,7 +130,7 @@ def guardar_iteracion(trial, ganancia, archivo_base=None):
         'datetime': datetime.now().isoformat(),
         'state': 'COMPLETE',  # Si llegamos aquí, el trial se completó exitosamente
         'configuracion': {
-            'semilla': SEMILLA,
+         #   'semilla': SEMILLA,
             'mes_train': MES_TRAIN,
             'mes_validacion': MES_VALIDACION
         }
@@ -524,3 +524,144 @@ def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
     }
   
     return resultados
+
+#### OBJETIVO GANANCIA SEEDS 
+
+def objetivo_ganancia_seeds(trial, df) -> float:
+    """
+    Parameters:
+    trial: trial de optuna
+    df: dataframe con datos
+  
+    Description:
+    Función objetivo que maximiza ganancia en mes de validación.
+    Utiliza configuración YAML para períodos y semilla.
+    Define parametros para el modelo LightGBM
+    Preparar dataset para entrenamiento y validación
+    Entrena modelo con función de ganancia personalizada
+    Predecir y calcular ganancia
+    Guardar cada iteración en JSON
+  
+    Returns:
+    float: ganancia total
+    """
+    # Hiperparámetros a optimizar en el modelo LightGBM
+    params = {
+        'objective': 'binary',
+        'metric': 'None',
+        'num_iterations' : trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
+        'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
+        'learning_rate': trial.suggest_float('learning_rate', conf.parametros_lgb.learning_rate[0], conf.parametros_lgb.learning_rate[1], log=True),
+        'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
+        'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
+        'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
+        'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
+        'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
+        'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
+        'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
+        'verbosity': -1,
+        'scale_pos_weight': 97,
+        'bagging_fraction': 1.0,
+        'pos_bagging_fraction': 1.0,
+        'neg_bagging_fraction': 0.01,
+        'bagging_freq': 1,
+        #'silent': True,
+        #'bin': trial.suggest_int('bin', conf.parametros_lgb.bin[0], conf.parametros_lgb.bin[1]),
+        'bin': 31
+    }
+  
+    # Preparar dataset para entrenamiento y validación
+
+    if isinstance(MES_TRAIN, list):
+        df_train = df[df['foto_mes'].astype(str).isin(MES_TRAIN)]
+    else:
+        df_train = df[df['foto_mes'].astype(str) == MES_TRAIN]
+    
+    df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
+
+    # Usar target (con clase ternaria ya convertida a binaria)
+    
+    y_train = df_train['clase_ternaria'].values
+    y_val = df_val['clase_ternaria'].values
+
+    # Features (excluir target)
+    X_train = df_train.drop(columns=['clase_ternaria', 'clase_peso'])
+    X_val = df_val.drop(columns=['clase_ternaria', 'clase_peso'])
+
+    weights_train= df_train['clase_peso'].values
+    weights_val = df_val['clase_peso'].values
+
+    # Crear datasets de LightGBM
+   
+    train_data = lgb.Dataset(X_train, label=y_train, weight = weights_train )
+    val_data = lgb.Dataset(X_val, label=y_val, weight = weights_val, reference=train_data)
+   
+    # Entrenar modelos distintos por cada seed
+
+    ganancia_total=0
+
+    for seed in SEMILLA:
+        params['random_state'] = seed
+
+        model = lgb.train(
+            params, 
+            train_data,
+            valid_sets=[val_data],
+            feval=lgb_gan_eval,         #ganancia_lgb_binary, 
+            callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
+        )
+
+    # Predecir y calcular ganancia
+        y_pred_proba = model.predict(X_val)
+        _, ganancia_iter, _ =lgb_gan_eval(y_pred_proba, val_data)
+                 
+    # Sumar a la ganancia de los modelos anteriores
+        ganancia_total = ganancia_total +  ganancia_iter 
+
+    # Calcular ganancia media de los modelos entrenados en la iteración
+    ganancia_media = ganancia_total / len(SEMILLA)
+
+    # Guardar cada iteración en JSON
+    guardar_iteracion(trial, ganancia_media)
+  
+    logger.info(f"Trial {trial.number}: Ganancia = {ganancia_media:,.0f}")
+  
+    return ganancia_media
+   
+
+#######################################################################################################
+
+
+def optimizar_con_seed_pesos(df, n_trials=50) -> optuna.Study:
+    """
+    Ejecuta optimización bayesiana con ganancia media de modelos entrenados con distintos seeds.
+  
+    Args:
+        df: DataFrame con datos
+        n_trials: Número de trials a ejecutar
+  
+    Returns:
+        optuna.Study: Estudio de Optuna con resultados de Ganancia media
+    """
+    study_name = f"{conf.STUDY_NAME}"
+  
+    logger.info(f"Iniciando optimización con Seeds - {n_trials} trials")
+    logger.info(f"Configuración: períodos={MES_TRAIN + [MES_VALIDACION] if isinstance(MES_TRAIN, list) else [MES_TRAIN, MES_VALIDACION]}")
+  
+    # Crear estudio
+    study = optuna.create_study(
+        direction='maximize',
+        study_name=study_name,
+        sampler=optuna.samplers.TPESampler(seed=SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA)
+    )
+  
+    # Ejecutar optimización
+    study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df), n_trials=n_trials)
+  
+    # Resultados
+    logger.info("=== OPTIMIZACIÓN CON SEEDS COMPLETADA ===")
+    logger.info(f"Número de trials completados: {len(study.trials)}")
+    logger.info(f"Mejor ganancia promedio = {study.best_value:,.0f}")
+    logger.info(f"Mejores parámetros: {study.best_params}")
+
+    return study

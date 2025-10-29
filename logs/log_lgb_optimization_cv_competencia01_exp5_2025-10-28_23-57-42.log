@@ -1,0 +1,30 @@
+2025-10-28 23:57:42,343 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-28 23:57:42,344 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-10-28 23:57:42,345 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-28 23:57:52,550 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-28 23:57:52,553 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_cv_competencia01_exp5.csv. Cargando desde disco.
+2025-10-28 23:59:30,091 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-28 23:59:38,066 - INFO - __name__ 101 - Conversión completada:
+2025-10-28 23:59:38,076 - INFO - __name__ 102 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-28 23:59:38,076 - INFO - __name__ 103 -   Binario - 0: 642830, 1: 8513
+2025-10-28 23:59:38,078 - INFO - __name__ 104 -   Distribución: 1.31% casos positivos
+2025-10-28 23:59:39,220 - INFO - src.optimization_cv 291 - Iniciando optimización con CV - 75 trials
+2025-10-28 23:59:39,222 - INFO - src.optimization_cv 292 - Configuración CV: períodos=['202101', '202102', '202103']
+2025-10-29 00:00:19,446 - INFO - src.optimization_cv 266 - Trial 0: Ganancia CV = 64,000 ± 0 
+2025-10-29 00:00:19,448 - INFO - src.optimization_cv 267 - Trial 0: Mejor iteración en CV: 0 
+2025-10-29 00:00:19,454 - INFO - src.optimization_cv 149 - Iteración 0 guardada. Ganancia promedio CV: 64,000 
+2025-10-29 00:01:09,140 - INFO - src.optimization_cv 266 - Trial 1: Ganancia CV = 64,000 ± 0 
+2025-10-29 00:01:09,142 - INFO - src.optimization_cv 267 - Trial 1: Mejor iteración en CV: 0 
+2025-10-29 00:01:09,147 - INFO - src.optimization_cv 149 - Iteración 1 guardada. Ganancia promedio CV: 64,000 
+2025-10-29 00:02:06,590 - INFO - src.optimization_cv 266 - Trial 2: Ganancia CV = 64,000 ± 0 
+2025-10-29 00:02:06,594 - INFO - src.optimization_cv 267 - Trial 2: Mejor iteración en CV: 0 
+2025-10-29 00:02:06,607 - INFO - src.optimization_cv 149 - Iteración 2 guardada. Ganancia promedio CV: 64,000 
+2025-10-29 00:03:05,204 - INFO - src.optimization_cv 266 - Trial 3: Ganancia CV = 64,000 ± 0 
+2025-10-29 00:03:05,206 - INFO - src.optimization_cv 267 - Trial 3: Mejor iteración en CV: 0 
+2025-10-29 00:03:05,212 - INFO - src.optimization_cv 149 - Iteración 3 guardada. Ganancia promedio CV: 64,000 
+2025-10-29 00:03:56,411 - INFO - src.optimization_cv 266 - Trial 4: Ganancia CV = 64,000 ± 0 
+2025-10-29 00:03:56,413 - INFO - src.optimization_cv 267 - Trial 4: Mejor iteración en CV: 0 
+2025-10-29 00:03:56,418 - INFO - src.optimization_cv 149 - Iteración 4 guardada. Ganancia promedio CV: 64,000 
+2025-10-29 00:04:59,080 - INFO - src.optimization_cv 266 - Trial 5: Ganancia CV = 64,000 ± 0 
+2025-10-29 00:04:59,084 - INFO - src.optimization_cv 267 - Trial 5: Mejor iteración en CV: 0 
+2025-10-29 00:04:59,097 - INFO - src.optimization_cv 149 - Iteración 5 guardada. Ganancia promedio CV: 64,000 

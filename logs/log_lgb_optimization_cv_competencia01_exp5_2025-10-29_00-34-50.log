@@ -1,0 +1,314 @@
+2025-10-29 00:34:50,130 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-29 00:34:50,130 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-10-29 00:34:50,131 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-29 00:35:00,412 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-29 00:35:00,414 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_cv_competencia01_exp5.csv. Cargando desde disco.
+2025-10-29 00:36:48,308 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-29 00:36:59,594 - INFO - __name__ 101 - Conversión completada:
+2025-10-29 00:36:59,601 - INFO - __name__ 102 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-29 00:36:59,602 - INFO - __name__ 103 -   Binario - 0: 642830, 1: 8513
+2025-10-29 00:36:59,602 - INFO - __name__ 104 -   Distribución: 1.31% casos positivos
+2025-10-29 00:37:00,571 - INFO - src.optimization 648 - Iniciando optimización con Seeds - 75 trials
+2025-10-29 00:37:00,573 - INFO - src.optimization 649 - Configuración: períodos=['202101', '202102', '202103']
+2025-10-29 00:37:40,736 - INFO - src.optimization 158 - Iteración 0 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:37:40,738 - INFO - src.optimization 159 - Ganancia: -14,000---Parámetros: {params}
+2025-10-29 00:37:40,739 - INFO - src.optimization 627 - Trial 0: Ganancia = -14,000
+2025-10-29 00:38:34,342 - INFO - src.optimization 158 - Iteración 1 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:38:34,345 - INFO - src.optimization 159 - Ganancia: -14,000---Parámetros: {params}
+2025-10-29 00:38:34,345 - INFO - src.optimization 627 - Trial 1: Ganancia = -14,000
+2025-10-29 00:39:49,743 - INFO - src.optimization 158 - Iteración 2 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:39:49,745 - INFO - src.optimization 159 - Ganancia: 24,624,000---Parámetros: {params}
+2025-10-29 00:39:49,745 - INFO - src.optimization 627 - Trial 2: Ganancia = 24,624,000
+2025-10-29 00:40:48,645 - INFO - src.optimization 158 - Iteración 3 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:40:48,648 - INFO - src.optimization 159 - Ganancia: -16,000---Parámetros: {params}
+2025-10-29 00:40:48,649 - INFO - src.optimization 627 - Trial 3: Ganancia = -16,000
+2025-10-29 00:41:42,779 - INFO - src.optimization 158 - Iteración 4 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:41:42,781 - INFO - src.optimization 159 - Ganancia: 49,946,000---Parámetros: {params}
+2025-10-29 00:41:42,782 - INFO - src.optimization 627 - Trial 4: Ganancia = 49,946,000
+2025-10-29 00:42:58,823 - INFO - src.optimization 158 - Iteración 5 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:42:58,825 - INFO - src.optimization 159 - Ganancia: 18,786,000---Parámetros: {params}
+2025-10-29 00:42:58,826 - INFO - src.optimization 627 - Trial 5: Ganancia = 18,786,000
+2025-10-29 00:44:06,865 - INFO - src.optimization 158 - Iteración 6 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:44:06,868 - INFO - src.optimization 159 - Ganancia: 132,000---Parámetros: {params}
+2025-10-29 00:44:06,869 - INFO - src.optimization 627 - Trial 6: Ganancia = 132,000
+2025-10-29 00:45:26,019 - INFO - src.optimization 158 - Iteración 7 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:45:26,022 - INFO - src.optimization 159 - Ganancia: -10,000---Parámetros: {params}
+2025-10-29 00:45:26,022 - INFO - src.optimization 627 - Trial 7: Ganancia = -10,000
+2025-10-29 00:47:13,133 - INFO - src.optimization 158 - Iteración 8 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:47:13,135 - INFO - src.optimization 159 - Ganancia: 208,548,000---Parámetros: {params}
+2025-10-29 00:47:13,135 - INFO - src.optimization 627 - Trial 8: Ganancia = 208,548,000
+2025-10-29 00:48:21,777 - INFO - src.optimization 158 - Iteración 9 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:48:21,779 - INFO - src.optimization 159 - Ganancia: 21,144,000---Parámetros: {params}
+2025-10-29 00:48:21,779 - INFO - src.optimization 627 - Trial 9: Ganancia = 21,144,000
+2025-10-29 00:49:46,784 - INFO - src.optimization 158 - Iteración 10 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:49:46,787 - INFO - src.optimization 159 - Ganancia: 189,278,000---Parámetros: {params}
+2025-10-29 00:49:46,787 - INFO - src.optimization 627 - Trial 10: Ganancia = 189,278,000
+2025-10-29 00:51:05,158 - INFO - src.optimization 158 - Iteración 11 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:51:05,165 - INFO - src.optimization 159 - Ganancia: 180,284,000---Parámetros: {params}
+2025-10-29 00:51:05,165 - INFO - src.optimization 627 - Trial 11: Ganancia = 180,284,000
+2025-10-29 00:52:32,808 - INFO - src.optimization 158 - Iteración 12 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:52:32,812 - INFO - src.optimization 159 - Ganancia: 120,322,000---Parámetros: {params}
+2025-10-29 00:52:32,812 - INFO - src.optimization 627 - Trial 12: Ganancia = 120,322,000
+2025-10-29 00:54:09,035 - INFO - src.optimization 158 - Iteración 13 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:54:09,039 - INFO - src.optimization 159 - Ganancia: 225,258,000---Parámetros: {params}
+2025-10-29 00:54:09,040 - INFO - src.optimization 627 - Trial 13: Ganancia = 225,258,000
+2025-10-29 00:55:25,476 - INFO - src.optimization 158 - Iteración 14 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:55:25,481 - INFO - src.optimization 159 - Ganancia: 120,758,000---Parámetros: {params}
+2025-10-29 00:55:25,482 - INFO - src.optimization 627 - Trial 14: Ganancia = 120,758,000
+2025-10-29 00:56:29,700 - INFO - src.optimization 158 - Iteración 15 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:56:29,705 - INFO - src.optimization 159 - Ganancia: 24,928,000---Parámetros: {params}
+2025-10-29 00:56:29,705 - INFO - src.optimization 627 - Trial 15: Ganancia = 24,928,000
+2025-10-29 00:57:36,313 - INFO - src.optimization 158 - Iteración 16 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:57:36,317 - INFO - src.optimization 159 - Ganancia: 25,468,000---Parámetros: {params}
+2025-10-29 00:57:36,317 - INFO - src.optimization 627 - Trial 16: Ganancia = 25,468,000
+2025-10-29 00:58:54,556 - INFO - src.optimization 158 - Iteración 17 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:58:54,561 - INFO - src.optimization 159 - Ganancia: 133,836,000---Parámetros: {params}
+2025-10-29 00:58:54,562 - INFO - src.optimization 627 - Trial 17: Ganancia = 133,836,000
+2025-10-29 00:59:58,011 - INFO - src.optimization 158 - Iteración 18 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:59:58,016 - INFO - src.optimization 159 - Ganancia: 47,204,000---Parámetros: {params}
+2025-10-29 00:59:58,016 - INFO - src.optimization 627 - Trial 18: Ganancia = 47,204,000
+2025-10-29 01:01:02,006 - INFO - src.optimization 158 - Iteración 19 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:01:02,013 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 01:01:02,014 - INFO - src.optimization 627 - Trial 19: Ganancia = -20,000
+2025-10-29 01:03:24,494 - INFO - src.optimization 158 - Iteración 20 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:03:24,501 - INFO - src.optimization 159 - Ganancia: 227,234,000---Parámetros: {params}
+2025-10-29 01:03:24,501 - INFO - src.optimization 627 - Trial 20: Ganancia = 227,234,000
+2025-10-29 01:05:36,051 - INFO - src.optimization 158 - Iteración 21 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:05:36,056 - INFO - src.optimization 159 - Ganancia: 217,438,000---Parámetros: {params}
+2025-10-29 01:05:36,056 - INFO - src.optimization 627 - Trial 21: Ganancia = 217,438,000
+2025-10-29 01:07:50,229 - INFO - src.optimization 158 - Iteración 22 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:07:50,235 - INFO - src.optimization 159 - Ganancia: 253,540,000---Parámetros: {params}
+2025-10-29 01:07:50,235 - INFO - src.optimization 627 - Trial 22: Ganancia = 253,540,000
+2025-10-29 01:10:01,576 - INFO - src.optimization 158 - Iteración 23 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:10:01,580 - INFO - src.optimization 159 - Ganancia: 251,134,000---Parámetros: {params}
+2025-10-29 01:10:01,581 - INFO - src.optimization 627 - Trial 23: Ganancia = 251,134,000
+2025-10-29 01:12:07,020 - INFO - src.optimization 158 - Iteración 24 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:12:07,027 - INFO - src.optimization 159 - Ganancia: 250,124,000---Parámetros: {params}
+2025-10-29 01:12:07,027 - INFO - src.optimization 627 - Trial 24: Ganancia = 250,124,000
+2025-10-29 01:14:11,252 - INFO - src.optimization 158 - Iteración 25 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:14:11,257 - INFO - src.optimization 159 - Ganancia: 251,458,000---Parámetros: {params}
+2025-10-29 01:14:11,258 - INFO - src.optimization 627 - Trial 25: Ganancia = 251,458,000
+2025-10-29 01:15:28,537 - INFO - src.optimization 158 - Iteración 26 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:15:28,542 - INFO - src.optimization 159 - Ganancia: 27,916,000---Parámetros: {params}
+2025-10-29 01:15:28,542 - INFO - src.optimization 627 - Trial 26: Ganancia = 27,916,000
+2025-10-29 01:18:18,978 - INFO - src.optimization 158 - Iteración 27 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:18:18,984 - INFO - src.optimization 159 - Ganancia: 256,782,000---Parámetros: {params}
+2025-10-29 01:18:18,985 - INFO - src.optimization 627 - Trial 27: Ganancia = 256,782,000
+2025-10-29 01:19:24,589 - INFO - src.optimization 158 - Iteración 28 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:19:24,593 - INFO - src.optimization 159 - Ganancia: 23,438,000---Parámetros: {params}
+2025-10-29 01:19:24,593 - INFO - src.optimization 627 - Trial 28: Ganancia = 23,438,000
+2025-10-29 01:20:38,586 - INFO - src.optimization 158 - Iteración 29 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:20:38,593 - INFO - src.optimization 159 - Ganancia: 50,096,000---Parámetros: {params}
+2025-10-29 01:20:38,594 - INFO - src.optimization 627 - Trial 29: Ganancia = 50,096,000
+2025-10-29 01:22:56,604 - INFO - src.optimization 158 - Iteración 30 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:22:56,610 - INFO - src.optimization 159 - Ganancia: 252,128,000---Parámetros: {params}
+2025-10-29 01:22:56,611 - INFO - src.optimization 627 - Trial 30: Ganancia = 252,128,000
+2025-10-29 01:24:43,473 - INFO - src.optimization 158 - Iteración 31 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:24:43,479 - INFO - src.optimization 159 - Ganancia: 252,796,000---Parámetros: {params}
+2025-10-29 01:24:43,479 - INFO - src.optimization 627 - Trial 31: Ganancia = 252,796,000
+2025-10-29 01:26:15,515 - INFO - src.optimization 158 - Iteración 32 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:26:15,522 - INFO - src.optimization 159 - Ganancia: 252,098,000---Parámetros: {params}
+2025-10-29 01:26:15,523 - INFO - src.optimization 627 - Trial 32: Ganancia = 252,098,000
+2025-10-29 01:27:34,379 - INFO - src.optimization 158 - Iteración 33 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:27:34,386 - INFO - src.optimization 159 - Ganancia: 250,450,000---Parámetros: {params}
+2025-10-29 01:27:34,387 - INFO - src.optimization 627 - Trial 33: Ganancia = 250,450,000
+2025-10-29 01:28:32,173 - INFO - src.optimization 158 - Iteración 34 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:28:32,177 - INFO - src.optimization 159 - Ganancia: 34,802,000---Parámetros: {params}
+2025-10-29 01:28:32,177 - INFO - src.optimization 627 - Trial 34: Ganancia = 34,802,000
+2025-10-29 01:31:20,295 - INFO - src.optimization 158 - Iteración 35 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:31:20,301 - INFO - src.optimization 159 - Ganancia: 255,020,000---Parámetros: {params}
+2025-10-29 01:31:20,302 - INFO - src.optimization 627 - Trial 35: Ganancia = 255,020,000
+2025-10-29 01:33:37,280 - INFO - src.optimization 158 - Iteración 36 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:33:37,286 - INFO - src.optimization 159 - Ganancia: 263,400,000---Parámetros: {params}
+2025-10-29 01:33:37,287 - INFO - src.optimization 627 - Trial 36: Ganancia = 263,400,000
+2025-10-29 01:34:43,217 - INFO - src.optimization 158 - Iteración 37 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:34:43,224 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 01:34:43,225 - INFO - src.optimization 627 - Trial 37: Ganancia = -20,000
+2025-10-29 01:36:35,593 - INFO - src.optimization 158 - Iteración 38 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:36:35,599 - INFO - src.optimization 159 - Ganancia: 178,464,000---Parámetros: {params}
+2025-10-29 01:36:35,599 - INFO - src.optimization 627 - Trial 38: Ganancia = 178,464,000
+2025-10-29 01:37:40,488 - INFO - src.optimization 158 - Iteración 39 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:37:40,496 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 01:37:40,497 - INFO - src.optimization 627 - Trial 39: Ganancia = -20,000
+2025-10-29 01:39:25,861 - INFO - src.optimization 158 - Iteración 40 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:39:25,867 - INFO - src.optimization 159 - Ganancia: 192,766,000---Parámetros: {params}
+2025-10-29 01:39:25,867 - INFO - src.optimization 627 - Trial 40: Ganancia = 192,766,000
+2025-10-29 01:40:49,329 - INFO - src.optimization 158 - Iteración 41 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:40:49,337 - INFO - src.optimization 159 - Ganancia: 50,362,000---Parámetros: {params}
+2025-10-29 01:40:49,337 - INFO - src.optimization 627 - Trial 41: Ganancia = 50,362,000
+2025-10-29 01:43:37,455 - INFO - src.optimization 158 - Iteración 42 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:43:37,459 - INFO - src.optimization 159 - Ganancia: 242,638,000---Parámetros: {params}
+2025-10-29 01:43:37,460 - INFO - src.optimization 627 - Trial 42: Ganancia = 242,638,000
+2025-10-29 01:45:56,390 - INFO - src.optimization 158 - Iteración 43 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:45:56,397 - INFO - src.optimization 159 - Ganancia: 255,288,000---Parámetros: {params}
+2025-10-29 01:45:56,397 - INFO - src.optimization 627 - Trial 43: Ganancia = 255,288,000
+2025-10-29 01:48:04,310 - INFO - src.optimization 158 - Iteración 44 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:48:04,316 - INFO - src.optimization 159 - Ganancia: 257,416,000---Parámetros: {params}
+2025-10-29 01:48:04,317 - INFO - src.optimization 627 - Trial 44: Ganancia = 257,416,000
+2025-10-29 01:49:10,675 - INFO - src.optimization 158 - Iteración 45 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:49:10,680 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 01:49:10,680 - INFO - src.optimization 627 - Trial 45: Ganancia = -20,000
+2025-10-29 01:50:29,585 - INFO - src.optimization 158 - Iteración 46 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:50:29,590 - INFO - src.optimization 159 - Ganancia: 253,944,000---Parámetros: {params}
+2025-10-29 01:50:29,590 - INFO - src.optimization 627 - Trial 46: Ganancia = 253,944,000
+2025-10-29 01:53:09,501 - INFO - src.optimization 158 - Iteración 47 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:53:09,506 - INFO - src.optimization 159 - Ganancia: 250,198,000---Parámetros: {params}
+2025-10-29 01:53:09,507 - INFO - src.optimization 627 - Trial 47: Ganancia = 250,198,000
+2025-10-29 01:54:12,471 - INFO - src.optimization 158 - Iteración 48 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:54:12,477 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 01:54:12,477 - INFO - src.optimization 627 - Trial 48: Ganancia = -20,000
+2025-10-29 01:55:05,486 - INFO - src.optimization 158 - Iteración 49 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:55:05,491 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 01:55:05,491 - INFO - src.optimization 627 - Trial 49: Ganancia = -20,000
+2025-10-29 01:57:27,423 - INFO - src.optimization 158 - Iteración 50 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:57:27,430 - INFO - src.optimization 159 - Ganancia: 200,716,000---Parámetros: {params}
+2025-10-29 01:57:27,431 - INFO - src.optimization 627 - Trial 50: Ganancia = 200,716,000
+2025-10-29 01:58:40,515 - INFO - src.optimization 158 - Iteración 51 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 01:58:40,520 - INFO - src.optimization 159 - Ganancia: 249,438,000---Parámetros: {params}
+2025-10-29 01:58:40,521 - INFO - src.optimization 627 - Trial 51: Ganancia = 249,438,000
+2025-10-29 02:00:22,617 - INFO - src.optimization 158 - Iteración 52 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:00:22,623 - INFO - src.optimization 159 - Ganancia: 252,810,000---Parámetros: {params}
+2025-10-29 02:00:22,624 - INFO - src.optimization 627 - Trial 52: Ganancia = 252,810,000
+2025-10-29 02:02:21,407 - INFO - src.optimization 158 - Iteración 53 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:02:21,414 - INFO - src.optimization 159 - Ganancia: 250,172,000---Parámetros: {params}
+2025-10-29 02:02:21,414 - INFO - src.optimization 627 - Trial 53: Ganancia = 250,172,000
+2025-10-29 02:03:15,203 - INFO - src.optimization 158 - Iteración 54 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:03:15,211 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 02:03:15,211 - INFO - src.optimization 627 - Trial 54: Ganancia = -20,000
+2025-10-29 02:04:25,121 - INFO - src.optimization 158 - Iteración 55 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:04:25,126 - INFO - src.optimization 159 - Ganancia: 256,084,000---Parámetros: {params}
+2025-10-29 02:04:25,127 - INFO - src.optimization 627 - Trial 55: Ganancia = 256,084,000
+2025-10-29 02:06:45,732 - INFO - src.optimization 158 - Iteración 56 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:06:45,738 - INFO - src.optimization 159 - Ganancia: 244,062,000---Parámetros: {params}
+2025-10-29 02:06:45,738 - INFO - src.optimization 627 - Trial 56: Ganancia = 244,062,000
+2025-10-29 02:09:00,715 - INFO - src.optimization 158 - Iteración 57 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:09:00,722 - INFO - src.optimization 159 - Ganancia: 227,136,000---Parámetros: {params}
+2025-10-29 02:09:00,723 - INFO - src.optimization 627 - Trial 57: Ganancia = 227,136,000
+2025-10-29 02:10:15,327 - INFO - src.optimization 158 - Iteración 58 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:10:15,332 - INFO - src.optimization 159 - Ganancia: 25,812,000---Parámetros: {params}
+2025-10-29 02:10:15,333 - INFO - src.optimization 627 - Trial 58: Ganancia = 25,812,000
+2025-10-29 02:12:32,045 - INFO - src.optimization 158 - Iteración 59 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:12:32,051 - INFO - src.optimization 159 - Ganancia: 252,750,000---Parámetros: {params}
+2025-10-29 02:12:32,052 - INFO - src.optimization 627 - Trial 59: Ganancia = 252,750,000
+2025-10-29 02:14:36,752 - INFO - src.optimization 158 - Iteración 60 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:14:36,759 - INFO - src.optimization 159 - Ganancia: 257,664,000---Parámetros: {params}
+2025-10-29 02:14:36,759 - INFO - src.optimization 627 - Trial 60: Ganancia = 257,664,000
+2025-10-29 02:16:21,427 - INFO - src.optimization 158 - Iteración 61 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:16:21,432 - INFO - src.optimization 159 - Ganancia: 255,668,000---Parámetros: {params}
+2025-10-29 02:16:21,433 - INFO - src.optimization 627 - Trial 61: Ganancia = 255,668,000
+2025-10-29 02:17:16,748 - INFO - src.optimization 158 - Iteración 62 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:17:16,757 - INFO - src.optimization 159 - Ganancia: 25,058,000---Parámetros: {params}
+2025-10-29 02:17:16,757 - INFO - src.optimization 627 - Trial 62: Ganancia = 25,058,000
+2025-10-29 02:18:15,012 - INFO - src.optimization 158 - Iteración 63 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:18:15,016 - INFO - src.optimization 159 - Ganancia: 15,950,000---Parámetros: {params}
+2025-10-29 02:18:15,017 - INFO - src.optimization 627 - Trial 63: Ganancia = 15,950,000
+2025-10-29 02:19:24,658 - INFO - src.optimization 158 - Iteración 64 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:19:24,665 - INFO - src.optimization 159 - Ganancia: 22,964,000---Parámetros: {params}
+2025-10-29 02:19:24,665 - INFO - src.optimization 627 - Trial 64: Ganancia = 22,964,000
+2025-10-29 02:20:26,877 - INFO - src.optimization 158 - Iteración 65 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:20:26,883 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 02:20:26,883 - INFO - src.optimization 627 - Trial 65: Ganancia = -20,000
+2025-10-29 02:21:46,615 - INFO - src.optimization 158 - Iteración 66 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:21:46,621 - INFO - src.optimization 159 - Ganancia: 258,412,000---Parámetros: {params}
+2025-10-29 02:21:46,621 - INFO - src.optimization 627 - Trial 66: Ganancia = 258,412,000
+2025-10-29 02:23:16,691 - INFO - src.optimization 158 - Iteración 67 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:23:16,696 - INFO - src.optimization 159 - Ganancia: 231,146,000---Parámetros: {params}
+2025-10-29 02:23:16,696 - INFO - src.optimization 627 - Trial 67: Ganancia = 231,146,000
+2025-10-29 02:24:35,462 - INFO - src.optimization 158 - Iteración 68 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:24:35,468 - INFO - src.optimization 159 - Ganancia: 258,012,000---Parámetros: {params}
+2025-10-29 02:24:35,469 - INFO - src.optimization 627 - Trial 68: Ganancia = 258,012,000
+2025-10-29 02:25:36,621 - INFO - src.optimization 158 - Iteración 69 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:25:36,628 - INFO - src.optimization 159 - Ganancia: 13,786,000---Parámetros: {params}
+2025-10-29 02:25:36,628 - INFO - src.optimization 627 - Trial 69: Ganancia = 13,786,000
+2025-10-29 02:26:34,941 - INFO - src.optimization 158 - Iteración 70 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:26:34,948 - INFO - src.optimization 159 - Ganancia: 39,726,000---Parámetros: {params}
+2025-10-29 02:26:34,949 - INFO - src.optimization 627 - Trial 70: Ganancia = 39,726,000
+2025-10-29 02:27:50,539 - INFO - src.optimization 158 - Iteración 71 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:27:50,545 - INFO - src.optimization 159 - Ganancia: 260,898,000---Parámetros: {params}
+2025-10-29 02:27:50,546 - INFO - src.optimization 627 - Trial 71: Ganancia = 260,898,000
+2025-10-29 02:29:15,314 - INFO - src.optimization 158 - Iteración 72 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:29:15,322 - INFO - src.optimization 159 - Ganancia: 173,078,000---Parámetros: {params}
+2025-10-29 02:29:15,323 - INFO - src.optimization 627 - Trial 72: Ganancia = 173,078,000
+2025-10-29 02:30:35,196 - INFO - src.optimization 158 - Iteración 73 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:30:35,205 - INFO - src.optimization 159 - Ganancia: 258,510,000---Parámetros: {params}
+2025-10-29 02:30:35,206 - INFO - src.optimization 627 - Trial 73: Ganancia = 258,510,000
+2025-10-29 02:31:56,098 - INFO - src.optimization 158 - Iteración 74 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:31:56,104 - INFO - src.optimization 159 - Ganancia: 256,582,000---Parámetros: {params}
+2025-10-29 02:31:56,105 - INFO - src.optimization 627 - Trial 74: Ganancia = 256,582,000
+2025-10-29 02:31:57,117 - INFO - src.optimization 662 - === OPTIMIZACIÓN CON SEEDS COMPLETADA ===
+2025-10-29 02:31:57,140 - INFO - src.optimization 663 - Número de trials completados: 75
+2025-10-29 02:31:57,142 - INFO - src.optimization 664 - Mejor ganancia promedio = 263,400,000
+2025-10-29 02:31:57,142 - INFO - src.optimization 665 - Mejores parámetros: {'num_iterations': 363, 'num_leaves': 217, 'learning_rate': 0.09824627893982146, 'feature_fraction': 0.5334162910473841, 'bagging_fraction': 0.3174918651635106, 'min_child_samples': 22, 'max_depth': 12, 'reg_lambda': 1.8953597518056362, 'reg_alpha': 7.358747810960065, 'min_gain_to_split': 1.9790288874680386}
+2025-10-29 02:31:57,145 - INFO - __main__ 67 - === ANÁLISIS DE RESULTADOS ===
+2025-10-29 02:31:57,348 - INFO - __main__ 71 - Top 5 mejores trials:
+2025-10-29 02:31:57,360 - INFO - __main__ 73 -   Trial 36: 263,400,000
+2025-10-29 02:31:57,361 - INFO - __main__ 73 -   Trial 71: 260,898,000
+2025-10-29 02:31:57,361 - INFO - __main__ 73 -   Trial 73: 258,510,000
+2025-10-29 02:31:57,361 - INFO - __main__ 73 -   Trial 66: 258,412,000
+2025-10-29 02:31:57,362 - INFO - __main__ 73 -   Trial 68: 258,012,000
+2025-10-29 02:31:57,362 - INFO - __main__ 75 - === OPTIMIZACIÓN COMPLETADA ===
+2025-10-29 02:31:57,362 - INFO - __main__ 78 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-29 02:31:57,366 - INFO - src.best_params 49 - Mejores hiperparámetros cargados desde resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 02:31:57,366 - INFO - src.best_params 50 - Mejor ganancia encontrada: 263,400,000
+2025-10-29 02:31:57,367 - INFO - src.best_params 51 - Trial número: 36
+2025-10-29 02:31:57,367 - INFO - src.best_params 52 - Parámetros: {'num_iterations': 363, 'num_leaves': 217, 'learning_rate': 0.09824627893982146, 'feature_fraction': 0.5334162910473841, 'bagging_fraction': 1.0, 'min_child_samples': 22, 'max_depth': 12, 'reg_lambda': 1.8953597518056362, 'reg_alpha': 7.358747810960065, 'min_gain_to_split': 1.9790288874680386, 'scale_pos_weight': 97, 'pos_bagging_fraction': 1.0, 'neg_bagging_fraction': 0.01, 'bagging_freq': 1, 'objective': 'binary', 'metric': 'None', 'random_state': 839071}
+2025-10-29 02:31:57,368 - INFO - src.optimization 445 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-10-29 02:31:57,368 - INFO - src.optimization 446 - Período de test: 202104
+2025-10-29 02:32:10,767 - INFO - src.optimization 458 - Entrenando modelo con mejores hiperparámetros...
+2025-10-29 02:32:10,781 - INFO - src.optimization 459 - Dimensiones df_train_completo: (486791, 726), Dimensiones df_test: (163418, 726)
+2025-10-29 02:32:15,754 - INFO - src.optimization 468 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Dimensiones de train_data: (486791, 724)
+2025-10-29 02:33:02,459 - INFO - src.optimization 427 - Ganancia: 365,060,000---Total Predicciones positivas: 9,867
+2025-10-29 02:33:02,468 - INFO - __main__ 90 - === RESUMEN DE EVALUACIÓN EN TEST ===
+2025-10-29 02:33:02,468 - INFO - __main__ 91 - ✅ Ganancia en test: 365,060,000
+2025-10-29 02:33:02,469 - INFO - __main__ 92 - 🔍 Umbral óptimo encontrado: 0.9900
+2025-10-29 02:33:02,469 - INFO - __main__ 93 - 🎯 Predicciones positivas: 9,867 (6.04%)
+2025-10-29 02:33:02,469 - INFO - __main__ 97 - === ENTRENAMIENTO FINAL ===
+2025-10-29 02:33:02,470 - INFO - __main__ 98 - Preparar datos para entrenamiento final
+2025-10-29 02:33:02,470 - INFO - src.final_training 421 - Preparando datos para entrenamiento final
+2025-10-29 02:33:02,471 - INFO - src.final_training 422 - Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-29 02:33:02,471 - INFO - src.final_training 423 - Período de predicción: 202106
+2025-10-29 02:33:18,930 - INFO - src.final_training 433 - Registros de entrenamiento: 650,209
+2025-10-29 02:33:18,931 - INFO - src.final_training 434 - Registros de predicción: 164,313
+2025-10-29 02:33:39,542 - INFO - src.final_training 446 - Features utilizadas: 724
+2025-10-29 02:33:39,656 - INFO - src.final_training 447 - Distribución del target - 0: 642,830, 1: 7,379
+2025-10-29 02:33:40,211 - INFO - __main__ 103 - Entrenar modelo final
+2025-10-29 02:33:40,212 - INFO - src.final_training 239 - Iniciando entrenamiento del modelo final
+2025-10-29 02:34:23,158 - INFO - src.final_training 274 - Modelo final (semilla 839071) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_839071_2025-10-29_02-34-23.txt
+2025-10-29 02:34:49,986 - INFO - src.final_training 274 - Modelo final (semilla 666557) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_666557_2025-10-29_02-34-49.txt
+2025-10-29 02:35:16,185 - INFO - src.final_training 274 - Modelo final (semilla 390653) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_390653_2025-10-29_02-35-16.txt
+2025-10-29 02:35:42,344 - INFO - src.final_training 274 - Modelo final (semilla 408341) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_408341_2025-10-29_02-35-42.txt
+2025-10-29 02:36:08,559 - INFO - src.final_training 274 - Modelo final (semilla 858577) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_858577_2025-10-29_02-36-08.txt
+2025-10-29 02:36:35,000 - INFO - src.final_training 274 - Modelo final (semilla 156893) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_156893_2025-10-29_02-36-34.txt
+2025-10-29 02:37:00,972 - INFO - src.final_training 274 - Modelo final (semilla 220481) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_220481_2025-10-29_02-37-00.txt
+2025-10-29 02:37:27,569 - INFO - src.final_training 274 - Modelo final (semilla 557412) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_557412_2025-10-29_02-37-27.txt
+2025-10-29 02:37:53,807 - INFO - src.final_training 274 - Modelo final (semilla 111058) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_111058_2025-10-29_02-37-53.txt
+2025-10-29 02:38:19,812 - INFO - src.final_training 274 - Modelo final (semilla 401171) guardado en: resultados/lgb_optimization_cv_competencia01_exp5/modelo_final_semilla_401171_2025-10-29_02-38-19.txt
+2025-10-29 02:38:19,812 - INFO - src.final_training 279 - Entrenamiento de modelos finales completado
+2025-10-29 02:38:19,913 - INFO - __main__ 107 - Generar predicciones finales
+2025-10-29 02:38:19,914 - INFO - src.final_training 357 - Generando predicciones finales
+2025-10-29 02:38:37,422 - INFO - src.final_training 377 - Predicciones de probabilidad guardadas en: resultados/predicciones_probabilidad_lgb_optimization_cv_competencia01_exp5_varias_seeds_2025-10-29_02-38-37.csv
+2025-10-29 02:38:37,437 - INFO - src.final_training 399 - Predicciones generadas:
+2025-10-29 02:38:37,437 - INFO - src.final_training 400 -   Total clientes: 164,313
+2025-10-29 02:38:37,438 - INFO - src.final_training 401 -   Predicciones positivas: 13,298 (8.09%)
+2025-10-29 02:38:37,438 - INFO - src.final_training 402 -   Predicciones negativas: 151,015
+2025-10-29 02:38:37,439 - INFO - src.final_training 403 -   Porcentaje solicitado: 0.0809
+2025-10-29 02:38:37,440 - INFO - __main__ 111 - Guardar predicciones
+2025-10-29 02:38:37,601 - INFO - src.output_manager 42 - Predicciones guardadas en: predict/lgb_optimization_cv_competencia01_exp5_20251029_023837.csv
+2025-10-29 02:38:37,602 - INFO - src.output_manager 43 - Formato del archivo:
+2025-10-29 02:38:37,603 - INFO - src.output_manager 44 -   Columnas: ['numero_de_cliente', 'predict']
+2025-10-29 02:38:37,603 - INFO - src.output_manager 45 -   Registros: 164,313
+2025-10-29 02:38:37,603 - INFO - src.output_manager 46 -   Primeras filas:
+2025-10-29 02:38:37,675 - INFO - src.output_manager 47 -    numero_de_cliente  predict
+0          249350768        0
+1          249432306        0
+2          249565688        0
+3          249596175        0
+4          249695645        0
+2025-10-29 02:38:37,676 - INFO - __main__ 115 - === RESUMEN FINAL ===
+2025-10-29 02:38:37,677 - INFO - __main__ 116 - ✅ Entrenamiento final completado exitosamente
+2025-10-29 02:38:37,678 - INFO - __main__ 117 - 📊 Mejores hiperparámetros utilizados: {'num_iterations': 363, 'num_leaves': 217, 'learning_rate': 0.09824627893982146, 'feature_fraction': 0.5334162910473841, 'bagging_fraction': 1.0, 'min_child_samples': 22, 'max_depth': 12, 'reg_lambda': 1.8953597518056362, 'reg_alpha': 7.358747810960065, 'min_gain_to_split': 1.9790288874680386, 'scale_pos_weight': 97, 'pos_bagging_fraction': 1.0, 'neg_bagging_fraction': 0.01, 'bagging_freq': 1, 'objective': 'binary', 'metric': 'None', 'random_state': 401171}
+2025-10-29 02:38:37,679 - INFO - __main__ 118 - 🎯 Períodos de entrenamiento: ['202101', '202102', '202103', '202104']
+2025-10-29 02:38:37,679 - INFO - __main__ 119 - 🔮 Período de predicción: 202106
+2025-10-29 02:38:37,680 - INFO - __main__ 122 - 📁 Archivo de salida: predict/lgb_optimization_cv_competencia01_exp5_20251029_023837.csv
+2025-10-29 02:38:37,680 - INFO - __main__ 123 - 📝 Log detallado: logs/log_lgb_optimization_cv_competencia01_exp5_2025-10-29_00-34-50.log
+2025-10-29 02:38:37,681 - INFO - __main__ 126 - >>> Ejecución finalizada. Revisar logs para mas detalles.

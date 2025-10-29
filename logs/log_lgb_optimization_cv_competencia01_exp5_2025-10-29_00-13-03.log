@@ -1,0 +1,15 @@
+2025-10-29 00:13:03,692 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-10-29 00:13:03,693 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-10-29 00:13:03,693 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-10-29 00:13:13,144 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
+2025-10-29 00:13:13,145 - INFO - __main__ 49 - Archivo de features encontrado: data/df_fe_lgb_optimization_cv_competencia01_exp5.csv. Cargando desde disco.
+2025-10-29 00:14:38,022 - INFO - __main__ 56 - Feature Engineering completado: (978439, 725)
+2025-10-29 00:14:44,377 - INFO - __name__ 101 - Conversión completada:
+2025-10-29 00:14:44,385 - INFO - __name__ 102 -   Original - CONTINUA: 642830, BAJA+1: 4575, BAJA+2: 3938
+2025-10-29 00:14:44,385 - INFO - __name__ 103 -   Binario - 0: 642830, 1: 8513
+2025-10-29 00:14:44,386 - INFO - __name__ 104 -   Distribución: 1.31% casos positivos
+2025-10-29 00:14:45,523 - INFO - src.optimization 643 - Iniciando optimización con Seeds - 75 trials
+2025-10-29 00:14:45,528 - INFO - src.optimization 644 - Configuración: períodos=['202101', '202102', '202103']
+2025-10-29 00:15:23,529 - INFO - src.optimization 158 - Iteración 0 guardada en resultados/lgb_optimization_cv_competencia01_exp5_iteraciones.json
+2025-10-29 00:15:23,531 - INFO - src.optimization 159 - Ganancia: -20,000---Parámetros: {params}
+2025-10-29 00:15:23,532 - INFO - src.optimization 622 - Trial 0: Ganancia = -20,000

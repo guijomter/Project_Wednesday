@@ -6,7 +6,7 @@ import logging
 
 from src.loader import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
 from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
-from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos
+from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros
 from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds

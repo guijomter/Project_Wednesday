@@ -1,7 +1,7 @@
 # config.yaml
 
-STUDY_NAME : "lgb_optimization_cv_competencia01_exp5"  
-BUCKET_NAME: "home/guijomter/buckets/b1"
+STUDY_NAME : "Compe_02_(V0.0)"  
+BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 
 competencia01:
     DATA_PATH: "./data/competencia_01.csv"

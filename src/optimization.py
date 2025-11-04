@@ -104,7 +104,6 @@ def objetivo_ganancia(trial, df) -> float:
   
     return ganancia_total
    
-
 #######################################################################################################
 
 def guardar_iteracion(trial, ganancia, archivo_base=None):
@@ -204,84 +203,6 @@ def optimizar(df, n_trials=100) -> optuna.Study:
     return study
 
 #######################################################################################################
-### VERSION VIEJA DE EVALUACION EN TEST SOLO PARA CALCULAR GANANCIA
-
-# def evaluar_en_test(df, mejores_params) -> dict:
-#     """
-#     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
-#     Solo calcula la ganancia, sin usar sklearn.
-  
-#     Args:
-#         df: DataFrame con todos los datos
-#         mejores_params: Mejores hiperparámetros encontrados por Optuna
-  
-#     Returns:
-#         dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
-#     """
-#     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
-#     logger.info(f"Período de test: {MES_TEST}")
-  
-#     # Preparar datos de entrenamiento (TRAIN + VALIDACION)
-#     if isinstance(MES_TRAIN, list):
-#         periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
-#     else:
-#         periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
-  
-#     df_train_completo = df[df['foto_mes'].astype(str).isin(periodos_entrenamiento)]
-#     df_test = df[df['foto_mes'].astype(str) == MES_TEST]
-  
-#     # Entrenar modelo con mejores parámetros
-#     # ... Implementar entrenamiento y test con la logica de entrenamiento FINAL para mayor detalle
-#     # recordar realizar todos los df necesarios y utilizar lgb.train()
-#     # Cargar mejores parámetros
-
-#     # Entrenar modelo con mejores parámetros
-#     logger.info("Entrenando modelo con mejores hiperparámetros...")
-#     logger.info(f'Dimensiones df_train_completo: {df_train_completo.shape}, Dimensiones df_test: {df_test.shape}')
-
-#     # Preparar datasets
-
-#     train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
-#     test_data = lgb.Dataset(df_test.drop(columns=['clase_ternaria']), label=df_test['clase_ternaria'].values, reference=train_data)
-#   # chequeo si train_data y test_data estan bien formados
-#     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Tipo de dato de test_data: {type(test_data)}")
-#     logger.info(f"Dimensiones de train_data: {train_data.data.shape}, Dimensiones de test_data: {test_data.data.shape}")
-
-#     model = lgb.train(
-#         mejores_params,
-#         train_data,
-#         #num_boost_round=1000,
-#         valid_sets=[test_data],
-#         feval=ganancia_lgb_binary,
-#         callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
-#     )
-
-#     # Predecir en test
-    
-#     X_test = df_test.drop(columns=['clase_ternaria'])
-#     y_test = df_test['clase_ternaria'].values
-#     y_pred_proba = model.predict(X_test)
-#     y_pred_binary = (y_pred_proba >= UMBRAL).astype(int)  # Usar mismo umbral que en ganancia_lgb_binary
-
-
-#     # Calcular solo la ganancia
-#     ganancia_test = calcular_ganancia(y_test, y_pred_binary)
-  
-#     # Estadísticas básicas
-#     total_predicciones = len(y_pred_binary)
-#     predicciones_positivas = np.sum(y_pred_binary == 1)
-#     porcentaje_positivas = (predicciones_positivas / total_predicciones) * 100
-  
-#     resultados = {
-#         'ganancia_test': float(ganancia_test),
-#         'total_predicciones': int(total_predicciones),
-#         'predicciones_positivas': int(predicciones_positivas),
-#         'porcentaje_positivas': float(porcentaje_positivas)
-#     }
-  
-#     return resultados
-#########################################################################################################
-
 
 def evaluar_en_test(df, mejores_params, semilla=SEMILLA[0]) -> dict:
     """
@@ -426,8 +347,6 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     #logger.info(f"Iteración {trial.number} guardada en {archivo}")
     logger.info(f"Ganancia: {resultados_test['ganancia_test']:,.0f}" + "---" + f"Total Predicciones positivas: {resultados_test['predicciones_positivas']:,.0f}")
 
-
-
 #####################################################################################
 
 def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
@@ -527,7 +446,7 @@ def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
 
 #### OBJETIVO GANANCIA SEEDS 
 
-def objetivo_ganancia_seeds(trial, df) -> float:
+def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pd.DataFrame, undersampling: float = 1) -> float:
     """
     Parameters:
     trial: trial de optuna
@@ -579,6 +498,14 @@ def objetivo_ganancia_seeds(trial, df) -> float:
     
     df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
 
+    # CLASE 6     #Convierto a binaria la clase ternaria, 
+    # # para entrenar el modelo Baja+1 y Baja+2 == 1
+    # # y calcular la ganancia de validacion Baja+2 solamente en 1
+    # df_train = convertir_clase_ternaria_a_target(df_train, baja_2_1=True)
+    # df_val = convertir_clase_ternaria_a_target(df_val, baja_2_1=False)
+    # df_train['clase_ternaria'] = df_train['clase_ternaria'].astype(np.int8)
+    # df_val['clase_ternaria'] = df_val['clase_ternaria'].astype(np.int8)
+
     # Usar target (con clase ternaria ya convertida a binaria)
     
     y_train = df_train['clase_ternaria'].values
@@ -628,9 +555,7 @@ def objetivo_ganancia_seeds(trial, df) -> float:
   
     return ganancia_media
    
-
 #######################################################################################################
-
 
 def optimizar_con_seed_pesos(df, n_trials=50) -> optuna.Study:
     """
@@ -664,4 +589,121 @@ def optimizar_con_seed_pesos(df, n_trials=50) -> optuna.Study:
     logger.info(f"Mejor ganancia promedio = {study.best_value:,.0f}")
     logger.info(f"Mejores parámetros: {study.best_params}")
 
+    return study
+
+##########################################################################################################
+
+def crear_o_cargar_estudio(study_name: str = None, semilla: int = None) -> optuna.Study:
+    """
+    Crea un nuevo estudio de Optuna o carga uno existente desde SQLite.
+  
+    Args:
+        study_name: Nombre del estudio (si es None, usa STUDY_NAME del config)
+        semilla: Semilla para reproducibilidad
+  
+    Returns:
+        optuna.Study: Estudio de Optuna (nuevo o cargado)
+    """
+    study_name = conf.STUDY_NAME
+  
+    if semilla is None:
+        semilla = SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA
+  
+    # Crear carpeta para bases de datos si no existe
+    path_db = os.path.join(conf.BUCKET_NAME, "optuna_db")
+    os.makedirs(path_db, exist_ok=True)
+  
+    # Ruta completa de la base de datos
+    db_file = os.path.join(path_db, f"{study_name}.db")
+    storage = f"sqlite:///{db_file}"
+  
+    # Verificar si existe un estudio previo
+    if os.path.exists(db_file):
+        logger.info(f"⚡ Base de datos encontrada: {db_file}")
+        logger.info(f"🔄 Cargando estudio existente: {study_name}")
+  
+        try:
+            # Cargar estudio existente
+            study = optuna.load_study(study_name=study_name, storage=storage)
+            n_trials_previos = len(study.trials) # la cantidad de trials registrados en el estudio existente es la cantidad de trials previos
+  
+            logger.info(f"✅ Estudio cargado exitosamente")
+            logger.info(f"📊 Trials previos: {n_trials_previos}")
+  
+            if n_trials_previos > 0:
+                logger.info(f"🏆 Mejor ganancia hasta ahora: {study.best_value:,.0f}")
+  
+            return study
+  
+        except Exception as e:
+            logger.warning(f"⚠️ No se pudo cargar el estudio: {e}")
+            logger.info(f"🆕 Creando nuevo estudio...")
+    else:
+        logger.info(f"🆕 No se encontró base de datos previa")
+        logger.info(f"📁 Creando nueva base de datos: {db_file}")
+  
+    # Crear nuevo estudio
+    study = optuna.create_study(
+        study_name = study_name,
+        storage = storage,
+        direction = 'maximize',
+        sampler = optuna.sampler.TPESampler(seed=semilla),
+        load_if_exists=True
+    )
+  
+    logger.info(f"✅ Nuevo estudio creado: {study_name}")
+    logger.info(f"💾 Storage: {storage}")
+  
+    return study
+
+#########################################################################################################
+
+
+def optimizar(df: pd.DataFrame, n_trials: int, study_name: str = None, undersampling: float = 0.01) -> optuna.Study:
+    """
+    Args:
+        df: DataFrame con datos
+        n_trials: Número de trials a ejecutar
+        study_name: Nombre del estudio (si es None, usa el de config.yaml)
+        undersampling: Undersampling para entrenamiento
+  
+    Description:
+       Ejecuta optimización bayesiana de hiperparámetros usando configuración YAML.
+       Guarda cada iteración en un archivo JSON separado. 
+       Pasos:
+        1. Crear estudio de Optuna
+        2. Ejecutar optimización
+        3. Retornar estudio
+
+    Returns:
+        optuna.Study: Estudio de Optuna con resultados
+    """
+
+    study_name = conf.STUDY_NAME
+
+    logger.info(f"Iniciando optimización con {n_trials} trials")
+    logger.info(f"Configuración: TRAIN={MES_TRAIN}, VALID={MES_VALIDACION}, SEMILLA={SEMILLA}")
+  
+    # Crear o cargar estudio desde DuckDB
+    study = crear_o_cargar_estudio(study_name, SEMILLA[0])
+
+    # Calcular cuántos trials faltan
+    trials_previos = len(study.trials)
+    trials_a_ejecutar = max(0, n_trials - trials_previos)
+  
+    if trials_previos > 0:
+        logger.info(f"🔄 Retomando desde trial {trials_previos}")
+        logger.info(f"📝 Trials a ejecutar: {trials_a_ejecutar} (total objetivo: {n_trials})")
+    else:
+        logger.info(f"🆕 Nueva optimización: {n_trials} trials")
+  
+    # Ejecutar optimización
+    if trials_a_ejecutar > 0:
+        ##LO UNICO IMPORTANTE DEL METODO Y EL study CLARO
+        study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df, undersampling), n_trials=trials_a_ejecutar)
+        logger.info(f"🏆 Mejor ganancia: {study.best_value:,.0f}")
+        logger.info(f"Mejores parámetros: {study.best_params}")
+    else:
+        logger.info(f"✅ Ya se completaron {n_trials} trials")
+  
     return study

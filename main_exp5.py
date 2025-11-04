@@ -61,7 +61,7 @@ def main():
   
     #03 Ejecutar optimizacion de hiperparametros
     
-    study = optimizar_con_seed_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
+    study = optimizar_con_sgiteed_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")

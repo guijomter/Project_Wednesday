@@ -6,7 +6,7 @@ import logging
 
 from src.loader import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
 from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
-from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos
+from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros
 from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
@@ -15,7 +15,7 @@ from src.best_params import obtener_estadisticas_optuna
 from src.config import *
 
 ## config basico logging
-os.makedirs("logs", exist_ok=True)
+os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
 
 fecha = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 monbre_log = f"log_{conf.STUDY_NAME}_{fecha}.log"
@@ -23,7 +23,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(name)s %(lineno)d - %(message)s',
     handlers=[
-        logging.FileHandler(f"logs/{monbre_log}", mode="w", encoding="utf-8"),
+        logging.FileHandler(f"{conf.BUCKET_NAME}/logs/{monbre_log}", mode="w", encoding="utf-8"),
         logging.StreamHandler()
     ]
 )
@@ -39,12 +39,14 @@ def main():
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
 
     #00 Cargar datos
-    os.makedirs("data", exist_ok=True)
-    df = cargar_datos(DATA_PATH)   
+    os.makedirs(f"{conf.BUCKET_NAME}/data", exist_ok=True)
+    data_path= os.path.join(conf.BUCKET_NAME, DATA_PATH)
+    print(data_path)
+    df = cargar_datos(data_path)   
 
     #01 Feature Engineering
 
-    fe_path = f"data/df_fe_{conf.STUDY_NAME}.csv"
+    fe_path = f"{conf.BUCKET_NAME}/data/df_fe_{conf.STUDY_NAME}.csv"
     if os.path.exists(fe_path):
         logger.info(f"Archivo de features encontrado: {fe_path}. Cargando desde disco.")
         df_fe = pd.read_csv(fe_path)
@@ -61,7 +63,9 @@ def main():
   
     #03 Ejecutar optimizacion de hiperparametros
     
-    study = optimizar_con_cv_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
+    # study = optimizar_con_cv_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
+    
+    study = optimizar(df_fe, n_trials=100, undersampling=0.02)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -120,7 +124,7 @@ def main():
 
     ## Sumar cantidad de features utilizadas, feature importance y cantidad de clientes predichos
     logger.info(f"📁 Archivo de salida: {archivo_salida}")
-    logger.info(f"📝 Log detallado: logs/{monbre_log}")
+    logger.info(f"📝 Log detallado: {conf.BUCKET_NAME}/logs/{monbre_log}")
 
 
     logger.info(f">>> Ejecución finalizada. Revisar logs para mas detalles.")

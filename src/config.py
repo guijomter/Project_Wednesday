@@ -39,7 +39,7 @@ def load_yaml_config(file_path=PATH_CONFIG):
 conf = load_yaml_config(PATH_CONFIG)
 
 ## Disponibilizar variables globales de la competencia01 para acceso directo (no hace falta poner conf.competencia01. delante)
-cfg = conf.competencia01
+cfg = conf.competencia02
 globals().update(cfg.__dict__)
 
 

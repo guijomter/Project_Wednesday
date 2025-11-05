@@ -25,19 +25,25 @@ logger = logging.getLogger("__name__")
 
 def cargar_datos(gcs_path: str) -> pd.DataFrame:
     '''
-    Descarga un CSV desde GCS (gs://...) a un archivo temporal
-    y lo carga en un pandas.DataFrame.
+    Descarga un CSV o CSV.GZ desde GCS (gs://...) a un archivo temporal
+    y lo carga en un pandas.DataFrame, manejando la descompresión.
     '''
     
-    # 1. Crear un path local temporal único
-    # Usamos tempfile.NamedTemporaryFile para que nos dé un nombre único
-    with tempfile.NamedTemporaryFile(suffix=".csv") as temp_file:
+    # 1. Detectar si el archivo está comprimido basado en la ruta GCS
+    ### <-- CAMBIO: Decidimos el tipo de compresión
+    compression_type = 'gzip' if gcs_path.endswith('.gz') else None
+    
+    # 2. Asignar un sufijo al archivo temporal (ayuda a la depuración)
+    ### <-- CAMBIO: El sufijo ahora coincide con el tipo de archivo
+    file_suffix = ".csv.gz" if compression_type == 'gzip' else ".csv"
+    
+    # 3. Usar tempfile.NamedTemporaryFile para un manejo seguro
+    with tempfile.NamedTemporaryFile(suffix=file_suffix) as temp_file:
         local_path = temp_file.name
         
         logger.info(f"Descargando dataset desde {gcs_path} a {local_path}")
         try:
-            # 2. Descargar de GCS con gsutil (rápido)
-            # (os.system mostrará la salida de gsutil en tu consola)
+            # 4. Descargar de GCS con gsutil (rápido)
             return_code = os.system(f"gsutil cp {gcs_path} {local_path}")
             
             if return_code != 0:
@@ -45,8 +51,9 @@ def cargar_datos(gcs_path: str) -> pd.DataFrame:
 
             logger.info(f"Dataset descargado. Cargando en pandas...")
             
-            # 3. Cargar el CSV local (muy rápido)
-            df = pd.read_csv(local_path)
+            # 5. Cargar el CSV local, pasando el tipo de compresión
+            ### <-- CAMBIO CLAVE: Le decimos a pandas cómo descomprimir
+            df = pd.read_csv(local_path, compression=compression_type) 
             
             logger.info(f"Dataset cargado con {df.shape[0]} filas y {df.shape[1]} columnas")
             return df

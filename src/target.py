@@ -40,9 +40,9 @@ def procesar_y_guardar_clase_ternaria(input_csv_path: str, output_csv_path: str)
             SELECT
             a.*,
             CASE 
-                WHEN b.mes_n_2 IS NOT NULL AND LEAD(a.numero_de_cliente, 2) OVER(PARTITION BY a.numero_de_cliente ORDER BY a.foto_mes) IS NOT NULL THEN 'Continua'
-                WHEN b.mes_n_2 IS NOT NULL AND LEAD(a.numero_de_cliente, 1) OVER(PARTITION BY a.numero_de_cliente ORDER BY a.foto_mes) IS NOT NULL THEN 'Baja N+2'
-                WHEN b.mes_n_1 IS NOT NULL AND LEAD(a.numero_de_cliente, 1) OVER(PARTITION BY a.numero_de_cliente ORDER BY a.foto_mes) IS NULL THEN 'Baja N+1'
+                WHEN b.mes_n_2 IS NOT NULL AND LEAD(a.numero_de_cliente, 2) OVER(PARTITION BY a.numero_de_cliente ORDER BY a.foto_mes) IS NOT NULL THEN 'CONTINUA'
+                WHEN b.mes_n_2 IS NOT NULL AND LEAD(a.numero_de_cliente, 1) OVER(PARTITION BY a.numero_de_cliente ORDER BY a.foto_mes) IS NOT NULL THEN 'BAJA+2'
+                WHEN b.mes_n_1 IS NOT NULL AND LEAD(a.numero_de_cliente, 1) OVER(PARTITION BY a.numero_de_cliente ORDER BY a.foto_mes) IS NULL THEN 'BAJA+1'
                 END AS clase_ternaria
             FROM competencia_01_crudo a
             INNER JOIN proximos_meses b

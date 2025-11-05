@@ -13,6 +13,7 @@ from src.final_training import preparar_datos_entrenamiento_final, generar_predi
 from src.output_manager import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
 from src.config import *
+from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
 
 ## config basico logging
 os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
@@ -39,22 +40,67 @@ def main():
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
 
     #00 Cargar datos
-    os.makedirs(f"{conf.BUCKET_NAME}/data", exist_ok=True)
-    data_path= os.path.join(conf.BUCKET_NAME, DATA_PATH)
-    print(data_path)
-    df = cargar_datos(data_path)   
+    # os.makedirs(f"{conf.BUCKET_NAME}/data", exist_ok=True)
+    
+    # data_path= os.path.join(conf.BUCKET_NAME, DATA_PATH)
+    # print(data_path)
+    # df = cargar_datos(data_path)   
+    
+    # 0A. Construimos la ruta GCS (URI) en lugar de la ruta de archivo local
+    # Nota: Ya no usamos os.path.join, sino f-strings para construir el URI
+    data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
+
+    print(f"Ruta GCS del dataset: {data_path_gcs}")
+
+    # 0B. Llamamos a la nueva función optimizada
+    df = cargar_datos(data_path_gcs)
 
     #01 Feature Engineering
 
-    fe_path = f"{conf.BUCKET_NAME}/data/df_fe_{conf.STUDY_NAME}.csv"
-    if os.path.exists(fe_path):
-        logger.info(f"Archivo de features encontrado: {fe_path}. Cargando desde disco.")
-        df_fe = pd.read_csv(fe_path)
+    # fe_path = f"{conf.BUCKET_NAME}/data/df_fe_{conf.STUDY_NAME}.csv"
+    # if os.path.exists(fe_path):
+    #     logger.info(f"Archivo de features encontrado: {fe_path}. Cargando desde disco.")
+    #     df_fe = pd.read_csv(fe_path)
+    # else:
+    #     logger.info("Archivo de features no encontrado. Ejecutando feature engineering.")
+    #     df_fe = feature_engineering(df, competencia="competencia01")
+    ##     guardar_features(df_fe, fe_path)
+    #     df_fe.to_csv(fe_path, index=False)
+    ###########################################
+
+    # --- DEBES DEFINIR ESTO ---
+    # Tu 'conf.BUCKET_NAME' parecía ser una ruta de linux (ej: /mnt/mi-bucket)
+    # Ahora necesitas definir la ruta URI real de GCS
+    #GCS_BUCKET_URI = "gs://nombre-real-de-tu-bucket" 
+    # (Reemplaza "nombre-real-de-tu-bucket" por el tuyo)
+
+    # Asumimos que 'conf' y 'logger' ya están definidos
+    # ... (tu código anterior)
+
+    #01 Feature Engineering
+
+    # 1. Definimos la ruta de GCS y usamos .parquet
+    gcs_fe_path = f"{conf.GCS_BUCKET_URI}/data/df_fe_{conf.STUDY_NAME}.parquet"
+
+    # 2. Usamos la nueva función para verificar si existe
+    if archivo_existe_en_bucket(gcs_fe_path):
+        logger.info(f"Archivo de features encontrado: {gcs_fe_path}. Cargando desde GCS.")
+        # 3. Usamos la nueva función para cargar
+        df_fe = cargar_de_buckets(gcs_fe_path)
+    
     else:
         logger.info("Archivo de features no encontrado. Ejecutando feature engineering.")
+        # (Esto asume que 'df' y 'feature_engineering' existen)
         df_fe = feature_engineering(df, competencia="competencia01")
-        df_fe.to_csv(fe_path, index=False)
-   
+        
+        # 4. Usamos la nueva función para guardar
+        logger.info(f"Guardando features en: {gcs_fe_path}")
+        guardar_en_buckets(df_fe, gcs_fe_path)
+
+    # 'df_fe' ya está listo para ser usado
+    # ... (resto de tu código)
+
+
     logger.info(f"Feature Engineering completado: {df_fe.shape}")
 
     #02 Convertir clase_ternaria a target binario

@@ -2,6 +2,8 @@
 
 STUDY_NAME : "Compe_02_(V0.0)"  
 BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
+#LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
+GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
 
 competencia01:
     DATA_PATH: "./data/competencia_01.csv"

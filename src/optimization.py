@@ -647,7 +647,7 @@ def crear_o_cargar_estudio(study_name: str = None, semilla: int = None) -> optun
         study_name = study_name,
         storage = storage,
         direction = 'maximize',
-        sampler = optuna.sampler.TPESampler(seed=semilla),
+        sampler = optuna.samplers.TPESampler(seed=semilla),
         load_if_exists=True
     )
   

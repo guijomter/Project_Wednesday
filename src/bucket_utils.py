@@ -8,15 +8,40 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def archivo_existe_en_bucket(gcs_path: str) -> bool:
+# def archivo_existe_en_bucket(gcs_path: str) -> bool:
+#     """
+#     Verifica si un archivo existe en GCS usando 'gsutil ls'.
+#     Es más rápido y fiable que os.path.exists() en un bucket montado.
+#     """
+#     # El comando retorna 0 (éxito) si el archivo existe
+#     # Usamos -q para suprimir la salida de 'ls' en caso de éxito
+#     logger.debug(f"Verificando existencia de: {gcs_path}")
+#     return os.system(f"gsutil -q ls {gcs_path}") == 0
+
+def archivo_existe_en_bucket(bucket_path: str) -> bool:
     """
-    Verifica si un archivo existe en GCS usando 'gsutil ls'.
-    Es más rápido y fiable que os.path.exists() en un bucket montado.
+    Verifica si un archivo existe en GCS usando 'gsutil ls' con subprocess.
     """
-    # El comando retorna 0 (éxito) si el archivo existe
-    # Usamos -q para suprimir la salida de 'ls' en caso de éxito
-    logger.debug(f"Verificando existencia de: {gcs_path}")
-    return os.system(f"gsutil -q ls {gcs_path}") == 0
+    logger.debug(f"Verificando existencia de: {bucket_path}...")
+    try:
+        subprocess.run(
+            ["gsutil", "-q", "ls", bucket_path], 
+            check=True,        # Lanza excepción si el comando falla (retorno != 0)
+            stdout=subprocess.PIPE, # No imprimir salida en la consola
+            stderr=subprocess.PIPE  # No imprimir errores en la consola
+        )
+        # Si check=True pasa, el comando retornó 0 -> el archivo existe
+        logger.debug("Resultado: El archivo SÍ existe.")
+        return True
+    except subprocess.CalledProcessError:
+        # check=True falló, (gsutil retornó != 0) -> El archivo NO existe
+        logger.debug("Resultado: El archivo NO existe.")
+        return False
+    except FileNotFoundError:
+        # 'gsutil' no está instalado
+        logger.error("'gsutil' no se encontró. Asegúrate de que esté instalado y en tu PATH.")
+        raise # Relanzamos el error porque es un problema de entorno
+
 
 def guardar_en_buckets(df: pd.DataFrame, gcs_path: str):
     """

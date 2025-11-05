@@ -14,6 +14,7 @@ from src.output_manager import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
 from src.config import *
 from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
+from src.target import crear_clase_ternaria_gcs
 
 ## config basico logging
 os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
@@ -38,6 +39,14 @@ def main():
     logger.info("Inicio de ejecucion.")
    
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
+    
+    data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}"
+    data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
+    
+    # -1 Crear clase_ternaria en GCS si no existe
+ 
+    from src.target import crear_clase_ternaria_gcs
+    crear_clase_ternaria_gcs(data_path_raw_gcs, data_path_gcs)
 
     #00 Cargar datos
     # os.makedirs(f"{conf.BUCKET_NAME}/data", exist_ok=True)
@@ -48,7 +57,7 @@ def main():
     
     # 0A. Construimos la ruta GCS (URI) en lugar de la ruta de archivo local
     # Nota: Ya no usamos os.path.join, sino f-strings para construir el URI
-    data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
+    #data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
 
     print(f"Ruta GCS del dataset: {data_path_gcs}")
 

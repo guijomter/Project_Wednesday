@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import tempfile
 import logging
+import subprocess
 
 # Configura un logger (o usa el tuyo si ya lo tienes)
 # Si ya tienes una variable 'logger' global, puedes borrar estas dos líneas

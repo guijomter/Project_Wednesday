@@ -33,7 +33,7 @@ competencia02:
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 parametros_lgb:
-    n_trial: 75
+    n_trial: 10
     num_leaves: [8, 300]
     num_iterations: [50, 1000]
     feature_fraction: [0.1, 1.0]

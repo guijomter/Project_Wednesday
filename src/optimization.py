@@ -782,7 +782,8 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pd.DataFrame, undersa
         'num_iterations': 9999,   # dejo libre la cantidad de arboles, zLightGBM se detiene solo
         'canaritos': 100,
         'min_sum_hessian_in_leaf': 0.001,
-        'min_data_in_leaf': 20,  # default de LightGBM
+        #'min_data_in_leaf': 20,  # default de LightGBM min_child_samples
+        'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
         'num_leaves': 999,    # dejo libre, zLightGBM se detiene solo
         'learning_rate': 1.0,
         #'gradient_bound': 0.1  # default de zLightGBM

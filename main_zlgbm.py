@@ -6,9 +6,9 @@ import logging
 
 from src.loader import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
 from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
-from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos
+from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar_zlgbm
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
-from src.best_params import cargar_mejores_hiperparametros
+from src.best_params import cargar_mejores_hiperparametros, cargar_mejores_hiperparametros_zlgbm
 from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
 from src.output_manager import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
@@ -61,7 +61,7 @@ def main():
   
     #03 Ejecutar optimizacion de hiperparametros
     
-    study = optimizar_con_seed_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
+    study = optimizar_zlgbm(df_fe, n_trials=conf.parametros_lgb.n_trial)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -78,7 +78,7 @@ def main():
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
   
     # Cargar mejores hiperparámetros
-    mejores_params = cargar_mejores_hiperparametros()
+    mejores_params = cargar_mejores_hiperparametros_zlgbm()
   
     # Evaluar en test
     resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, SEMILLA[0])

@@ -100,3 +100,70 @@ def obtener_estadisticas_optuna(archivo_base=None):
     except Exception as e:
         logger.error(f"Error al obtener estadísticas: {e}")
         raise
+
+def cargar_mejores_hiperparametros_zlgbm(archivo_base: str = None) -> dict:
+    """
+    Carga los mejores hiperparámetros desde el archivo JSON de iteraciones de Optuna.
+  
+    Args:
+        archivo_base: Nombre base del archivo (si es None, usa STUDY_NAME)
+  
+    Returns:
+        dict: Mejores hiperparámetros encontrados
+    """
+    if archivo_base is None:
+        archivo_base = conf.STUDY_NAME   ## Fijarse que conf viene de config.py
+  
+    archivo = f"resultados/{archivo_base}_iteraciones.json"
+  
+    try:
+        with open(archivo, 'r') as f:
+            iteraciones = json.load(f)
+  
+        if not iteraciones:
+            raise ValueError("No se encontraron iteraciones en el archivo")
+  
+        # Encontrar la iteración con mayor ganancia
+        mejor_iteracion = max(iteraciones, key=lambda x: x['value'])
+        mejores_params = mejor_iteracion['params']
+        mejor_ganancia = mejor_iteracion['value']
+
+        # Parámetros fijos
+        params_fijos = {
+            'boosting': 'gbdt',
+            'objective': 'binary',
+            'metric': 'custom',
+            'first_metric_only': False,
+            'boost_from_average': True,
+            'feature_pre_filter': False,
+            'force_row_wise': True,
+            'verbosity': -100,
+            'num_threads': 4,
+            'feature_fraction': 0.50, # un nuevo default
+            'num_iterations': 9999,   # dejo libre la cantidad de arboles, zLightGBM se detiene solo
+            'canaritos': 100,
+            'min_sum_hessian_in_leaf': 0.001,
+            'min_data_in_leaf': 20,  # default de LightGBM
+            'num_leaves': 999, # default de LightGBM
+            'learning_rate': 1,
+            'random_state': SEMILLA[0],
+            'bin': 31
+        }
+
+        # Agregar los fijos al diccionario de Optuna
+        mejores_params.update(params_fijos)
+
+        logger.info(f"Mejores hiperparámetros cargados desde {archivo}")
+        logger.info(f"Mejor ganancia encontrada: {mejor_ganancia:,.0f}")
+        logger.info(f"Trial número: {mejor_iteracion['trial_number']}")
+        logger.info(f"Parámetros: {mejores_params}")
+  
+        return mejores_params
+  
+    except FileNotFoundError:
+        logger.error(f"No se encontró el archivo {archivo}")
+        logger.error("Asegúrate de haber ejecutado la optimización con Optuna primero")
+        raise
+    except Exception as e:
+        logger.error(f"Error al cargar mejores hiperparámetros: {e}")
+        raise

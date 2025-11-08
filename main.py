@@ -40,7 +40,7 @@ def main():
    
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
     
-    data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}"
+    data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}" # type: ignore
     data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
     
     # -1 Crear clase_ternaria en GCS si no existe

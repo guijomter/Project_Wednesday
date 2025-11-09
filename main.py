@@ -16,7 +16,8 @@ from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros
 #from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
 from src.final_training_p import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
-from src.output_manager import guardar_predicciones_finales
+#from src.output_manager import guardar_predicciones_finales
+from src.output_manager_p import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
 from src.config import *
 #from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket

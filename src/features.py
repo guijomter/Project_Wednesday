@@ -543,6 +543,7 @@ def feature_engineering_cambio_estado(df: pd.DataFrame, columnas: list[str], can
 
 #########################
 FEATURES_CONFIG = os.path.join(os.path.dirname(os.path.dirname(__file__)), "features.yaml")
+
 def feature_engineering(
     # La operación 'ratios' puede generar más de una columna si 'numerador', 'denominador' y 'nombre' son listas.
     df: pd.DataFrame,

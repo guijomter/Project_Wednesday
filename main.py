@@ -1,19 +1,26 @@
 # main_final.py
 import pandas as pd
+import polars as pl
 import os
 import datetime
 import logging
 
-from src.loader import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
-from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
-from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
+#from src.loader import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
+from src.loader_p import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
+
+#from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
+from src.features_p import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
+#from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
+from src.optimization_p import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros
-from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
+#from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
+from src.final_training_p import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
 from src.output_manager import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
 from src.config import *
-from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
+#from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
+from src.bucket_utils_p import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
 from src.target import crear_clase_ternaria_gcs
 
 ## config basico logging
@@ -44,47 +51,14 @@ def main():
     data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
     
     # -1 Crear clase_ternaria en GCS si no existe
- 
-    from src.target import crear_clase_ternaria_gcs
+     
     crear_clase_ternaria_gcs(data_path_raw_gcs, data_path_gcs)
 
-    #00 Cargar datos
-    # os.makedirs(f"{conf.BUCKET_NAME}/data", exist_ok=True)
-    
-    # data_path= os.path.join(conf.BUCKET_NAME, DATA_PATH)
-    # print(data_path)
-    # df = cargar_datos(data_path)   
-    
-    # 0A. Construimos la ruta GCS (URI) en lugar de la ruta de archivo local
-    # Nota: Ya no usamos os.path.join, sino f-strings para construir el URI
-    #data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
+    #print(f"Ruta GCS del dataset: {data_path_gcs}")
 
-    print(f"Ruta GCS del dataset: {data_path_gcs}")
-
-    # 0B. Llamamos a la nueva función optimizada
+    # 0B. Carga de datos desde GCS usando Polars
+    logger.info(f"Cargando datos desde GCS: {data_path_gcs}")
     df = cargar_datos(data_path_gcs)
-
-    #01 Feature Engineering
-
-    # fe_path = f"{conf.BUCKET_NAME}/data/df_fe_{conf.STUDY_NAME}.csv"
-    # if os.path.exists(fe_path):
-    #     logger.info(f"Archivo de features encontrado: {fe_path}. Cargando desde disco.")
-    #     df_fe = pd.read_csv(fe_path)
-    # else:
-    #     logger.info("Archivo de features no encontrado. Ejecutando feature engineering.")
-    #     df_fe = feature_engineering(df, competencia="competencia01")
-    ##     guardar_features(df_fe, fe_path)
-    #     df_fe.to_csv(fe_path, index=False)
-    ###########################################
-
-    # --- DEBES DEFINIR ESTO ---
-    # Tu 'conf.BUCKET_NAME' parecía ser una ruta de linux (ej: /mnt/mi-bucket)
-    # Ahora necesitas definir la ruta URI real de GCS
-    #GCS_BUCKET_URI = "gs://nombre-real-de-tu-bucket" 
-    # (Reemplaza "nombre-real-de-tu-bucket" por el tuyo)
-
-    # Asumimos que 'conf' y 'logger' ya están definidos
-    # ... (tu código anterior)
 
     #01 Feature Engineering
 
@@ -106,11 +80,7 @@ def main():
         logger.info(f"Guardando features en: {gcs_fe_path}")
         guardar_en_buckets(df_fe, gcs_fe_path)
 
-    # 'df_fe' ya está listo para ser usado
-    # ... (resto de tu código)
-
-
-    logger.info(f"Feature Engineering completado: {df_fe.shape}")
+    logger.info(f"Feature Engineering completado: {df_fe.height, df_fe.width}")  
 
     #02 Convertir clase_ternaria a target binario
     

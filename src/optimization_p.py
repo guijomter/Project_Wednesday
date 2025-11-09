@@ -1,7 +1,8 @@
-# src/optimization.py
+#src/optimization_p.py  # Versión usando Polars
+
 import optuna
 import lightgbm as lgb
-import pandas as pd
+import polars as pl
 import numpy as np
 import logging
 import json
@@ -14,31 +15,16 @@ from datetime import timezone, timedelta
 logger = logging.getLogger(__name__)
 
 #######################################################################################################
-
-def objetivo_ganancia(trial, df) -> float:
+def objetivo_ganancia(trial, df: pl.DataFrame) -> float:
     """
     Parameters:
     trial: trial de optuna
-    df: dataframe con datos
-  
-    Description:
-    Función objetivo que maximiza ganancia en mes de validación.
-    Utiliza configuración YAML para períodos y semilla.
-    Define parametros para el modelo LightGBM
-    Preparar dataset para entrenamiento y validación
-    Entrena modelo con función de ganancia personalizada
-    Predecir y calcular ganancia
-    Guardar cada iteración en JSON
-  
-    Returns:
-    float: ganancia total
+    df: pl.DataFrame con datos
     """
     # Hiperparámetros a optimizar en el modelo LightGBM
     params = {
         'objective': 'binary',
-        'metric': 'None',  # Usamos nuestra métrica personalizada
-
-	#completar a gusto!!!!!!!
+        'metric': 'None',
         'num_iterations' : trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
         'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
         'learning_rate': trial.suggest_float('learn_rate', conf.parametros_lgb.learn_rate[0], conf.parametros_lgb.learn_rate[1], log=True),
@@ -49,34 +35,30 @@ def objetivo_ganancia(trial, df) -> float:
         'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': 0.0,
-       # 'verbose': -1,
         'verbosity': -1,
         'silent': True,
         'bin': 31,
-        'random_state': SEMILLA[0] #,  # Desde configuración YAML
-        
+        'random_state': SEMILLA[0]
     }
   
-    # Preparar dataset para entrenamiento y validación
-
+    # Preparar dataset para entrenamiento y validación con Polars
     if isinstance(MES_TRAIN, list):
-        df_train = df[df['foto_mes'].astype(str).isin(MES_TRAIN)]
+        # Aseguramos que la comparación de tipos sea correcta. Si foto_mes es int y MES_TRAIN strings, hacemos cast.
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in(MES_TRAIN))
     else:
-        df_train = df[df['foto_mes'].astype(str) == MES_TRAIN]
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
     
-    df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
+    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
 
-    # Usar target (con clase ternaria ya convertida a binaria)
-    
-    y_train = df_train['clase_ternaria'].values
-    y_val = df_val['clase_ternaria'].values
+    # Targets a numpy
+    y_train = df_train['clase_ternaria'].to_numpy()
+    y_val = df_val['clase_ternaria'].to_numpy()
 
-    # Features (excluir target)
-    X_train = df_train.drop(columns=['clase_ternaria'])
-    X_val = df_val.drop(columns=['clase_ternaria'])
-
-    # Completar!!!!!!
-    # Entrenar modelo con función de ganancia personalizada
+    # Features (excluir target) - Convertimos a pandas para máxima compatibilidad con lgb si es necesario,
+    # o mantenemos en Polars si tu versión de lgb lo soporta bien.
+    # Para seguridad, usamos .to_pandas() aquí, pero podrías probar sin él.
+    X_train = df_train.drop(['clase_ternaria']).to_pandas()
+    X_val = df_val.drop(['clase_ternaria']).to_pandas()
 
     train_data = lgb.Dataset(X_train, label=y_train)
     val_data = lgb.Dataset(X_val, label=y_val, reference=train_data)
@@ -89,19 +71,13 @@ def objetivo_ganancia(trial, df) -> float:
         callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
     )
 
-    # Predecir y calcular ganancia
-
     y_pred_proba = model.predict(X_val)
-    y_pred_binary = (y_pred_proba >= UMBRAL).astype(int)  # Usar mismo umbral que en ganancia_lgb_binary                  
-
+    y_pred_binary = (y_pred_proba >= UMBRAL).astype(int)
 
     ganancia_total = calcular_ganancia(y_val, y_pred_binary)
 
-    # Guardar cada iteración en JSON
     guardar_iteracion(trial, ganancia_total)
-  
     logger.info(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
-  
     return ganancia_total
    
 #######################################################################################################
@@ -159,10 +135,10 @@ def guardar_iteracion(trial, ganancia, archivo_base=None):
 
 #######################################################################################################
 
-def optimizar(df, n_trials=100) -> optuna.Study:
+def optimizar(df: pl.DataFrame, n_trials: int, study_name: str = None, undersampling: float = 0.01) -> optuna.Study:
     """
     Args:
-        df: DataFrame con datos
+        df: DataFrame de Polars con datos
         n_trials: Número de trials a ejecutar
         study_name: Nombre del estudio (si es None, usa el de config.yaml)
   
@@ -177,118 +153,96 @@ def optimizar(df, n_trials=100) -> optuna.Study:
     Returns:
         optuna.Study: Estudio de Optuna con resultados
     """
-
     study_name = conf.STUDY_NAME
-
     logger.info(f"Iniciando optimización con {n_trials} trials")
     logger.info(f"Configuración: TRAIN={MES_TRAIN}, VALID={MES_VALIDACION}, SEMILLA={SEMILLA}")
   
-    # Crear estudio de Optuna
-    study = optuna.create_study(
-        study_name=study_name,
-        direction='maximize',
-    )
-
-    # Función objetivo parcial con datos
-    objective_with_data = lambda trial: objetivo_ganancia(trial, df)
-
-    # Ejecutar optimización
-    study.optimize(objective_with_data, n_trials=n_trials, show_progress_bar=True)
+    study = crear_o_cargar_estudio(study_name, SEMILLA[0])
+    trials_previos = len(study.trials)
+    trials_a_ejecutar = max(0, n_trials - trials_previos)
   
-    # Resultados
-    logger.info(f"Mejor ganancia: {study.best_value:,.0f}")
-    logger.info(f"Mejores parámetros: {study.best_params}")
+    if trials_previos > 0:
+        logger.info(f"🔄 Retomando desde trial {trials_previos}. A ejecutar: {trials_a_ejecutar}")
+    else:
+        logger.info(f"🆕 Nueva optimización: {n_trials} trials")
   
-  
+    if trials_a_ejecutar > 0:
+        study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df, undersampling), n_trials=trials_a_ejecutar)
+        logger.info(f"🏆 Mejor ganancia: {study.best_value:,.0f}")
+        logger.info(f"Mejores parámetros: {study.best_params}")
+    else:
+        logger.info(f"✅ Ya se completaron {n_trials} trials")
     return study
 
-#######################################################################################################
 
-def evaluar_en_test(df, mejores_params, semilla=SEMILLA[0]) -> dict:
+#######################################################################################################
+   
+def evaluar_en_test(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0]) -> dict:
     """
     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
     Solo calcula la ganancia, sin usar sklearn.
   
     Args:
-        df: DataFrame con todos los datos
+        df: DataFrame de Polars con todos los datos
         mejores_params: Mejores hiperparámetros encontrados por Optuna
   
     Returns:
         dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
     """
+
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
     logger.info(f"Período de test: {MES_TEST}")
   
-    # Preparar datos de entrenamiento (TRAIN + VALIDACION)
     if isinstance(MES_TRAIN, list):
         periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
     else:
         periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
   
-    df_train_completo = df[df['foto_mes'].astype(str).isin(periodos_entrenamiento)]
-    df_test = df[df['foto_mes'].astype(str) == MES_TEST]
+    # Filtrado con Polars
+    # Aseguramos casting a string si es necesario para la comparación con listas de strings
+    df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos_entrenamiento]))
+    df_test = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TEST))
   
-    # Entrenar modelo con mejores parámetros
-    # ... Implementar entrenamiento y test con la logica de entrenamiento FINAL para mayor detalle
-    # recordar realizar todos los df necesarios y utilizar lgb.train()
-    # Cargar mejores parámetros
-
-    # Entrenar modelo con mejores parámetros
     logger.info("Entrenando modelo con mejores hiperparámetros...")
-    logger.info(f'Dimensiones df_train_completo: {df_train_completo.shape}, Dimensiones df_test: {df_test.shape}')
+    logger.info(f'Dimensiones df_train_completo: {(df_train_completo.height, df_train_completo.width)}, Dimensiones df_test: {(df_test.height, df_test.width)}')
 
-    # Preparar datasets
-
-    train_data = lgb.Dataset(df_train_completo.drop(columns=['clase_ternaria']), label=df_train_completo['clase_ternaria'].values)
+    # Preparar datasets (convirtiendo a pandas/numpy para lgb)
+    X_train = df_train_completo.drop(['clase_ternaria']).to_pandas()
+    y_train = df_train_completo['clase_ternaria'].to_numpy()
+    train_data = lgb.Dataset(X_train, label=y_train)
   
-    # chequeo si train_data está ok
-    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
-
-
     model = lgb.train(
         mejores_params,
         train_data,
-        #num_boost_round=1000,
-        #valid_sets=[test_data],
-        #feval=ganancia_lgb_binary,
         feval=ganancia_evaluator
-      #  callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
 
     # Predecir en test
-    X_test = df_test.drop(columns=['clase_ternaria'])
-    y_test = df_test['clase_ternaria'].values
+    X_test = df_test.drop(['clase_ternaria']).to_pandas()
+    y_test = df_test['clase_ternaria'].to_numpy()
     y_pred_proba = model.predict(X_test)
 
-    # Buscar el umbral que maximiza la ganancia
+    # Buscar el umbral óptimo (lógica numpy, igual)
     mejor_ganancia = -np.inf
     mejor_umbral = 0.5
-    umbrales = np.linspace(0, 1, 201)  # 0.00, 0.005, ..., 1.00
+    y_pred_binary = np.zeros_like(y_pred_proba, dtype=int) # Inicializar
 
-    for umbral in umbrales:
+    for umbral in np.linspace(0, 1, 201):
         y_pred_bin = (y_pred_proba >= umbral).astype(int)
         ganancia = calcular_ganancia(y_test, y_pred_bin)
         if ganancia > mejor_ganancia:
             mejor_ganancia = ganancia
             mejor_umbral = umbral
-            y_pred_binary = y_pred_bin  # Guardar predicción óptima
+            y_pred_binary = y_pred_bin
 
-    ganancia_test = mejor_ganancia
-
-    # Estadísticas básicas
-    total_predicciones = len(y_pred_binary)
-    predicciones_positivas = np.sum(y_pred_binary == 1)
-    porcentaje_positivas = (predicciones_positivas / total_predicciones) * 100
-  
     resultados = {
-        'ganancia_test': float(ganancia_test),
+        'ganancia_test': float(mejor_ganancia),
         'umbral_optimo': float(mejor_umbral),
-        'total_predicciones': int(total_predicciones),
-        'predicciones_positivas': int(predicciones_positivas),
-        'porcentaje_positivas': float(porcentaje_positivas),
+        'total_predicciones': int(len(y_pred_binary)),
+        'predicciones_positivas': int(np.sum(y_pred_binary == 1)),
+        'porcentaje_positivas': float((np.sum(y_pred_binary == 1) / len(y_pred_binary)) * 100),
         'semilla': semilla
     }
-  
     return resultados
 #######################################################################################################
 
@@ -348,105 +302,87 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     logger.info(f"Ganancia: {resultados_test['ganancia_test']:,.0f}" + "---" + f"Total Predicciones positivas: {resultados_test['predicciones_positivas']:,.0f}")
 
 #####################################################################################
-
-def evaluar_en_test_pesos(df, mejores_params, semilla=SEMILLA[0]) -> dict:
+  
+def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0]) -> dict:
     """
     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
     Solo calcula la ganancia, sin usar sklearn.
   
     Args:
-        df: DataFrame con todos los datos
+        df: Polars DataFrame con todos los datos
         mejores_params: Mejores hiperparámetros encontrados por Optuna
   
     Returns:
         dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
     """
+
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
     logger.info(f"Período de test: {MES_TEST}")
   
-    # Preparar datos de entrenamiento (TRAIN + VALIDACION)
+    # Filtrado Polars
     if isinstance(MES_TRAIN, list):
-        periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
+        periodos = MES_TRAIN + [MES_VALIDACION]
     else:
-        periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
-  
-    df_train_completo = df[df['foto_mes'].astype(str).isin(periodos_entrenamiento)]
-    df_test = df[df['foto_mes'].astype(str) == MES_TEST]
-
+        periodos = [MES_TRAIN, MES_VALIDACION]
+    
+    df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
+    df_test = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TEST))
+    
     # Entrenar modelo con mejores parámetros
     logger.info("Entrenando modelo con mejores hiperparámetros...")
-    logger.info(f'Dimensiones df_train_completo: {df_train_completo.shape}, Dimensiones df_test: {df_test.shape}')
+    logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}, Dimensiones df_test: {df_test.height, df_test.width}')
 
-    # Preparar datasets
-    X= df_train_completo.drop(columns=['clase_ternaria', 'clase_peso'])
-    y= df_train_completo['clase_ternaria'].values
-    weights= df_train_completo['clase_peso'].values  # Pesos para cada instancia
 
+    # Datasets
+    X = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y = df_train_completo['clase_ternaria'].to_numpy()
+    weights = df_train_completo['clase_peso'].to_numpy()
+    
     train_data = lgb.Dataset(X, label=y, weight=weights)
-  
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
   
+    model = lgb.train(mejores_params, train_data, feval=lgb_gan_eval)
 
-    model = lgb.train(
-        mejores_params,
-        train_data,
-        #num_boost_round=1000,
-        #valid_sets=[test_data],
-        feval=lgb_gan_eval
-      #  callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
-    )
-
-    # Predecir en test
-    X_test = df_test.drop(columns=['clase_ternaria', 'clase_peso'])
-    y_test = df_test['clase_peso'].values
-    y_test = np.where(y_test == 1.00002, 1, 0)  # Convertir pesos de clase_ternaria a 0 y 1
+    # Test
+    X_test = df_test.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_test_pesos = df_test['clase_peso'].to_numpy()
+    y_test = np.where(y_test_pesos == 1.00002, 1, 0)
 
     y_pred_proba = model.predict(X_test)
 
-    predicciones_test = pd.DataFrame({
+    # Guardar predicciones ordenadas por probabilidad descendente (usando Polars para crear el DF y guardar CSV)
+    predicciones_test = pl.DataFrame({
         'probabilidad': y_pred_proba,
         'clase_ternaria': y_test
-    })
-
-    # Ordenar por probabilidad descendente
-    predicciones_test = predicciones_test.sort_values(by='probabilidad', ascending=False).reset_index(drop=True)
-
-    # Guardar predicciones ordenadas en CSV
-    predicciones_test.to_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_{semilla}.csv', index=False)
+    }).sort('probabilidad', descending=True)
+    
+    predicciones_test.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_{semilla}.csv')
 
     # Buscar el umbral que maximiza la ganancia
     mejor_ganancia = -np.inf
     mejor_umbral = 0.5
-    umbrales = np.linspace(0, 1, 201)  # 0.00, 0.005, ..., 1.00
-
-    for umbral in umbrales:
+    y_pred_binary = np.zeros_like(y_pred_proba, dtype=int)
+    for umbral in np.linspace(0, 1, 201):
         y_pred_bin = (y_pred_proba >= umbral).astype(int)
         ganancia = calcular_ganancia(y_test, y_pred_bin)
         if ganancia > mejor_ganancia:
             mejor_ganancia = ganancia
             mejor_umbral = umbral
-            y_pred_binary = y_pred_bin  # Guardar predicción óptima
+            y_pred_binary = y_pred_bin
 
-    ganancia_test = mejor_ganancia
-
-    total_predicciones = len(y_pred_binary)
-    predicciones_positivas = np.sum(y_pred_binary == 1)
-    porcentaje_positivas = (predicciones_positivas / total_predicciones) * 100
-  
     resultados = {
-        'ganancia_test': float(ganancia_test),
+        'ganancia_test': float(mejor_ganancia),
         'umbral_optimo': float(mejor_umbral),
-        'total_predicciones': int(total_predicciones),
-        'predicciones_positivas': int(predicciones_positivas),
-        'porcentaje_positivas': float(porcentaje_positivas),
+        'total_predicciones': int(len(y_pred_binary)),
+        'predicciones_positivas': int(np.sum(y_pred_binary == 1)),
+        'porcentaje_positivas': float((np.sum(y_pred_binary == 1) / len(y_pred_binary)) * 100),
         'semilla': semilla
     }
-  
     return resultados
 
-#### OBJETIVO GANANCIA SEEDS 
+############################################################################ OBJETIVO GANANCIA SEEDS 
 
-def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pd.DataFrame, undersampling: float = 1) -> float:
+def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersampling: float = 1) -> float:
     """
     Parameters:
     trial: trial de optuna
@@ -464,100 +400,68 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pd.DataFrame, undersa
     Returns:
     float: ganancia total
     """
-    # Hiperparámetros a optimizar en el modelo LightGBM
     params = {
-        'objective': 'binary',
-        'metric': 'None',
-        'num_iterations' : trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
+        'objective': 'binary', 'metric': 'None',
+        'num_iterations': trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
         'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
         'learning_rate': trial.suggest_float('learning_rate', conf.parametros_lgb.learning_rate[0], conf.parametros_lgb.learning_rate[1], log=True),
         'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
-        'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
+        'bagging_fraction': 1.0, # Fijo según tu código original en esta función
         'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
         'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
         'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
-        'verbosity': -1,
-        'scale_pos_weight': 97,
-        'bagging_fraction': 1.0,
-        'pos_bagging_fraction': 1.0,
-        'neg_bagging_fraction': 0.01,
-        'bagging_freq': 1,
-        'silent': True,
-        #'bin': trial.suggest_int('bin', conf.parametros_lgb.bin[0], conf.parametros_lgb.bin[1]),
-        'bin': 31
+        'verbosity': -1, 'scale_pos_weight': 97,
+        'pos_bagging_fraction': 1.0, 'neg_bagging_fraction': 0.01, 'bagging_freq': 1, 'silent': True, 'bin': 31
     }
-  
+    
     # Preparar dataset para entrenamiento y validación
-
+    
     if isinstance(MES_TRAIN, list):
-        df_train = df[df['foto_mes'].astype(str).isin(MES_TRAIN)]
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
     else:
-        df_train = df[df['foto_mes'].astype(str) == MES_TRAIN]
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
+    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
+
+    # Preparar datos para LGBM
+    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_train = df_train['clase_ternaria'].to_numpy()
+    weights_train = df_train['clase_peso'].to_numpy()
     
-    df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
+    X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_val = df_val['clase_ternaria'].to_numpy()
+    weights_val = df_val['clase_peso'].to_numpy()
 
-    # CLASE 6     #Convierto a binaria la clase ternaria, 
-    # # para entrenar el modelo Baja+1 y Baja+2 == 1
-    # # y calcular la ganancia de validacion Baja+2 solamente en 1
-    # df_train = convertir_clase_ternaria_a_target(df_train, baja_2_1=True)
-    # df_val = convertir_clase_ternaria_a_target(df_val, baja_2_1=False)
-    # df_train['clase_ternaria'] = df_train['clase_ternaria'].astype(np.int8)
-    # df_val['clase_ternaria'] = df_val['clase_ternaria'].astype(np.int8)
-
-    # Usar target (con clase ternaria ya convertida a binaria)
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
     
-    y_train = df_train['clase_ternaria'].values
-    y_val = df_val['clase_ternaria'].values
-
-    # Features (excluir target)
-    X_train = df_train.drop(columns=['clase_ternaria', 'clase_peso'])
-    X_val = df_val.drop(columns=['clase_ternaria', 'clase_peso'])
-
-    weights_train= df_train['clase_peso'].values
-    weights_val = df_val['clase_peso'].values
-
-    # Crear datasets de LightGBM
-   
-    train_data = lgb.Dataset(X_train, label=y_train, weight = weights_train )
-    val_data = lgb.Dataset(X_val, label=y_val, weight = weights_val, reference=train_data)
-   
     # Entrenar modelos distintos por cada seed
-
-    ganancia_total=0
-
-    for seed in SEMILLA:
+    ganancia_total = 0
+    semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
+    
+    for seed in semillas:
         params['random_state'] = seed
-
-        model = lgb.train(
-            params, 
-            train_data,
-            valid_sets=[val_data],
-            feval=lgb_gan_eval,         #ganancia_lgb_binary, 
-            callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
-        )
-
-    # Predecir y calcular ganancia
+        model = lgb.train(params, train_data, valid_sets=[val_data], feval=lgb_gan_eval,
+                          callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)])
+        # Predecir y calcular ganancia
         y_pred_proba = model.predict(X_val)
-        _, ganancia_iter, _ =lgb_gan_eval(y_pred_proba, val_data)
-                 
-    # Sumar a la ganancia de los modelos anteriores
-        ganancia_total = ganancia_total +  ganancia_iter 
+        _, ganancia_iter, _ = lgb_gan_eval(y_pred_proba, val_data)
 
+        # Sumar a la ganancia de los modelos anteriores
+        ganancia_total += ganancia_iter
+    
     # Calcular ganancia media de los modelos entrenados en la iteración
-    ganancia_media = ganancia_total / len(SEMILLA)
-
+    ganancia_media = ganancia_total / len(semillas)
+    
     # Guardar cada iteración en JSON
     guardar_iteracion(trial, ganancia_media)
-  
-    logger.info(f"Trial {trial.number}: Ganancia = {ganancia_media:,.0f}")
-  
+    logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_media:,.0f}")
     return ganancia_media
    
 #######################################################################################################
 
-def optimizar_con_seed_pesos(df, n_trials=50) -> optuna.Study:
+def optimizar_con_seed_pesos(df: pl.DataFrame, n_trials=50) -> optuna.Study:
     """
     Ejecuta optimización bayesiana con ganancia media de modelos entrenados con distintos seeds.
   
@@ -571,16 +475,19 @@ def optimizar_con_seed_pesos(df, n_trials=50) -> optuna.Study:
     study_name = f"{conf.STUDY_NAME}"
   
     logger.info(f"Iniciando optimización con Seeds - {n_trials} trials")
-    logger.info(f"Configuración: períodos={MES_TRAIN + [MES_VALIDACION] if isinstance(MES_TRAIN, list) else [MES_TRAIN, MES_VALIDACION]}")
+    # Ajuste para visualización del log si MES_TRAIN es lista o escalar
+    periodos = MES_TRAIN + [MES_VALIDACION] if isinstance(MES_TRAIN, list) else [MES_TRAIN, MES_VALIDACION]
+    logger.info(f"Configuración: períodos={periodos}")
   
     # Crear estudio
     study = optuna.create_study(
         direction='maximize',
         study_name=study_name,
+        # Manejo de SEMILLA si es lista o escalar para el sampler
         sampler=optuna.samplers.TPESampler(seed=SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA)
     )
   
-    # Ejecutar optimización
+    # Ejecutar optimización pasando el DataFrame de Polars
     study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df), n_trials=n_trials)
   
     # Resultados
@@ -590,7 +497,6 @@ def optimizar_con_seed_pesos(df, n_trials=50) -> optuna.Study:
     logger.info(f"Mejores parámetros: {study.best_params}")
 
     return study
-
 ##########################################################################################################
 
 def crear_o_cargar_estudio(study_name: str = None, semilla: int = None) -> optuna.Study:
@@ -658,8 +564,7 @@ def crear_o_cargar_estudio(study_name: str = None, semilla: int = None) -> optun
 
 #########################################################################################################
 
-
-def optimizar(df: pd.DataFrame, n_trials: int, study_name: str = None, undersampling: float = 0.01) -> optuna.Study:
+def optimizar(df: pl.DataFrame, n_trials: int, study_name: str = None, undersampling: float = 0.01) -> optuna.Study:
     """
     Args:
         df: DataFrame con datos
@@ -678,14 +583,13 @@ def optimizar(df: pd.DataFrame, n_trials: int, study_name: str = None, undersamp
     Returns:
         optuna.Study: Estudio de Optuna con resultados
     """
-
     study_name = conf.STUDY_NAME
 
     logger.info(f"Iniciando optimización con {n_trials} trials")
     logger.info(f"Configuración: TRAIN={MES_TRAIN}, VALID={MES_VALIDACION}, SEMILLA={SEMILLA}")
   
-    # Crear o cargar estudio desde DuckDB
-    study = crear_o_cargar_estudio(study_name, SEMILLA[0])
+    # Crear o cargar estudio
+    study = crear_o_cargar_estudio(study_name, SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA)
 
     # Calcular cuántos trials faltan
     trials_previos = len(study.trials)
@@ -699,7 +603,7 @@ def optimizar(df: pd.DataFrame, n_trials: int, study_name: str = None, undersamp
   
     # Ejecutar optimización
     if trials_a_ejecutar > 0:
-        ##LO UNICO IMPORTANTE DEL METODO Y EL study CLARO
+        # Llama a la función objetivo que ya soporta Polars
         study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df, undersampling), n_trials=trials_a_ejecutar)
         logger.info(f"🏆 Mejor ganancia: {study.best_value:,.0f}")
         logger.info(f"Mejores parámetros: {study.best_params}")
@@ -708,24 +612,17 @@ def optimizar(df: pd.DataFrame, n_trials: int, study_name: str = None, undersamp
   
     return study
 
-
 #######################################################################################################
 
-def optimizar_zlgbm(df, n_trials=50) -> optuna.Study:
+def optimizar_zlgbm(df: pl.DataFrame, n_trials=50) -> optuna.Study:
     """
-    Ejecuta optimización bayesiana de modelo ZLightGBM
-  
-    Args:
-        df: DataFrame con datos
-        n_trials: Número de trials a ejecutar
-  
-    Returns:
-        optuna.Study: Estudio de Optuna con resultados de Ganancia media
+    Ejecuta optimización bayesiana de modelo ZLightGBM usando Polars DataFrame.
     """
     study_name = f"{conf.STUDY_NAME}"
   
     logger.info(f"Iniciando optimización con zLGBM - {n_trials} trials")
-    logger.info(f"Configuración: períodos={MES_TRAIN + [MES_VALIDACION] if isinstance(MES_TRAIN, list) else [MES_TRAIN, MES_VALIDACION]}")
+    periodos = MES_TRAIN + [MES_VALIDACION] if isinstance(MES_TRAIN, list) else [MES_TRAIN, MES_VALIDACION]
+    logger.info(f"Configuración: períodos={periodos}")
   
     # Crear estudio
     study = optuna.create_study(
@@ -747,9 +644,9 @@ def optimizar_zlgbm(df, n_trials=50) -> optuna.Study:
 
 #######################################################################################################
 
-def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pd.DataFrame, undersampling: float = 1) -> float:
+def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersampling: float = 1) -> float:
     """
-    Parameters:
+        Parameters:
     trial: trial de optuna
     df: dataframe con datos
   
@@ -765,8 +662,7 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pd.DataFrame, undersa
     Returns:
     float: ganancia total
     """
-    # Hiperparámetros a optimizar en el modelo LightGBM
-    
+    # Hiperparámetros a optimizar
     params = {
         'boosting': 'gbdt',
         'objective': 'binary',
@@ -776,74 +672,44 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pd.DataFrame, undersa
         'feature_pre_filter': False,
         'force_row_wise': True,
         'verbosity': -100,
-        'random_state': SEMILLA[0],
+        'random_state': SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
         'num_threads': 4,
-        'feature_fraction': 0.50, # un nuevo default
-        'num_iterations': 9999,   # dejo libre la cantidad de arboles, zLightGBM se detiene solo
+        'feature_fraction': 0.50,
+        'num_iterations': 9999,
         'canaritos': 100,
         'min_sum_hessian_in_leaf': 0.001,
-        #'min_data_in_leaf': 20,  # default de LightGBM min_child_samples
         'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
-        'num_leaves': 999,    # dejo libre, zLightGBM se detiene solo
+        'num_leaves': 999,
         'learning_rate': 1.0,
-        #'gradient_bound': 0.1  # default de zLightGBM
         'gradient_bound': trial.suggest_float('gradient_bound', conf.parametros_lgb.gradient_bound[0], conf.parametros_lgb.gradient_bound[1]),
-    #    'num_iterations' : trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
-    #     'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
-    #     'learning_rate': trial.suggest_float('learning_rate', conf.parametros_lgb.learning_rate[0], conf.parametros_lgb.learning_rate[1], log=True),
-    #     'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
-    #     'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
-    #     'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
-    #     'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
-    #     'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
-    #     'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
-    #     'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
-    #     'verbosity': -1,
-    #     'scale_pos_weight': 97,
-    #     'bagging_fraction': 1.0,
-    #     'pos_bagging_fraction': 1.0,
-    #     'neg_bagging_fraction': 0.01,
-    #     'bagging_freq': 1,
-    #     'silent': True,
-        #'bin': trial.suggest_int('bin', conf.parametros_lgb.bin[0], conf.parametros_lgb.bin[1]),
         'bin': 31
     }
   
-    # Preparar dataset para entrenamiento y validación
-
+    # Preparar dataset para entrenamiento y validación con Polars
+    # Casteamos 'foto_mes' a string para asegurar compatibilidad si MES_TRAIN/VALIDACION son strings
     if isinstance(MES_TRAIN, list):
-        df_train = df[df['foto_mes'].astype(str).isin(MES_TRAIN)]
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
     else:
-        df_train = df[df['foto_mes'].astype(str) == MES_TRAIN]
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
     
-    df_val = df[df['foto_mes'].astype(str) == MES_VALIDACION]
+    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
 
-    # CLASE 6     #Convierto a binaria la clase ternaria, 
-    # # para entrenar el modelo Baja+1 y Baja+2 == 1
-    # # y calcular la ganancia de validacion Baja+2 solamente en 1
-    # df_train = convertir_clase_ternaria_a_target(df_train, baja_2_1=True)
-    # df_val = convertir_clase_ternaria_a_target(df_val, baja_2_1=False)
-    # df_train['clase_ternaria'] = df_train['clase_ternaria'].astype(np.int8)
-    # df_val['clase_ternaria'] = df_val['clase_ternaria'].astype(np.int8)
+    # Targets y pesos a numpy
+    y_train = df_train['clase_ternaria'].to_numpy()
+    y_val = df_val['clase_ternaria'].to_numpy()
+    weights_train = df_train['clase_peso'].to_numpy()
+    weights_val = df_val['clase_peso'].to_numpy()
 
-    # Usar target (con clase ternaria ya convertida a binaria)
-    
-    y_train = df_train['clase_ternaria'].values
-    y_val = df_val['clase_ternaria'].values
-
-    # Features (excluir target)
-    X_train = df_train.drop(columns=['clase_ternaria', 'clase_peso'])
-    X_val = df_val.drop(columns=['clase_ternaria', 'clase_peso'])
-
-    weights_train= df_train['clase_peso'].values
-    weights_val = df_val['clase_peso'].values
+    # Features a pandas (recomendado para máxima compatibilidad con LGBM por ahora)
+    # Se excluyen 'clase_ternaria' y 'clase_peso'
+    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
 
     # Crear datasets de LightGBM
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
    
-    train_data = lgb.Dataset(X_train, label=y_train, weight = weights_train )
-    val_data = lgb.Dataset(X_val, label=y_val, weight = weights_val, reference=train_data)
-   
-    # Entrenar modelos distintos por cada seed
+    # Entrenar modelo
     model = lgb.train(
         params, 
         train_data,
@@ -854,13 +720,13 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pd.DataFrame, undersa
 
     # Predecir y calcular ganancia
     y_pred_proba = model.predict(X_val)
-    _, ganancia_total, _ =lgb_gan_eval(y_pred_proba, val_data)
 
-    # Guardar cada iteración en JSON
+    # Usamos lgb_gan_eval para obtener la ganancia tal como se definió en el entrenamiento
+    _, ganancia_total, _ = lgb_gan_eval(y_pred_proba, val_data)
+
+    # Guardar iteración en JSON
     guardar_iteracion(trial, ganancia_total)
   
     logger.info(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
   
     return ganancia_total
-
-   

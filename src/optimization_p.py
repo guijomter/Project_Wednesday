@@ -621,7 +621,7 @@ def optimizar(df: pl.DataFrame, n_trials: int, study_name: str = None, undersamp
 
 #######################################################################################################
 
-def optimizar_zlgbm(df: pl.DataFrame, n_trials=50) -> optuna.Study:
+def optimizar_zlgbm(df: pl.DataFrame, n_trials=50, undersampling: float = 0.01) -> optuna.Study:
     """
     Ejecuta optimización bayesiana de modelo ZLightGBM usando Polars DataFrame.
     """
@@ -639,7 +639,7 @@ def optimizar_zlgbm(df: pl.DataFrame, n_trials=50) -> optuna.Study:
     )
   
     # Ejecutar optimización
-    study.optimize(lambda trial: objetivo_ganancia_zlgbm(trial, df), n_trials=n_trials)
+    study.optimize(lambda trial: objetivo_ganancia_zlgbm(trial, df), n_trials=n_trials, undersampling=undersampling)
   
     # Resultados
     logger.info("=== OPTIMIZACIÓN CON zLGBM COMPLETADA ===")

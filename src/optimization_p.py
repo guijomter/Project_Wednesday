@@ -429,7 +429,7 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
     
     # Aplicar undersampling si es necesario
-    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling)
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
     
     # Preparar datos para LGBM
     X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
@@ -766,7 +766,10 @@ def aplicar_undersampling_clientes(
         pl.col(col_target).max().alias("max_clase")
     )
 
-    # 2. Separar IDs de clientes
+    registros_originales_clase_mayoritaria = df.filter(pl.col(col_target) == clase_mayoritaria).height
+    registros_originales_clase_minoritarias = df.filter(pl.col(col_target) != clase_mayoritaria).height
+
+    # 2. Separar IDs de clientes    
     clientes_a_conservar = df_clientes_status.filter(pl.col("max_clase") != clase_mayoritaria)[col_cliente]
     clientes_mayoritaria_pura = df_clientes_status.filter(pl.col("max_clase") == clase_mayoritaria)[col_cliente]
 
@@ -779,4 +782,6 @@ def aplicar_undersampling_clientes(
     # 5. Filtrar el dataframe original y mezclar
     df_filtrado = df.filter(pl.col(col_cliente).is_in(clientes_finales))
     
+    logger.info(f"Undersampling aplicado: tasa={tasa}, registros originales={df.height} (C May: {registros_originales_clase_mayoritaria} / C Min: {registros_originales_clase_minoritarias}), registros finales={df_filtrado.height} (CMay : {df_filtrado.filter(pl.col('clase_ternaria') == 1).height} / CMin: {df_filtrado.filter(pl.col('clase_ternaria') != 1).height})")
+
     return df_filtrado.sample(fraction=1.0, shuffle=True, seed=semilla)

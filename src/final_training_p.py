@@ -6,6 +6,7 @@ import logging
 import os
 from datetime import datetime
 #from .config import FINAL_TRAIN, FINAL_PREDIC, SEMILLA
+from optimization_p import aplicar_undersampling_clientes
 from .config import *
 from .best_params import cargar_mejores_hiperparametros
 from .gain_function import ganancia_lgb_binary, ganancia_evaluator, lgb_gan_eval
@@ -341,7 +342,7 @@ def generar_predicciones_finales_seeds(modelos_finales: list, X_predict, cliente
 
 ##########################################################################################################################
 
-def preparar_datos_entrenamiento_final_pesos(df: pl.DataFrame) -> tuple:
+def preparar_datos_entrenamiento_final_pesos(df: pl.DataFrame, undersampling: float = 1.0) -> tuple:
     """
     Prepara los datos para el entrenamiento final con pesos usando Polars.
     
@@ -364,6 +365,10 @@ def preparar_datos_entrenamiento_final_pesos(df: pl.DataFrame) -> tuple:
     #Corroborar que no esten vacios los df
     logger.info(f"Registros de entrenamiento: {df_train.height:,}")
     logger.info(f"Registros de predicción: {df_predict.height:,}")
+    
+    # Aplicar undersampling
+    
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
     
     # Preparar features y target para entrenamiento
     # Convertir a pandas para features, numpy para targets/pesos/IDs

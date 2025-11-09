@@ -303,7 +303,7 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
 
 #####################################################################################
   
-def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0]) -> dict:
+def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], undersampling: float = 1) -> dict:
     """
     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
     Solo calcula la ganancia, sin usar sklearn.
@@ -327,6 +327,10 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0]) 
     
     df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
     df_test = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TEST))
+    
+    # Aplicar undersampling si es necesario
+    
+    df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=SEMILLA[0])
     
     # Entrenar modelo con mejores parámetros
     logger.info("Entrenando modelo con mejores hiperparámetros...")

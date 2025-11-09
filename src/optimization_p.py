@@ -786,6 +786,6 @@ def aplicar_undersampling_clientes(
     # 5. Filtrar el dataframe original y mezclar
     df_filtrado = df.filter(pl.col(col_cliente).is_in(clientes_finales))
     
-    logger.info(f"Undersampling aplicado: tasa={tasa}, registros originales={df.height} (C May: {registros_originales_clase_mayoritaria} / C Min: {registros_originales_clase_minoritarias}), registros finales={df_filtrado.height} (CMay : {df_filtrado.filter(pl.col('clase_ternaria') == 1).height} / CMin: {df_filtrado.filter(pl.col('clase_ternaria') != 1).height})")
+    logger.info(f"Undersampling aplicado: tasa={tasa}, registros originales={df.height} (C May: {registros_originales_clase_mayoritaria} / C Min: {registros_originales_clase_minoritarias}), registros finales={df_filtrado.height} (CMay : {df_filtrado.filter(pl.col('clase_ternaria') != 1).height} / CMin: {df_filtrado.filter(pl.col('clase_ternaria') == 1).height})")
 
     return df_filtrado.sample(fraction=1.0, shuffle=True, seed=semilla)

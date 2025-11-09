@@ -51,45 +51,44 @@ def main():
     data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}" # type: ignore
     data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
     
-    # -1 Crear clase_ternaria en GCS si no existe
+    #00 Crear clase_ternaria en GCS si no existe
      
     crear_clase_ternaria_gcs(data_path_raw_gcs, data_path_gcs)
 
     #print(f"Ruta GCS del dataset: {data_path_gcs}")
 
-    # 0B. Carga de datos desde GCS usando Polars
-    logger.info(f"Cargando datos desde GCS: {data_path_gcs}")
-    df = cargar_datos(data_path_gcs)
+    #01-02 Feature Engineering + Target binario
 
-    #01 Feature Engineering
-
-    # 1. Definimos la ruta de GCS y usamos .parquet
+    # 1. Definimos la ruta de GCS del archivo .parquet donde se guardará el FE
     gcs_fe_path = f"{conf.GCS_BUCKET_URI}/data/df_fe_{conf.STUDY_NAME}.parquet"
 
-    # 2. Usamos la nueva función para verificar si existe
+    # Si existe el archivo de FE en buckets, se lo carga en un dataframe
     if archivo_existe_en_bucket(gcs_fe_path):
         logger.info(f"Archivo de features encontrado: {gcs_fe_path}. Cargando desde GCS.")
         # 3. Usamos la nueva función para cargar
         df_fe = cargar_de_buckets(gcs_fe_path)
-    
+    # Si no existe el archivo de FE en buckets, se carga el archivo de datos y se ejecuta el feature engineering
     else:
-        logger.info("Archivo de features no encontrado. Ejecutando feature engineering.")
+        logger.info("Archivo de features no encontrado")
+        
+        # Cargar datos desde GCS
+        logger.info(f"Cargando datos desde GCS: {data_path_gcs}")
+        df = cargar_datos(data_path_gcs)
+
+        logger.info("Ejecutando feature engineering.")
         # (Esto asume que 'df' y 'feature_engineering' existen)
         df_fe = feature_engineering(df, competencia="competencia01")
         
-        # 4. Usamos la nueva función para guardar
+        #Convertir clase_ternaria a target binario + pesos
+        df_fe = convertir_clase_ternaria_a_target_peso(df_fe) 
+
+        # Se guardan los features + target binario en buckets
         logger.info(f"Guardando features en: {gcs_fe_path}")
         guardar_en_buckets(df_fe, gcs_fe_path)
 
     logger.info(f"Feature Engineering completado: {df_fe.height, df_fe.width}")  
-
-    #02 Convertir clase_ternaria a target binario
     
-    df_fe = convertir_clase_ternaria_a_target_peso(df_fe)  
-  
     #03 Ejecutar optimizacion de hiperparametros
-    
-    # study = optimizar_con_cv_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
     
     study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=0.05)
 

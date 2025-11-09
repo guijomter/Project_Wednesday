@@ -1,6 +1,6 @@
 # config.yaml
 
-STUDY_NAME : "Compe_02_V0_2p"  
+STUDY_NAME : "Compe_02_V0_3p"  
 BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
@@ -33,7 +33,7 @@ competencia02:
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 parametros_lgb:
-    n_trial: 25
+    n_trial: 2
     num_leaves: [8, 300]
     num_iterations: [50, 1000]
     feature_fraction: [0.1, 1.0]

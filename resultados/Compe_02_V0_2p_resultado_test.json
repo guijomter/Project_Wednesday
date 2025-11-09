@@ -1,0 +1,24 @@
+[
+  {
+    "Mes_test": "202104",
+    "ganancia_test": 344900000.0,
+    "date_time": "2025-11-09T00:08:30.051083-03:00",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": 839071,
+      "meses_train": [
+        "202101",
+        "202102",
+        "202103"
+      ]
+    },
+    "resultados": {
+      "ganancia_test": 344900000.0,
+      "umbral_optimo": 0.995,
+      "total_predicciones": 163418,
+      "predicciones_positivas": 12475,
+      "porcentaje_positivas": 7.633797990429452,
+      "semilla": 839071
+    }
+  }
+]

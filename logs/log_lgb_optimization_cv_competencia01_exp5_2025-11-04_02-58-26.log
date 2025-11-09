@@ -1,0 +1,4 @@
+2025-11-04 02:58:26,486 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-11-04 02:58:26,486 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-11-04 02:58:26,755 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
+2025-11-04 02:58:26,844 - ERROR - __name__ 20 - Error al cargar el dataset: [Errno 2] No such file or directory: './data/competencia_01.csv'

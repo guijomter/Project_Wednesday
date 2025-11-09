@@ -1,0 +1,4 @@
+2025-11-04 03:05:56,232 - INFO - __main__ 37 - Inicio de ejecucion.
+2025-11-04 03:05:56,233 - INFO - __main__ 39 - Número de trials por estudio: 75
+2025-11-04 03:05:56,234 - INFO - __name__ 14 - Cargando dataset desde ./datasets/competencia_02_crudo.csv.gz
+2025-11-04 03:05:56,293 - ERROR - __name__ 20 - Error al cargar el dataset: [Errno 2] No such file or directory: './datasets/competencia_02_crudo.csv.gz'

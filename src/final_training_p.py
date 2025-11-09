@@ -6,7 +6,7 @@ import logging
 import os
 from datetime import datetime
 #from .config import FINAL_TRAIN, FINAL_PREDIC, SEMILLA
-from optimization_p import aplicar_undersampling_clientes
+from .optimization_p import aplicar_undersampling_clientes
 from .config import *
 from .best_params import cargar_mejores_hiperparametros
 from .gain_function import ganancia_lgb_binary, ganancia_evaluator, lgb_gan_eval

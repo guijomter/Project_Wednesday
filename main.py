@@ -91,7 +91,7 @@ def main():
     
     # study = optimizar_con_cv_pesos(df_fe, n_trials=conf.parametros_lgb.n_trial)
     
-    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=0.02)
+    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=0.05)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")

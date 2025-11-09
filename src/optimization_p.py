@@ -412,8 +412,11 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
-        'verbosity': -1, 'scale_pos_weight': 97,
-        'pos_bagging_fraction': 1.0, 'neg_bagging_fraction': 0.01, 'bagging_freq': 1, 'silent': True, 'bin': 31
+        'verbosity': -1,
+        #'scale_pos_weight': 97,
+        #'pos_bagging_fraction': 1.0, 
+        #'neg_bagging_fraction': 0.01, 
+        'bagging_freq': 1, 'silent': True, 'bin': 31
     }
     
     # Preparar dataset para entrenamiento y validación
@@ -422,8 +425,12 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
     else:
         df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
+   
     df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
-
+    
+    # Aplicar undersampling si es necesario
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling)
+    
     # Preparar datos para LGBM
     X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
     y_train = df_train['clase_ternaria'].to_numpy()
@@ -693,7 +700,10 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
     
     df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
-
+    
+    # Aplicar undersampling si es necesario
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling)
+    
     # Targets y pesos a numpy
     y_train = df_train['clase_ternaria'].to_numpy()
     y_val = df_val['clase_ternaria'].to_numpy()
@@ -730,3 +740,43 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     logger.info(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
   
     return ganancia_total
+
+
+#################################################
+
+def aplicar_undersampling_clientes(
+    df: pl.DataFrame,
+    tasa: float,
+    col_cliente: str = "numero_de_cliente",
+    col_target: str = "clase_ternaria",
+    clase_mayoritaria: int = 0,
+    semilla: int = 99999
+) -> pl.DataFrame:
+    """
+    Aplica undersampling a nivel de cliente, manteniendo todos los registros
+    de clientes que alguna vez tuvieron una clase positiva y muestreando
+    a los que siempre fueron clase mayoritaria.
+    """
+    # Si la tasa es 1.0, no hacemos nada
+    if tasa >= 1.0:
+        return df
+
+    # 1. Identificar el estatus máximo de cada cliente (si alguna vez fue > 0)
+    df_clientes_status = df.group_by(col_cliente).agg(
+        pl.col(col_target).max().alias("max_clase")
+    )
+
+    # 2. Separar IDs de clientes
+    clientes_a_conservar = df_clientes_status.filter(pl.col("max_clase") != clase_mayoritaria)[col_cliente]
+    clientes_mayoritaria_pura = df_clientes_status.filter(pl.col("max_clase") == clase_mayoritaria)[col_cliente]
+
+    # 3. Muestrear los clientes de la clase mayoritaria
+    clientes_muestreados = clientes_mayoritaria_pura.sample(fraction=tasa, seed=semilla)
+
+    # 4. Unir listas de clientes autorizados
+    clientes_finales = pl.concat([clientes_a_conservar, clientes_muestreados])
+
+    # 5. Filtrar el dataframe original y mezclar
+    df_filtrado = df.filter(pl.col(col_cliente).is_in(clientes_finales))
+    
+    return df_filtrado.sample(fraction=1.0, shuffle=True, seed=semilla)

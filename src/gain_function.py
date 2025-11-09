@@ -132,27 +132,67 @@ def ganancia_evaluator(y_pred, y_true) -> float:
 ####################################################################################################################################
 ## Función de ganancia para LightGBM usando el peso de las muestras 
 
-def lgb_gan_eval(y_pred, data):
+# def lgb_gan_eval(y_pred, data):
 
+#     weight = data.get_weight()
+#     #y_true = data.get_label()
+
+#     # Convertir a DataFrame de Polars para procesamiento eficiente
+#     df_eval = pl.DataFrame({'y_true_weight': weight,'y_pred_proba': y_pred})
+
+#     # Ordenar por probabilidad descendente
+#     df_ordenado = df_eval.sort('y_pred_proba', descending=True)
+
+#     # Calcular ganancia individual para cada cliente
+#     df_ordenado = df_ordenado.with_columns([pl.when(pl.col('y_true_weight') == 1.00002).then(GANANCIA_ACIERTO).otherwise(-COSTO_ESTIMULO).alias('ganancia_individual')])
+  
+#     # Calcular ganancia acumulada
+#     df_ordenado = df_ordenado.with_columns([pl.col('ganancia_individual').cast(pl.Int64).cum_sum().alias('ganancia_acumulada')])
+    
+#     # Encontrar la ganancia máxima
+#     ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()
+  
+#     return 'gan_eval', ganancia_maxima , True
+
+def lgb_gan_eval(y_pred, data):
     weight = data.get_weight()
     #y_true = data.get_label()
 
     # Convertir a DataFrame de Polars para procesamiento eficiente
-    df_eval = pl.DataFrame({'y_true_weight': weight,'y_pred_proba': y_pred})
+    df_eval = pl.DataFrame({'y_true_weight': weight, 'y_pred_proba': y_pred})
 
     # Ordenar por probabilidad descendente
     df_ordenado = df_eval.sort('y_pred_proba', descending=True)
 
     # Calcular ganancia individual para cada cliente
-    df_ordenado = df_ordenado.with_columns([pl.when(pl.col('y_true_weight') == 1.00002).then(GANANCIA_ACIERTO).otherwise(-COSTO_ESTIMULO).alias('ganancia_individual')])
-  
+    df_ordenado = df_ordenado.with_columns([
+        pl.when(pl.col('y_true_weight') == 1.00002)
+        .then(GANANCIA_ACIERTO)
+        .otherwise(-COSTO_ESTIMULO)
+        .alias('ganancia_individual')
+    ])
+
     # Calcular ganancia acumulada
-    df_ordenado = df_ordenado.with_columns([pl.col('ganancia_individual').cast(pl.Int64).cum_sum().alias('ganancia_acumulada')])
+    df_ordenado = df_ordenado.with_columns([
+        pl.col('ganancia_individual').cast(pl.Int64).cum_sum().alias('ganancia_acumulada')
+    ])
+
+    # --- MODIFICACIÓN: Promedio alrededor del máximo ---
     
-    # Encontrar la ganancia máxima
-    ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()
-  
-    return 'gan_eval', ganancia_maxima , True
+    # 1. Encontrar el índice (posición) de la ganancia máxima
+    idx_max = df_ordenado['ganancia_acumulada'].arg_max()
+    
+    # 2. Definir los límites de la ventana de +/- 500 registros
+    # Nos aseguramos de no salirnos de los límites del dataframe (0 y total de filas)
+    start_idx = max(0, idx_max - 500)
+    end_idx = min(df_ordenado.height, idx_max + 501) # +501 para que el slice incluya hasta +500
+    
+    # 3. Calcular el promedio de esa ventana (slice)
+    # slice(offset, length) en Polars
+    ganancia_suavizada = df_ordenado['ganancia_acumulada'].slice(start_idx, end_idx - start_idx).mean()
+
+    return 'gan_eval', ganancia_suavizada, True
+
 
 #####################################################################################################################################
 # 

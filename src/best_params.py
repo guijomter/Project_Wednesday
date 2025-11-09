@@ -33,10 +33,10 @@ def cargar_mejores_hiperparametros(archivo_base: str = None) -> dict:
 
         # Parámetros fijos
         params_fijos = {
-            'scale_pos_weight': 97,
-            'bagging_fraction': 1.0,
-            'pos_bagging_fraction': 1.0,
-            'neg_bagging_fraction': 0.01,
+          #  'scale_pos_weight': 97,
+          #  'bagging_fraction': 1.0,
+          #  'pos_bagging_fraction': 1.0,
+          #  'neg_bagging_fraction': 0.01,
             'bagging_freq': 1,
             'objective': 'binary',
             'metric': 'None',

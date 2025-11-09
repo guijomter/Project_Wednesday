@@ -1,5 +1,6 @@
 import polars as pl
 import lightgbm as lgb
+import pandas as pd
 import numpy as np
 import logging
 import os

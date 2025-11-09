@@ -643,7 +643,7 @@ def optimizar_zlgbm(df: pl.DataFrame, n_trials=50, undersampling: float = 0.01) 
     )
   
     # Ejecutar optimización
-    study.optimize(lambda trial: objetivo_ganancia_zlgbm(trial, df), n_trials=n_trials, undersampling=undersampling)
+    study.optimize(lambda trial: objetivo_ganancia_zlgbm(trial, df, undersampling), n_trials=n_trials)
   
     # Resultados
     logger.info("=== OPTIMIZACIÓN CON zLGBM COMPLETADA ===")

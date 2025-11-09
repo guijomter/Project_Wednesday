@@ -42,5 +42,93 @@
       "porcentaje_positivas": 0.0,
       "semilla": 839071
     }
+  },
+  {
+    "Mes_test": "202104",
+    "ganancia_test": 0.0,
+    "date_time": "2025-11-09T17:41:20.703421-03:00",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": 839071,
+      "meses_train": [
+        "202101",
+        "202102",
+        "202103"
+      ]
+    },
+    "resultados": {
+      "ganancia_test": 0.0,
+      "umbral_optimo": 0.015,
+      "total_predicciones": 163418,
+      "predicciones_positivas": 0,
+      "porcentaje_positivas": 0.0,
+      "semilla": 839071
+    }
+  },
+  {
+    "Mes_test": "202104",
+    "ganancia_test": 0.0,
+    "date_time": "2025-11-09T17:45:41.545117-03:00",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": 839071,
+      "meses_train": [
+        "202101",
+        "202102",
+        "202103"
+      ]
+    },
+    "resultados": {
+      "ganancia_test": 0.0,
+      "umbral_optimo": 0.015,
+      "total_predicciones": 163418,
+      "predicciones_positivas": 0,
+      "porcentaje_positivas": 0.0,
+      "semilla": 839071
+    }
+  },
+  {
+    "Mes_test": "202104",
+    "ganancia_test": 0.0,
+    "date_time": "2025-11-09T18:08:37.074836-03:00",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": 839071,
+      "meses_train": [
+        "202101",
+        "202102",
+        "202103"
+      ]
+    },
+    "resultados": {
+      "ganancia_test": 0.0,
+      "umbral_optimo": 0.525,
+      "total_predicciones": 163418,
+      "predicciones_positivas": 0,
+      "porcentaje_positivas": 0.0,
+      "semilla": 839071
+    }
+  },
+  {
+    "Mes_test": "202104",
+    "ganancia_test": 367080000.0,
+    "date_time": "2025-11-09T18:17:58.372260-03:00",
+    "state": "COMPLETE",
+    "configuracion": {
+      "semilla": 839071,
+      "meses_train": [
+        "202101",
+        "202102",
+        "202103"
+      ]
+    },
+    "resultados": {
+      "ganancia_test": 367080000.0,
+      "umbral_optimo": 0.42,
+      "total_predicciones": 163418,
+      "predicciones_positivas": 10446,
+      "porcentaje_positivas": 6.392196698038159,
+      "semilla": 839071
+    }
   }
 ]

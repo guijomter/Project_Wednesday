@@ -346,6 +346,7 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], 
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
   
     model = lgb.train(mejores_params, train_data, feval=lgb_gan_eval)
+    logger.info("Modelo final para test entrenado. Calculando ganancia en Test...")
 
     # Test
     X_test = df_test.drop(['clase_ternaria', 'clase_peso']).to_pandas()

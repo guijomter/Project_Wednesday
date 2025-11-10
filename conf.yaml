@@ -1,6 +1,6 @@
 # config.yaml
 
-STUDY_NAME : "Compe_02_V0_4z"  
+STUDY_NAME : "Compe_02_V0_5z"  
 BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
@@ -22,19 +22,19 @@ competencia02:
     DATA_PATH_RAW: "datasets/competencia_02_crudo.csv.gz"
     DATA_PATH: "datasets/competencia_02.csv"
     SEMILLA: [839071, 666557, 390653, 408341, 858577] #, 156893, 220481, 557412, 111058, 401171]
-    MES_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012"]  # Períodos para entrenamiento. Período pandemaia excluido "202003","202004","202005","202006","202007","202008","202009","202010",
+    MES_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012"] # SACAR TAMBIE´N 201910 # Períodos para entrenamiento. Período pandemaia excluido "202003","202004","202005","202006","202007","202008","202009","202010",
     MES_VALIDACION: "202101"
     MES_TEST: "202102"
     GANANCIA_ACIERTO: 780000
     COSTO_ESTIMULO: 20000
   # Configuración para entrenamiento final
     FINAL_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012","202101","202102"]  # Todos los períodos para entrenar
-    FINAL_PREDIC: ["202104"]                                 # Período objetivo para predicción
+    FINAL_PREDIC: "202104"                                 # Período objetivo para predicción
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 parametros_lgb:
     n_trial: 5
-    undersampling: 0.05
+    undersampling: 0.03
     num_leaves: [8, 300]
     num_iterations: [50, 1000]
     feature_fraction: [0.1, 1.0]

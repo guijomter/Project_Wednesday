@@ -2,6 +2,7 @@
 
 
 competencia01:
+    canaritos: 100
     rank:
       columnas: ['mcuentas_saldo']
     drop: 

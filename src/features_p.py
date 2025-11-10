@@ -300,8 +300,38 @@ def feature_engineering_cambio_estado(df: pl.DataFrame, columnas: list[str], can
 
     logger.info(f"Feature engineering de cambio categórico completado. DataFrame resultante con {df_result.width} columnas")
     return df_result
+############################################################################################################
 
-#########################
+def feature_engineering_canaritos(df: pl.DataFrame, cant: int = 1) -> pl.DataFrame:
+    """
+    Genera 'cant' nuevas columnas con valores aleatorios distribuidos uniformemente entre 0 y 1.
+    Útil para técnicas de selección de variables (boruta, etc).
+    """
+    logger.info(f"Generando {cant} variables 'canarito' con valores aleatorios")
+
+    if cant < 1:
+        logger.warning("La cantidad de canaritos debe ser al menos 1")
+        return df
+
+    sql = "SELECT *"
+    for i in range(1, cant + 1):
+        # DuckDB usa random() para generar floats entre 0 y 1
+        sql += f", random() AS canarito_{i}"
+
+    sql += " FROM df"
+    logger.debug(f"Consulta SQL: {sql}")
+
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df_result = con.execute(sql).pl()
+    con.close()
+
+    logger.info(f"Feature engineering de canaritos completado. DataFrame resultante con {df_result.width} columnas")
+    return df_result
+
+
+####################################################################################################################
+
 FEATURES_CONFIG = os.path.join(os.path.dirname(os.path.dirname(__file__)), "features.yaml")
 
 def feature_engineering(
@@ -321,15 +351,6 @@ def feature_engineering(
     
     # Polars .clone() en lugar de pandas .copy()
     df_result = df.clone()
-
-    # ... (El resto de la lógica de iteración de configuración se mantiene igual, 
-    # ya que solo manipula diccionarios y listas, no el DataFrame directamente 
-    # hasta llamar a las funciones que ya actualizamos) ...
-    
-    # [INICIO BLOQUE SIN CAMBIOS - Solo para contexto, no necesitas reescribirlo si ya lo tienes]
-    # Calcular la cantidad total de nuevas columnas a generar (Lógica original intacta)
-    # ...
-    # [FIN BLOQUE SIN CAMBIOS]
 
     for op, op_cfg in operaciones_config.items():
         if not op_cfg:
@@ -380,6 +401,13 @@ def feature_engineering(
 
                 df_result = feature_engineering_ratios(df_result, expanded_ratios)
                 break 
+
+            if op == "canaritos":
+                # Soporta formato yaml: "canaritos: 10" o "canaritos: {cant: 10}"
+                cant = cfg.get("cant", 1) if isinstance(cfg, dict) else (cfg if isinstance(cfg, int) else 1)
+                df_result = feature_engineering_canaritos(df_result, cant=cant)
+                logger.info(f"Operación '{op}' aplicada. {cant} variables generadas.")
+                continue # Saltamos el resto del bucle ya que no requiere 'columnas'
 
             if not isinstance(cfg, dict) and hasattr(cfg, "__dict__"):
                 cfg = vars(cfg)

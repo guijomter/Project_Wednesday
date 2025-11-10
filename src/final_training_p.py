@@ -355,7 +355,7 @@ def preparar_datos_entrenamiento_final_pesos(df: pl.DataFrame, undersampling: fl
     
     
     final_train_str = [str(x) for x in FINAL_TRAIN] if isinstance(FINAL_TRAIN, list) else [str(FINAL_TRAIN)]
-    final_predic_str = str(FINAL_PREDIC)
+    final_predic_str = [str(x) for x in FINAL_PREDIC] if isinstance(FINAL_PREDIC, list) else [str(FINAL_PREDIC)] 
     
     # Datos de entrenamiento: todos los períodos en FINAL_TRAIN
     df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in(final_train_str))

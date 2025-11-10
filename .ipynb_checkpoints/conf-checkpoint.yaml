@@ -1,0 +1,58 @@
+# config.yaml
+
+STUDY_NAME : "Compe_02_V0_4z"  
+BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
+#LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
+GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
+
+competencia01:
+    DATA_PATH: "./data/competencia_01.csv"
+    SEMILLA: [839071, 666557, 390653, 408341, 858577, 156893, 220481, 557412, 111058, 401171]
+    MES_TRAIN: ["202101","202102"]  # Períodos para entrenamiento
+    MES_VALIDACION: "202103"
+    MES_TEST: "202104"
+    GANANCIA_ACIERTO: 780000
+    COSTO_ESTIMULO: 20000
+  # Configuración para entrenamiento final
+    FINAL_TRAIN: ["202101", "202102", "202103", "202104"]  # Todos los períodos para entrenar
+    FINAL_PREDIC: "202106"                                 # Período objetivo para predicción
+    UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
+
+competencia02:
+    DATA_PATH_RAW: "datasets/competencia_02_crudo.csv.gz"
+    DATA_PATH: "datasets/competencia_02.csv"
+    SEMILLA: [839071, 666557, 390653, 408341, 858577] #, 156893, 220481, 557412, 111058, 401171]
+    MES_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012"]  # Períodos para entrenamiento. Período pandemaia excluido "202003","202004","202005","202006","202007","202008","202009","202010",
+    MES_VALIDACION: "202101"
+    MES_TEST: "202102"
+    GANANCIA_ACIERTO: 780000
+    COSTO_ESTIMULO: 20000
+  # Configuración para entrenamiento final
+    FINAL_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012","202101","202102"]  # Todos los períodos para entrenar
+    FINAL_PREDIC: ["202104"]                                 # Período objetivo para predicción
+    UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
+
+parametros_lgb:
+    n_trial: 5
+    undersampling: 0.05
+    num_leaves: [8, 300]
+    num_iterations: [50, 1000]
+    feature_fraction: [0.1, 1.0]
+    learning_rate: [0.01, 0.3]
+    bagging_fraction: [0.1, 1]
+    #bagging_freq: [1]
+    min_child_samples: [3, 30]    ### min_data_in_leaf = 3
+    max_depth: [3, 20]
+    reg_alpha: [0.0, 10.0]
+    reg_lambda: [0.0, 10.0]
+    bin: [30, 31]
+    min_gain_to_split: [0.0, 5]
+    gradient_bound: [0.05, 0.5]
+    #neg_bagging_fraction: [0.1, 0.5]
+    # bagging_freq: 5
+    # lambda_l1: 0.0
+    # lambda_l2: 0.0
+    # verbosity: -1
+    # seed: 42
+
+

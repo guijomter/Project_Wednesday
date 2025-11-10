@@ -107,18 +107,18 @@ def main():
     # Cargar mejores hiperparámetros
     mejores_params = cargar_mejores_hiperparametros_zlgbm()
   
-    # Evaluar en test
-    #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, SEMILLA[0])
-    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
+    # # Evaluar en test
+    # #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, SEMILLA[0])
+    # resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
 
-    # Guardar resultados de test
-    guardar_resultados_test(resultados_test)
+    # # Guardar resultados de test
+    # guardar_resultados_test(resultados_test)
   
-    # Resumen de evaluación en test
-    logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
-    logger.info(f"✅ Ganancia en test: {resultados_test['ganancia_test']:,.0f}")
-    logger.info(f"🔍 Umbral óptimo encontrado: {resultados_test['umbral_optimo']:.4f}")
-    logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
+    # # Resumen de evaluación en test
+    # logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
+    # logger.info(f"✅ Ganancia en test: {resultados_test['ganancia_test']:,.0f}")
+    # logger.info(f"🔍 Umbral óptimo encontrado: {resultados_test['umbral_optimo']:.4f}")
+    # logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
 
 
     #06 Entrenar modelo final

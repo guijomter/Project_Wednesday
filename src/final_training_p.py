@@ -360,7 +360,7 @@ def preparar_datos_entrenamiento_final_pesos(df: pl.DataFrame, undersampling: fl
     # Datos de entrenamiento: todos los períodos en FINAL_TRAIN
     df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in(final_train_str))
     # Datos de predicción: período FINAL_PREDIC
-    df_predict = df.filter(pl.col('foto_mes').cast(pl.Utf8) == final_predic_str)
+    df_predict = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in(final_predic_str))
     
     #Corroborar que no esten vacios los df
     logger.info(f"Registros de entrenamiento: {df_train.height:,}")

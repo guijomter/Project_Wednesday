@@ -329,6 +329,218 @@ def feature_engineering_canaritos(df: pl.DataFrame, cant: int = 1) -> pl.DataFra
     logger.info(f"Feature engineering de canaritos completado. DataFrame resultante con {df_result.width} columnas")
     return df_result
 
+####################################################################################################################
+
+def feature_engineering_slope(df: pl.DataFrame, columnas: list[str], n_meses: int = 6) -> pl.DataFrame:
+    """
+    Calcula la pendiente de la regresión lineal (tendencia) de los últimos n_meses.
+    """
+    logger.info(f"Realizando feature engineering de slope (tendencia) de últimos {n_meses} meses para {len(columnas) if columnas else 0} atributos")
+
+    if columnas is None or len(columnas) == 0:
+        logger.warning("No se especificaron atributos para generar slopes")
+        return df
+    if n_meses < 2:
+        logger.warning("La cantidad de meses para calcular slope debe ser al menos 2")
+        return df
+
+    # Se crea un eje temporal lineal (monotonic_month) para evitar el salto numérico 
+    # que ocurre en foto_mes entre diciembre (ej. 202312) y enero (ej. 202401).
+    # Fórmula: (año * 12) + mes
+    x_axis = "(CAST(foto_mes / 100 AS INTEGER) * 12 + (foto_mes % 100))"
+
+    sql = "SELECT *"
+    for attr in columnas:
+        if attr in df.columns:
+            sql += (
+                f"\n, regr_slope({attr}, {x_axis}) OVER (PARTITION BY numero_de_cliente ORDER BY foto_mes "
+                f"ROWS BETWEEN {n_meses - 1} PRECEDING AND CURRENT ROW) AS {attr}_slope_ult_{n_meses}m"
+            )
+        else:
+            logger.warning(f"El atributo {attr} no existe en el DataFrame")
+
+    sql += " FROM df"
+    logger.debug(f"Consulta SQL: {sql}")
+
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df_result = con.execute(sql).pl()
+    con.close()
+
+    logger.info(f"Feature engineering de slope completado. DataFrame resultante con {df_result.width} columnas")
+    return df_result
+####################################################################################################################
+
+def feature_engineering_sum(df: pl.DataFrame, sumas: list[dict]) -> pl.DataFrame:
+    """
+    Suma dos o más columnas. Útil para consolidar gastos (ej. VISA + Master).
+    Maneja NULLs convirtiéndolos a 0 para la suma.
+    """
+    logger.info(f"Realizando feature engineering de sumas para {len(sumas) if sumas else 0} combinaciones")
+
+    if not sumas:
+        logger.warning("No se especificaron sumas para generar")
+        return df
+
+    sql = "SELECT *"
+    for item in sumas:
+        variables = item.get("variables")
+        nombre = item.get("nombre")
+        
+        if not variables or not isinstance(variables, list):
+             logger.warning(f"Formato incorrecto para suma: {item}")
+             continue
+             
+        # Validar que existan (opcional, pero recomendado para evitar errores en SQL)
+        vars_existentes = [v for v in variables if v in df.columns]
+        if len(vars_existentes) < 2:
+             logger.warning(f"No hay suficientes variables válidas para sumar en: {nombre or variables}")
+             continue
+
+        # Generar nombre automático si no existe
+        if not nombre:
+            nombre = "suma_" + "_".join(vars_existentes)
+
+        # Construir la parte de la suma en SQL: COALESCE(col1, 0) + COALESCE(col2, 0) + ...
+        suma_sql = " + ".join([f"COALESCE({v}, 0)" for v in vars_existentes])
+        sql += f", ({suma_sql}) AS {nombre}"
+
+    sql += " FROM df"
+    logger.debug(f"Consulta SQL: {sql}")
+
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df_result = con.execute(sql).pl()
+    con.close()
+
+    logger.info(f"Feature engineering de sumas completado. DataFrame resultante con {df_result.width} columnas")
+    return df_result
+
+####################################################################################################################
+
+def feature_engineering_diff(df: pl.DataFrame, diffs: list[dict]) -> pl.DataFrame:
+    """
+    Resta dos columnas (v1 - v2). Útil para calcular netos o brechas.
+    Se asume que 'variables' es una lista ordenada: [minuendo, sustraendo].
+    Maneja NULLs convirtiéndolos a 0.
+    """
+    logger.info(f"Realizando feature engineering de restas para {len(diffs) if diffs else 0} combinaciones")
+
+    if not diffs:
+        logger.warning("No se especificaron restas para generar")
+        return df
+
+    sql = "SELECT *"
+    for item in diffs:
+        variables = item.get("variables")
+        nombre = item.get("nombre")
+        
+        if not variables or not isinstance(variables, list) or len(variables) != 2:
+             logger.warning(f"Se requieren exactamente 2 variables para restar [v1, v2], se recibió: {variables}")
+             continue
+             
+        v1, v2 = variables[0], variables[1]
+        
+        # Validar existencia
+        if v1 not in df.columns or v2 not in df.columns:
+             logger.warning(f"Alguna variable no existe para la resta: {v1}, {v2}")
+             continue
+
+        # Generar nombre automático si no existe (ej. v1_minus_v2)
+        if not nombre:
+            nombre = f"{v1}_minus_{v2}"
+
+        # SQL: COALESCE(v1, 0) - COALESCE(v2, 0)
+        sql += f", (COALESCE({v1}, 0) - COALESCE({v2}, 0)) AS {nombre}"
+
+    sql += " FROM df"
+    logger.debug(f"Consulta SQL: {sql}")
+
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df_result = con.execute(sql).pl()
+    con.close()
+
+    logger.info(f"Feature engineering de restas completado. DataFrame resultante con {df_result.width} columnas")
+    return df_result
+####################################################################################################################
+
+def feature_engineering_greatest(df: pl.DataFrame, groups: list[dict]) -> pl.DataFrame:
+    """
+    Calcula el valor máximo (greatest) entre un grupo de columnas para cada fila.
+    Ignora los valores NULL al comparar.
+    """
+    logger.info(f"Realizando feature engineering de 'greatest' (máximo entre columnas) para {len(groups) if groups else 0} grupos")
+
+    if not groups:
+        logger.warning("No se especificaron grupos para 'greatest'")
+        return df
+
+    sql = "SELECT *"
+    for item in groups:
+        variables = item.get("variables")
+        nombre = item.get("nombre")
+        
+        if not variables or not isinstance(variables, list) or len(variables) < 2:
+             logger.warning(f"Se requieren al menos 2 variables para 'greatest', se recibió: {variables}")
+             continue
+             
+        # Validar existencia
+        vars_existentes = [v for v in variables if v in df.columns]
+        if len(vars_existentes) < 2:
+             logger.warning(f"No hay suficientes variables válidas para 'greatest' en: {nombre or variables}")
+             continue
+
+        # Generar nombre automático si no existe
+        if not nombre:
+            nombre = "greatest_" + "_".join(vars_existentes)
+
+        # SQL: GREATEST(col1, col2, col3, ...)
+        vars_sql = ", ".join(vars_existentes)
+        sql += f", GREATEST({vars_sql}) AS {nombre}"
+
+    sql += " FROM df"
+    logger.debug(f"Consulta SQL: {sql}")
+
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df_result = con.execute(sql).pl()
+    con.close()
+
+    logger.info(f"Feature engineering de 'greatest' completado. DataFrame resultante con {df_result.width} columnas")
+    return df_result
+#####################################################################################################################
+
+def feature_engineering_is_negative(df: pl.DataFrame, columnas: list[str]) -> pl.DataFrame:
+    """
+    Genera una bandera (1 o 0) que indica si el valor de una columna es negativo.
+    Devuelve 1 si valor < 0, y 0 si valor >= 0 o NULL.
+    """
+    logger.info(f"Realizando feature engineering de 'is_negative' para {len(columnas) if columnas else 0} atributos")
+
+    if columnas is None or len(columnas) == 0:
+        logger.warning("No se especificaron atributos para 'is_negative'")
+        return df
+
+    sql = "SELECT *"
+    for attr in columnas:
+        if attr in df.columns:
+            # La lógica CASE WHEN (col < 0) THEN 1 ELSE 0 maneja automáticamente los NULLs
+            # (NULL < 0 es falso, por lo que caen en el ELSE 0)
+            sql += f", CASE WHEN {attr} < 0 THEN 1 ELSE 0 END AS {attr}_is_negative"
+        else:
+            logger.warning(f"El atributo {attr} no existe en el DataFrame")
+
+    sql += " FROM df"
+    logger.debug(f"Consulta SQL: {sql}")
+
+    con = duckdb.connect(database=":memory:")
+    con.register("df", df)
+    df_result = con.execute(sql).pl()
+    con.close()
+
+    logger.info(f"Feature engineering de 'is_negative' completado. DataFrame resultante con {df_result.width} columnas")
+    return df_result
 
 ####################################################################################################################
 
@@ -401,7 +613,40 @@ def feature_engineering(
 
                 df_result = feature_engineering_ratios(df_result, expanded_ratios)
                 break 
-
+            if op == "sum":
+                sumas_list = configs if isinstance(configs, list) else [configs]
+                # Normalizar a lista de diccionarios si viene del YAML como objetos
+                sumas_dicts = []
+                for s in sumas_list:
+                     if not isinstance(s, dict) and hasattr(s, "__dict__"):
+                         sumas_dicts.append(vars(s))
+                     elif isinstance(s, dict):
+                         sumas_dicts.append(s)
+                
+                df_result = feature_engineering_sum(df_result, sumas_dicts)
+                break
+            if op == "diff":
+                diffs_list = configs if isinstance(configs, list) else [configs]
+                diffs_dicts = []
+                for d in diffs_list:
+                     if not isinstance(d, dict) and hasattr(d, "__dict__"):
+                         diffs_dicts.append(vars(d))
+                     elif isinstance(d, dict):
+                         diffs_dicts.append(d)
+                
+                df_result = feature_engineering_diff(df_result, diffs_dicts)
+                break
+            if op == "greatest":
+                groups_list = configs if isinstance(configs, list) else [configs]
+                groups_dicts = []
+                for g in groups_list:
+                     if not isinstance(g, dict) and hasattr(g, "__dict__"):
+                         groups_dicts.append(vars(g))
+                     elif isinstance(g, dict):
+                         groups_dicts.append(g)
+                
+                df_result = feature_engineering_greatest(df_result, groups_dicts)
+                break
             if op == "canaritos":
                 # Soporta formato yaml: "canaritos: 10" o "canaritos: {cant: 10}"
                 cant = cfg.get("cant", 1) if isinstance(cfg, dict) else (cfg if isinstance(cfg, int) else 1)
@@ -439,9 +684,16 @@ def feature_engineering(
                 n_meses = cfg.get("n_meses", 3) if isinstance(cfg, dict) else 3
                 df_result = feature_engineering_min_ultimos_n_meses(df_result, columnas, n_meses)
                 logger.info(f"Operación '{op}' aplicada. Nuevas columnas generadas.")
+            elif op == "slope":
+                n_meses = cfg.get("n_meses", 6) if isinstance(cfg, dict) else 6 # Default de 6 meses para tendencia
+                df_result = feature_engineering_slope(df_result, columnas, n_meses)
+                logger.info(f"Operación '{op}' aplicada. Nuevas columnas generadas.")
             elif op == "cambio_estado":
                 cant_lag = cfg.get("cant_lag", 1) if isinstance(cfg, dict) else 1
                 df_result = feature_engineering_cambio_estado(df_result, columnas, cant_lag)
+                logger.info(f"Operación '{op}' aplicada. Nuevas columnas generadas.")
+            elif op == "is_negative":
+                df_result = feature_engineering_is_negative(df_result, columnas)
                 logger.info(f"Operación '{op}' aplicada. Nuevas columnas generadas.")
             elif op == "drop": 
                 df_result = feature_engineering_drop(df_result, columnas)

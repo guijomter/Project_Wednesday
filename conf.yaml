@@ -5,6 +5,15 @@ BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
 
+PIPELINE_STAGES = [
+    "fe_orden_1",
+    "fe_orden_2",
+    "fe_orden_3",
+    "fe_orden_4",
+    "fe_orden_final"
+    # Agrega "orden_4", "orden_5", etc., aquí.
+]
+
 competencia01:
     DATA_PATH: "./data/competencia_01.csv"
     SEMILLA: [839071, 666557, 390653, 408341, 858577, 156893, 220481, 557412, 111058, 401171]

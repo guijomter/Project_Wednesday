@@ -9,7 +9,7 @@ import logging
 from src.loader_p import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
 
 #from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
-from src.features_p import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
+from src.features_p import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering, run_feature_pipeline
 #from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
 from src.optimization_p import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
@@ -77,7 +77,8 @@ def main():
 
         logger.info("Ejecutando feature engineering.")
         # (Esto asume que 'df' y 'feature_engineering' existen)
-        df_fe = feature_engineering(df, competencia="competencia01")
+        df_fe = run_feature_pipeline(df, conf.PIPELINE_STAGES)
+        #df_fe = feature_engineering(df, competencia="competencia01")
         
         #Convertir clase_ternaria a target binario + pesos
         df_fe = convertir_clase_ternaria_a_target_peso(df_fe) 

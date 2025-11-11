@@ -548,7 +548,7 @@ FEATURES_CONFIG = os.path.join(os.path.dirname(os.path.dirname(__file__)), "feat
 
 def feature_engineering(
     df: pl.DataFrame,
-    competencia: str,
+    fe_etapa: str,
 ) -> pl.DataFrame:
     """
     Aplica múltiples técnicas de feature engineering sobre los atributos especificados en el archivo features.yaml.
@@ -556,10 +556,10 @@ def feature_engineering(
     """
     config = load_yaml_config(FEATURES_CONFIG)
     config_dict = vars(config)
-    if competencia not in config_dict:
-        logger.warning(f"La competencia '{competencia}' no está definida en el archivo de configuración {FEATURES_CONFIG}.yaml.")
+    if fe_etapa not in config_dict:
+        logger.warning(f"La etapa de operaciones '{fe_etapa}' no está definida en el archivo de configuración {FEATURES_CONFIG}.yaml.")
         return df
-    operaciones_config = vars(config_dict[competencia]) if isinstance(config_dict[competencia], object) else config_dict[competencia]
+    operaciones_config = vars(config_dict[fe_etapa]) if isinstance(config_dict[fe_etapa], object) else config_dict[fe_etapa]
     
     # Polars .clone() en lugar de pandas .copy()
     df_result = df.clone()
@@ -614,39 +614,19 @@ def feature_engineering(
                 df_result = feature_engineering_ratios(df_result, expanded_ratios)
                 break 
             if op == "sum":
-                sumas_list = configs if isinstance(configs, list) else [configs]
-                # Normalizar a lista de diccionarios si viene del YAML como objetos
-                sumas_dicts = []
-                for s in sumas_list:
-                     if not isinstance(s, dict) and hasattr(s, "__dict__"):
-                         sumas_dicts.append(vars(s))
-                     elif isinstance(s, dict):
-                         sumas_dicts.append(s)
-                
+                sumas_dicts = [vars(c) if not isinstance(c, dict) and hasattr(c, "__dict__") else c for c in configs]
                 df_result = feature_engineering_sum(df_result, sumas_dicts)
-                break
+                break 
+
             if op == "diff":
-                diffs_list = configs if isinstance(configs, list) else [configs]
-                diffs_dicts = []
-                for d in diffs_list:
-                     if not isinstance(d, dict) and hasattr(d, "__dict__"):
-                         diffs_dicts.append(vars(d))
-                     elif isinstance(d, dict):
-                         diffs_dicts.append(d)
-                
+                diffs_dicts = [vars(c) if not isinstance(c, dict) and hasattr(c, "__dict__") else c for c in configs]
                 df_result = feature_engineering_diff(df_result, diffs_dicts)
-                break
+                break 
+
             if op == "greatest":
-                groups_list = configs if isinstance(configs, list) else [configs]
-                groups_dicts = []
-                for g in groups_list:
-                     if not isinstance(g, dict) and hasattr(g, "__dict__"):
-                         groups_dicts.append(vars(g))
-                     elif isinstance(g, dict):
-                         groups_dicts.append(g)
-                
+                groups_dicts = [vars(c) if not isinstance(c, dict) and hasattr(c, "__dict__") else c for c in configs]
                 df_result = feature_engineering_greatest(df_result, groups_dicts)
-                break
+                break 
             if op == "canaritos":
                 # Soporta formato yaml: "canaritos: 10" o "canaritos: {cant: 10}"
                 cant = cfg.get("cant", 1) if isinstance(cfg, dict) else (cfg if isinstance(cfg, int) else 1)
@@ -702,3 +682,30 @@ def feature_engineering(
                 logger.warning(f"Operación '{op}' no reconocida. Se omite.")
 
     return df_result
+
+
+########################################################################################
+
+def run_feature_pipeline(df: pl.DataFrame, stages: list[str]) -> pl.DataFrame:
+    """
+    Ejecuta el pipeline de feature engineering por etapas.
+    """
+    logger.info(f"Iniciando pipeline de {len(stages)} etapas...")
+    
+    # Esta es la lógica clave: el 'df' se actualiza en cada iteración
+    for stage_name in stages:
+        if not stage_name: # Ignora etapas vacías o nulas
+            continue
+            
+        logger.info(f"--- Ejecutando etapa: {stage_name} ---")
+        try:
+            # La salida de una etapa es la entrada de la siguiente
+            df = feature_engineering(df, fe_etapa=stage_name)
+            logger.info(f"Etapa '{stage_name}' completada. Shape actual: {df.shape}")
+        except Exception as e:
+            logger.error(f"FALLÓ la etapa '{stage_name}': {e}")
+            # Dependiendo de tu necesidad, puedes parar aquí
+            raise e 
+
+    logger.info("Pipeline de feature engineering finalizado exitosamente.")
+    return df

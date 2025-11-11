@@ -1,172 +1,197 @@
 # Para usar en durante el proceso de Feature Engineering
+# -----------------------------------------------------------------
+# ETAPA 1: Creación de features base (dependen solo de datos originales)
+# -----------------------------------------------------------------
+fe_orden_1:
+  # canaritos: 10 # Descomentar si se quieren usar
 
+  rank:
+    columnas: ['mcuentas_saldo'] # Crea 'mcuentas_saldo_rank'
 
-competencia01:
-    canaritos: 10
-    rank:
-      columnas: ['mcuentas_saldo']
+  sum:
+    - {variables: ['mcaja_ahorro_dolares', 'mcaja_ahorro_adicional', 'mcaja_ahorro'], nombre: 'saldo_caja_ahorro_total'}
+    - {variables: ['mcuenta_corriente', 'mcuenta_corriente_adicional'], nombre: 'saldo_cuenta_corriente_total'}
+    - {variables: ['mcuenta_corriente', 'mcaja_ahorro'], nombre: 'saldo_cuentas_premium'}
+    - {variables: ['mtarjeta_master_consumo', 'mtarjeta_visa_consumo'], nombre: 'mtarjeta_total_consumo'}
+    - {variables: ['mprestamos_personales', 'mprestamos_prendarios', 'mprestamos_hipotecarios'], nombre: 'mprestamos_totales'}
+    - {variables: ['mplazo_fijo_dolares', 'mplazo_fijo_pesos', 'minversion1_pesos','minversion1_dolares','minversion2'], nombre: 'minversiones_totales'}
+    - {variables: ['mpayroll', 'mpayroll2'], nombre: 'mpayroll_totales'}
+    - {variables: ['mcuenta_debitos_automaticos', 'mttarjeta_visa_debitos_automaticos', 'mttarjeta_master_debitos_automaticos'], nombre: 'mdebitos_automaticos_totales'}
+    - {variables: ['mpagodeservicios', 'mpagomiscuentas'], nombre: 'mpagos_servicios_totales'}
+    - {variables: ['mcajeros_propios_descuentos', 'mtarjeta_visa_descuentos', 'mtarjeta_master_descuentos'], nombre: 'mdescuentos_totales'}
+    - {variables: ['mcomisiones_mantenimiento', 'mcomisiones_otras'], nombre: 'mcomisiones_totales'}
+    - {variables: ['mforex_buy', 'mtransferencias_recibidas', 'mcheques_depositados','mcheques_depositados_rechazados'], nombre: 'mentradas_dinero_totales'}
+    - {variables: ['mforex_sell', 'mtransferencias_emitidas', 'mextraccion_autoservicio','mcheques_emitidos','mcheques_emitidos_rechazados','matm','matm_other'], nombre: 'msalidas_dinero_totales'}
+    - {variables: ['Master_msaldototal', 'Visa_msaldototal'], nombre: 'msaldo_total_tarjetas'}
+    - {variables: ['Master_madelantopesos', 'Master_madelantodolares','Master_mconsumototal'], nombre: 'mtarjeta_master_consumos_total'}
+    - {variables: ['Visa_madelantopesos', 'Visa_madelantodolares','Visa_mconsumototal'], nombre: 'mtarjeta_visa_consumos_total'}
+    - {variables: ['Visa_mpagado', 'Master_mpagado'], nombre: 'mtarjetas_pagado_total'}
+    - {variables: ['Master_mpagominimo', 'Visa_mpagominimo'], nombre: 'mtarjetas_pagominimo_total'}
+    - {variables: ['Visa_mfinanciacion_limite', 'Visa_mlimitecompra','Master_mfinanciacion_limite','Master_mlimitecompra'], nombre: 'mlimite_total_tarjetas'}
+    - {variables: ['Master_status', 'Visa_status'], nombre: 'status_tarjetas_combined'}
+    - {variables: ['tcallcenter', 'thomebanking', 'tmobile_app'], nombre: 'total_canales_digitales'}
+    - {variables: ['tcuentas', 'cdescubierto_preacordado', 'ccaja_seguridad'], nombre: 'total_servicios_bancarios'}
+    - {variables: ['ccuenta_corriente', 'ccaja_ahorro','ctarjeta_debito','ctarjeta_visa','ctarjeta_master'], nombre: 'cant_cuentas_tarjetas'}
+    - {variables: ['cprestamos_personales', 'cprestamos_prendarios','cprestamos_hipotecarios'], nombre: 'cant_prestamos'}
+    - {variables: ['cplazo_fijo', 'cinversion1','cinversion2'], nombre: 'cant_inversiones'}
+    - {variables: ['cseguro_vida', 'cseguro_auto','cseguro_vivienda','cseguro_accidentes_personales'], nombre: 'cant_seguros'}
+    - {variables: ['cpayroll_trx', 'cpayroll2_trx'], nombre: 'cant_depos_haberes'}
+    - {variables: ['ctarjeta_debito_transacciones', 'ctarjeta_visa_transacciones','ctarjeta_master_transacciones'], nombre: 'cant_transacciones_tarjeta'}
+    - {variables: ['ctransferencias_recibidas', 'ctransferencias_emitidas','cextraccion_autoservicio','ccheques_depositados','ccheques_emitidos','ccheques_depositados_rechazados','ccheques_emitidos_rechazados','ccallcenter_transacciones','chomebanking_transacciones','ccajas_transacciones','catm_trx','catm_trx_other','cmobile_app_trx','cforex','cforex_buy'], nombre: 'cant_transf_extracciones'}
+    - {variables: ['cpagodeservicios', 'cpagomiscuentas'], nombre: 'cant_pagos'}
+    - {variables: ['Master_cconsumos', 'Visa_cconsumos'], nombre: 'cant_consumos_tarjetas'}
+    - {variables: ['Master_cadelantosefectivo', 'Visa_cadelantosefectivo'], nombre: 'cant_adelantes_tarjetas'}
+    - {variables: ['ccuenta_debitos_automaticos', 'cant_ctarjeta_visa_debitos_automaticos','ctarjeta_master_debitos_automaticos'], nombre: 'cant_debitos_automaticos'}
+    - {variables: ['ccajeros_propios_descuentos', 'ctarjeta_visa_descuentos','ctarjeta_master_descuentos'], nombre: 'cant_descuentos'}
+    - {variables: ['ccomisiones_mantenimiento', 'ccomisiones_otras'], nombre: 'cant_comisiones'}
 
-    sum:
-      - variables: ['mcaja_ahorro_dolares', 'mcaja_ahorro_adicional', 'mcaja_ahorro']
-        nombre: 'saldo_caja_ahorro_total'
-      - variables: ['mcuenta_corriente', 'mcuenta_corriente_adicional']
-        nombre: 'saldo_cuenta_corriente_total'
-      - variables: ['mcuenta_corriente', 'mcaja_ahorro']
-        nombre: 'saldo_cuentas_premium'
-      - variables: ['mtarjeta_master_consumo', 'mtarjeta_visa_consumo']
-        nombre: 'mtarjeta_total_consumo'
-      - variables: ['mprestamos_personales', 'mprestamos_prendarios', 'mprestamos_hipotecarios']
-        nombre: 'mprestamos_totales'
-      - variables: ['mplazo_fijo_dolares', 'mplazo_fijo_pesos', 'minversion1_pesos','minversion1_dolares','minversion2']
-        nombre: 'minversiones_totales'
-      - variables: ['mpayroll', 'mpayroll2']
-        nombre: 'mpayroll_totales'
-      - variables: ['mcuenta_debitos_automaticos', 'mttarjeta_visa_debitos_automaticos', 'mttarjeta_master_debitos_automaticos']
-        nombre: 'mdebitos_automaticos_totales'
-      - variables: ['mpagodeservicios', 'mpagomiscuentas']
-        nombre: 'mpagos_servicios_totales'
-      - variables: ['mcajeros_propios_descuentos', 'mtarjeta_visa_descuentos', 'mtarjeta_master_descuentos']
-        nombre: 'mdescuentos_totales'
-      - variables: ['mcomisiones_mantenimiento', 'mcomisiones_otras']
-        nombre: 'mcomisiones_totales'
-      - variables: ['mforex_buy', 'mtransferencias_recibidas', 'mcheques_depositados','mcheques_depositados_rechazados']
-        nombre: 'mentradas_dinero_totales'
-      - variables: ['mforex_sell', 'mtransferencias_emitidas', 'mextraccion_autoservicio','mcheques_emitidos','mcheques_emitidos_rechazados','matm','matm_other'] 
-        nombre: 'msalidas_dinero_totales'
-      - variables: ['mentradas_dinero_totales', 'msalidas_dinero_totales']
-        nombre: 'mflujo_dinero_total'
-      - variables: ['Master_msaldototal', 'Visa_msaldototal']
-        nombre: 'msaldo_total_tarjetas'
-      - variables: ['Master_madelantopesos', 'Master_madelantodolares','Master_mconsumototal']
-        nombre: 'mtarjeta_master_consumos_total'
-      - variables: ['Visa_madelantopesos', 'Visa_madelantodolares','Visa_mconsumototal']
-        nombre: 'mtarjeta_visa_consumos_total'
-      - variables: ['mtarjeta_master_consumos_total', 'mtarjeta_visa_consumos_total']
-        nombre: 'mtarjetas_consumos_totales'
-      - variables: ['Visa_mpagado', 'Master_mpagado']
-        nombre: 'mtarjetas_pagado_total'
-      - variables: ['Master_mpagominimo', 'Visa_mpagominimo']
-        nombre: 'mtarjetas_pagominimo_total'
-      - variables: ['Visa_mfinanciacion_limite', 'Visa_mlimitecompra','Master_mfinanciacion_limite','Master_mlimitecompra']
-        nombre: 'mlimite_total_tarjetas'
-      - variables: ['Master_status', 'Visa_status']
-        nombre: 'status_tarjetas_combined'
-      - variables: ['tcallcenter', 'thomebanking', 'tmobile_app']
-        nombre: 'total_canales_digitales'
-      - variables: ['tcuentas', 'cdescubierto_preacordado', 'ccaja_seguridad']
-        nombre: 'total_servicios_bancarios'
-      - variables: ['ccuenta_corriente', 'ccaja_ahorro','ctarjeta_debito','ctarjeta_visa','ctarjeta_master']
-        nombre: 'cant_cuentas_tarjetas'
-      - variables: ['cprestamos_personales', 'cprestamos_prendarios','cprestamos_hipotecarios']
-        nombre: 'cant_prestamos'
-      - variables: ['cplazo_fijo', 'cinversion1','cinversion2']
-        nombre: 'cant_inversiones'
-      - variables: ['cant_prestamos', 'cant_inversiones']
-        nombre: 'cant_productos_financieros'
-      - variables: ['cseguro_vida', 'cseguro_auto','cseguro_vivienda','cseguro_accidentes_personales']
-        nombre: 'cant_seguros'
-      - variables: ['cant_cuentas_tarjetas', 'cant_seguros','cant_productos_financieros']
-        nombre: 'total_productos_bancarios'
-      - variables: ['cpayroll_trx', 'cpayroll2_trx']
-        nombre: 'cant_depos_haberes'
-      - variables: ['ctarjeta_debito_transacciones', 'ctarjeta_visa_transacciones','ctarjeta_master_transacciones']
-        nombre: 'cant_transacciones_tarjeta'
-      - variables: ['ctransferencias_recibidas', 'ctransferencias_emitidas','cextraccion_autoservicio','ccheques_depositados','ccheques_emitidos','ccheques_depositados_rechazados','ccheques_emitidos_rechazados','ccallcenter_transacciones','chomebanking_transacciones','ccajas_transacciones','catm_trx','catm_trx_other','cmobile_app_trx','cforex','cforex_buy']
-        nombre: 'cant_transf_extracciones'
-      - variables: ['cant_transacciones_tarjeta', 'cant_transf_extracciones']
-        nombre: 'cant_tansacciones_tot'
-      - variables: ['cpagodeservicios', 'cpagomiscuentas']
-        nombre: 'cant_pagos'
-      - variables: ['Master_cconsumos', 'Visa_cconsumos']
-        nombre: 'cant_consumos_tarjetas'
-      - variables: ['Master_cadelantosefectivo', 'Visa_cadelantosefectivo']
-        nombre: 'cant_adelantes_tarjetas'
-      - variables: ['cant_consumos_tarjetas', 'cant_adelantes_tarjetas']
-        nombre: 'cant_operaciones_tarjetas'
-      - variables: ['cant_operaciones_tarjetas', 'cant_transf_extracciones']
-        nombre: 'cant_movimientos'
-      - variables: ['ccuenta_debitos_automaticos', 'cant_ctarjeta_visa_debitos_automaticos','ctarjeta_master_debitos_automaticos']
-        nombre: 'cant_debitos_automaticos'
-      - variables: ['ccajeros_propios_descuentos', 'ctarjeta_visa_descuentos','ctarjeta_master_descuentos']
-        nombre: 'cant_descuentos'
-      - variables: ['ccomisiones_mantenimiento', 'ccomisiones_otras']
-        nombre: 'cant_comisiones'
+  is_negative:
+    columnas: ['mcuentas_saldo'] # Depende de original
 
-    is_negative:
-      columnas: ['mcuentas_saldo','saldo_caja_ahorro_total','saldo_cuenta_corriente_total','saldo_cuentas_premium']
+  greatest:
+    - {variables: ['Master_delinquency', 'Visa_delinquency'], nombre: 'max_delinquency_tarjetas'}
+    - {variables: ['Master_Finiciomora', 'Visa_Finiciomora'], nombre: 'max_dias_mora_tarjetas'}
+    - {variables: ['Master_fechaalta', 'Visa_fechaalta'], nombre: 'tarjetas_antiguedad'}
 
-      #  'mtarjeta_visa_disponible',  # 1 si está sobregirado/en negativo
-      #             'saldo_neto_prestamos',      # 1 si debe más de lo que tiene
-      #             'mvacas_slope_ult_6m']       # 1 si la tendencia es a la baja
+  diff:
+    - {variables: ['Master_mconsumototal', 'Master_mpagado'], nombre: 'master_saldo_pendiente'}
+    - {variables: ['Visa_mconsumototal', 'Visa_mpagado'], nombre: 'visa_saldo_pendiente'}
 
-    greatest:
-      - variables: ['Master_delinquency', 'Visa_delinquency']
-        nombre: 'max_delinquency_tarjetas'
-      - variables: ['Master_Finiciomora', 'Visa_Finiciomora']
-        nombre: 'max_dias_mora_tarjetas'
-      - variables: ['Master_fechaalta', 'Visa_fechaalta']
-        nombre: 'tarjetas_antiguedad'
+  cambio_estado:
+    columnas: ['active_quarter', 'cliente_vip', 'internet', 'tcuentas', 'cdescubierto_preacordado', 'ccaja_seguridad', 'tcallcenter', 'thomebanking', 'tmobile_app', 'Master_delinquency', 'Master_status', 'Visa_delinquency', 'Visa_status']
+    cant_lag: 2
 
-    diff:
-      - variables: ['Master_mconsumototal', 'Master_mpagado']
-        nombre: 'master_saldo_pendiente'
-      - variables: ['Visa_mconsumototal', 'Visa_mpagado']
-        nombre: 'visa_saldo_pendiente'
-  # Cuánto le queda libre en la tarjeta
+  slope:
+    columnas: ['mcuentas_saldo'] # Única 'slope' que depende de originales
+    n_meses: 4
 
+  lag:
+    # Lags de variables originales seleccionadas
+    columnas: ['cproductos', 'mcuentas_saldo'] 
+    cant_lag: 3
 
-    # lag:
-    #   columnas: ['mcuentas_saldo_rank', 'cproductos', 'ccuenta_corriente', 'ccaja_ahorro', 'ctarjeta_debito', 'ctarjeta_debito_transacciones', 'ctarjeta_visa', 'ctarjeta_visa_transacciones', 'ctarjeta_master', 'ctarjeta_master_transacciones', 'cprestamos_personales', 'cprestamos_prendarios', 'cprestamos_hipotecarios', 'cplazo_fijo', 'cinversion1', 'cinversion2', 'cseguro_vida', 'cseguro_auto', 'cseguro_vivienda', 'cseguro_accidentes_personales', 'cpayroll_trx', 'cpayroll2_trx', 'ccuenta_debitos_automaticos', 'ctarjeta_visa_debitos_automaticos', 'ctarjeta_master_debitos_automaticos', 'cpagodeservicios', 'cpagomiscuentas', 'ccajeros_propios_descuentos', 'ctarjeta_visa_descuentos', 'ctarjeta_master_descuentos', 'ccomisiones_mantenimiento', 'ccomisiones_otras', 'cforex', 'cforex_buy', 'ctransferencias_recibidas', 'ctransferencias_emitidas', 'cextraccion_autoservicio', 'ccheques_depositados', 'ccheques_emitidos', 'ccheques_depositados_rechazados', 'ccheques_emitidos_rechazados', 'ccallcenter_transacciones', 'chomebanking_transacciones', 'ccajas_transacciones', 'ccajas_consultas', 'ccajas_depositos', 'ccajas_extracciones', 'ccajas_otras', 'catm_trx', 'catm_trx_other', 'ctrx_quarter', 'cmobile_app_trx', 'Master_cconsumos', 'Master_cadelantosefectivo', 'Visa_cconsumos', 'Visa_cadelantosefectivo', 'Master_Fvencimiento', 'Master_Finiciomora', 'Master_fultimo_cierre', 'Master_fechaalta', 'Visa_Fvencimiento', 'Visa_Finiciomora', 'Visa_fultimo_cierre', 'Visa_fechaalta', 'mrentabilidad', 'mrentabilidad_annual', 'mcomisiones', 'mactivos_margen', 'mpasivos_margen', 'mcuenta_corriente_adicional', 'mcuenta_corriente', 'mcaja_ahorro', 'mcaja_ahorro_adicional', 'mcaja_ahorro_dolares', 'mautoservicio', 'mtarjeta_visa_consumo', 'mtarjeta_master_consumo', 'mprestamos_personales', 'mprestamos_prendarios', 'mprestamos_hipotecarios', 'mplazo_fijo_dolares', 'mplazo_fijo_pesos', 'minversion1_pesos', 'minversion1_dolares', 'minversion2', 'mpayroll', 'mpayroll2', 'mcuenta_debitos_automaticos', 'mtarjeta_visa_debitos_automaticos', 'mttarjeta_master_debitos_automaticos', 'mpagodeservicios', 'mpagomiscuentas', 'mcajeros_propios_descuentos', 'mtarjeta_visa_descuentos', 'mtarjeta_master_descuentos', 'mcomisiones_mantenimiento', 'mcomisiones_otras', 'mforex_buy', 'mforex_sell', 'mtransferencias_recibidas', 'mtransferencias_emitidas', 'mextraccion_autoservicio', 'mcheques_depositados', 'mcheques_emitidos', 'mcheques_depositados_rechazados', 'mcheques_emitidos_rechazados', 'matm', 'matm_other', 'Master_mfinanciacion_limite', 'Master_msaldototal', 'Master_msaldopesos', 'Master_msaldodolares', 'Master_mconsumospesos', 'Master_mconsumosdolares', 'Master_mlimitecompra', 'Master_madelantopesos', 'Master_madelantodolares', 'Master_mpagado', 'Master_mpagospesos', 'Master_mpagosdolares', 'Master_mconsumototal', 'Master_mpagominimo', 'Visa_mfinanciacion_limite', 'Visa_msaldototal', 'Visa_msaldopesos', 'Visa_msaldodolares', 'Visa_mconsumospesos', 'Visa_mconsumosdolares', 'Visa_mlimitecompra', 'Visa_madelantopesos', 'Visa_madelantodolares', 'Visa_mpagado', 'Visa_mpagospesos', 'Visa_mpagosdolares', 'Visa_mconsumototal', 'Visa_mpagominimo', 'cforex_sell']
-    #   cant_lag: 2
-    # delta_lag:
-    #   columnas: ['mcuentas_saldo_rank', 'cproductos', 'ccuenta_corriente', 'ccaja_ahorro', 'ctarjeta_debito', 'ctarjeta_debito_transacciones', 'ctarjeta_visa', 'ctarjeta_visa_transacciones', 'ctarjeta_master', 'ctarjeta_master_transacciones', 'cprestamos_personales', 'cprestamos_prendarios', 'cprestamos_hipotecarios', 'cplazo_fijo', 'cinversion1', 'cinversion2', 'cseguro_vida', 'cseguro_auto', 'cseguro_vivienda', 'cseguro_accidentes_personales', 'cpayroll_trx', 'cpayroll2_trx', 'ccuenta_debitos_automaticos', 'ctarjeta_visa_debitos_automaticos', 'ctarjeta_master_debitos_automaticos', 'cpagodeservicios', 'cpagomiscuentas', 'ccajeros_propios_descuentos', 'ctarjeta_visa_descuentos', 'ctarjeta_master_descuentos', 'ccomisiones_mantenimiento', 'ccomisiones_otras', 'cforex', 'cforex_buy', 'ctransferencias_recibidas', 'ctransferencias_emitidas', 'cextraccion_autoservicio', 'ccheques_depositados', 'ccheques_emitidos', 'ccheques_depositados_rechazados', 'ccheques_emitidos_rechazados', 'ccallcenter_transacciones', 'chomebanking_transacciones', 'ccajas_transacciones', 'ccajas_consultas', 'ccajas_depositos', 'ccajas_extracciones', 'ccajas_otras', 'catm_trx', 'catm_trx_other', 'ctrx_quarter', 'cmobile_app_trx', 'Master_cconsumos', 'Master_cadelantosefectivo', 'Visa_cconsumos', 'Visa_cadelantosefectivo', 'Master_Fvencimiento', 'Master_Finiciomora', 'Master_fultimo_cierre', 'Master_fechaalta', 'Visa_Fvencimiento', 'Visa_Finiciomora', 'Visa_fultimo_cierre', 'Visa_fechaalta', 'mrentabilidad', 'mrentabilidad_annual', 'mcomisiones', 'mactivos_margen', 'mpasivos_margen', 'mcuenta_corriente_adicional', 'mcuenta_corriente', 'mcaja_ahorro', 'mcaja_ahorro_adicional', 'mcaja_ahorro_dolares', 'mautoservicio', 'mtarjeta_visa_consumo', 'mtarjeta_master_consumo', 'mprestamos_personales', 'mprestamos_prendarios', 'mprestamos_hipotecarios', 'mplazo_fijo_dolares', 'mplazo_fijo_pesos', 'minversion1_pesos', 'minversion1_dolares', 'minversion2', 'mpayroll', 'mpayroll2', 'mcuenta_debitos_automaticos', 'mtarjeta_visa_debitos_automaticos', 'mttarjeta_master_debitos_automaticos', 'mpagodeservicios', 'mpagomiscuentas', 'mcajeros_propios_descuentos', 'mtarjeta_visa_descuentos', 'mtarjeta_master_descuentos', 'mcomisiones_mantenimiento', 'mcomisiones_otras', 'mforex_buy', 'mforex_sell', 'mtransferencias_recibidas', 'mtransferencias_emitidas', 'mextraccion_autoservicio', 'mcheques_depositados', 'mcheques_emitidos', 'mcheques_depositados_rechazados', 'mcheques_emitidos_rechazados', 'matm', 'matm_other', 'Master_mfinanciacion_limite', 'Master_msaldototal', 'Master_msaldopesos', 'Master_msaldodolares', 'Master_mconsumospesos', 'Master_mconsumosdolares', 'Master_mlimitecompra', 'Master_madelantopesos', 'Master_madelantodolares', 'Master_mpagado', 'Master_mpagospesos', 'Master_mpagosdolares', 'Master_mconsumototal', 'Master_mpagominimo', 'Visa_mfinanciacion_limite', 'Visa_msaldototal', 'Visa_msaldopesos', 'Visa_msaldodolares', 'Visa_mconsumospesos', 'Visa_mconsumosdolares', 'Visa_mlimitecompra', 'Visa_madelantopesos', 'Visa_madelantodolares', 'Visa_mpagado', 'Visa_mpagospesos', 'Visa_mpagosdolares', 'Visa_mconsumototal', 'Visa_mpagominimo', 'cforex_sell']
-    #   cant_lag: 2
-  
-    cambio_estado:
-      columnas: ['active_quarter', 'cliente_vip', 'internet', 'tcuentas', 'cdescubierto_preacordado', 'ccaja_seguridad', 'tcallcenter', 'thomebanking', 'tmobile_app', 'Master_delinquency', 'Master_status', 'Visa_delinquency', 'Visa_status']
-      cant_lag: 2
-     
-    slope:
-      columnas: ['mcuentas_saldo', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
-      n_meses: 4  
+  delta_lag:
+    # Delta-Lags de variables originales seleccionadas
+    columnas: ['cproductos']
+    cant_lag: 3
 
-    lag:
-      columnas: ['mcuentas_saldo_rank','cproductos', 'mcuentas_saldo', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
+# -----------------------------------------------------------------
+# ETAPA 2: Dependen de variables creadas en ETAPA 1
+# -----------------------------------------------------------------
+fe_orden_2:
+  sum:
+    - {variables: ['mentradas_dinero_totales', 'msalidas_dinero_totales'], nombre: 'mflujo_dinero_total'}
+    - {variables: ['mtarjeta_master_consumos_total', 'mtarjeta_visa_consumos_total'], nombre: 'mtarjetas_consumos_totales'}
+    - {variables: ['cant_prestamos', 'cant_inversiones'], nombre: 'cant_productos_financieros'}
+    - {variables: ['cant_transacciones_tarjeta', 'cant_transf_extracciones'], nombre: 'cant_tansacciones_tot'}
+    - {variables: ['cant_consumos_tarjetas', 'cant_adelantes_tarjetas'], nombre: 'cant_operaciones_tarjetas'}
+
+  is_negative:
+    # Dependen de sumas de Orden 1
+    columnas: ['saldo_caja_ahorro_total','saldo_cuenta_corriente_total','saldo_cuentas_premium']
+
+  slope:
+    # Dependen de sumas de Orden 1
+    columnas: ['mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_servicios_bancarios','cant_transf_extracciones','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
+    n_meses: 4
+
+  lag:
+      # --- BLOQUE ACTUALIZADO ---
+      # Lags de TODAS las variables creadas en Orden 1
+      columnas: [
+        # De Rank (Orden 1)
+        'mcuentas_saldo_rank',
+        # De Sum (Orden 1)
+        'saldo_caja_ahorro_total', 'saldo_cuenta_corriente_total', 'saldo_cuentas_premium', 
+        'mtarjeta_total_consumo', 'mprestamos_totales', 'minversiones_totales', 'mpayroll_totales', 
+        'mdebitos_automaticos_totales', 'mpagos_servicios_totales', 'mdescuentos_totales', 
+        'mcomisiones_totales', 'mentradas_dinero_totales', 'msalidas_dinero_totales', 
+        'msaldo_total_tarjetas', 'mtarjeta_master_consumos_total', 'mtarjeta_visa_consumos_total', 
+        'mtarjetas_pagado_total', 'mtarjetas_pagominimo_total', 'mlimite_total_tarjetas', 
+        'status_tarjetas_combined', 'total_canales_digitales', 'total_servicios_bancarios', 
+        'cant_cuentas_tarjetas', 'cant_prestamos', 'cant_inversiones', 'cant_seguros', 
+        'cant_depos_haberes', 'cant_transacciones_tarjeta', 'cant_transf_extracciones', 
+        'cant_pagos', 'cant_consumos_tarjetas', 'cant_adelantes_tarjetas', 
+        'cant_debitos_automaticos', 'cant_descuentos', 'cant_comisiones',
+        # De Diff (Orden 1)
+        'master_saldo_pendiente', 'visa_saldo_pendiente',
+        # De Greatest (Orden 1)
+        'max_delinquency_tarjetas', 'max_dias_mora_tarjetas', 'tarjetas_antiguedad',
+        # De Slope (Orden 1) - Asumiendo n_meses=4
+        'mcuentas_saldo_slope_ult_4m'
+      ]
       cant_lag: 3
 
-    delta_lag:
-      columnas: ['mcuentas_saldo_rank','cproductos', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
-      cant_lag: 3
+  delta_lag:
+    # --- BLOQUE ACTUALIZADO --- (para consistencia con lag)
+    columnas: [
+      # De Rank (Orden 1)
+      'mcuentas_saldo_rank',
+      # De Sum (Orden 1)
+      'saldo_caja_ahorro_total', 'saldo_cuenta_corriente_total', 'saldo_cuentas_premium', 
+      'mtarjeta_total_consumo', 'mprestamos_totales', 'minversiones_totales', 'mpayroll_totales', 
+      'mdebitos_automaticos_totales', 'mpagos_servicios_totales', 'mdescuentos_totales', 
+      'mcomisiones_totales', 'mentradas_dinero_totales', 'msalidas_dinero_totales', 
+      'msaldo_total_tarjetas', 'mtarjeta_master_consumos_total', 'mtarjeta_visa_consumos_total', 
+      'mtarjetas_pagado_total', 'mtarjetas_pagominimo_total', 'mlimite_total_tarjetas', 
+      'status_tarjetas_combined', 'total_canales_digitales', 'total_servicios_bancarios', 
+      'cant_cuentas_tarjetas', 'cant_prestamos', 'cant_inversiones', 'cant_seguros', 
+      'cant_depos_haberes', 'cant_transacciones_tarjeta', 'cant_transf_extracciones', 
+      'cant_pagos', 'cant_consumos_tarjetas', 'cant_adelantes_tarjetas', 
+      'cant_debitos_automaticos', 'cant_descuentos', 'cant_comisiones',
+      # De Diff (Orden 1)
+      'master_saldo_pendiente', 'visa_saldo_pendiente',
+      # De Greatest (Orden 1)
+      'max_delinquency_tarjetas', 'max_dias_mora_tarjetas', 'tarjetas_antiguedad',
+      # De Slope (Orden 1) - Asumiendo n_meses=4
+      'mcuentas_saldo_slope_ult_4m'
+    ]
+    cant_lag: 3
+# -----------------------------------------------------------------
+# ETAPA 3: Dependen de variables creadas en ETAPA 2
+# -----------------------------------------------------------------
+fe_orden_3:
+  sum:
+    - {variables: ['cant_cuentas_tarjetas', 'cant_seguros','cant_productos_financieros'], nombre: 'total_productos_bancarios'}
+    - {variables: ['cant_operaciones_tarjetas', 'cant_transf_extracciones'], nombre: 'cant_movimientos'}
 
-    drop: 
-      columnas: ['mcuentas_saldo']
-    # slope:
-    #   - columnas: [mvacas, mcuenta_corriente]
-    #     n_meses: 6
-    #   - columnas: [mvacas, mtarjeta_visa_consumo]
-    #     n_meses: 3
+  slope:
+    # Dependen de sumas de Orden 2
+    columnas: ['cant_productos_financieros','cant_tansacciones_tot','cant_operaciones_tarjetas','mflujo_dinero_total','mtarjetas_consumos_totales']
+    n_meses: 4
 
+  lag:
+    # Lags de variables creadas en Orden 2
+    columnas: ['cant_productos_financieros','cant_tansacciones_tot','cant_operaciones_tarjetas']
+    cant_lag: 3
 
+  delta_lag:
+    # Delta-Lags de variables creadas en Orden 2
+    columnas: ['cant_productos_financieros','cant_tansacciones_tot','cant_operaciones_tarjetas']
+    cant_lag: 3
 
-    # diff:
-    #   - variables: [mcuentas_saldo, cprestamos_personales]
-    #     nombre: saldo_neto_prestamos
-    #   - variables: [mtarjeta_visa_limite, mtarjeta_visa_consumo]
-    #     nombre: mtarjeta_visa_disponible  # Cuánto le queda libre en la tarjeta
-    # ratios:
-    #   - numerador: mtarjeta_visa_consumo
-    #     denominador: mtarjeta_visa_limite
-    #     nombre: uso_limite_visa
-    #   - numerador: mprestamos_personales
-    #     denominador: mcuentas_saldo
-    #     nombre: ratio_prestamo_saldo
-    # greatest:
-    #   - variables: [matraso_prestamo_personal, matraso_prestamo_hip, matraso_tarjeta]
-    #     nombre: max_atraso_general
-    #   - variables: [mconsumo_visa, mconsumo_master]
-    #     nombre: max_consumo_tarjeta # Cuál fue el consumo más alto (compara visa vs master)
+# -----------------------------------------------------------------
+# ETAPA 4: Dependen de variables creadas en ETAPA 3
+# -----------------------------------------------------------------
+fe_orden_4:
+  slope:
+    # Dependen de sumas de Orden 3
+    columnas: ['total_productos_bancarios','cant_movimientos']
+    n_meses: 4
 
-    # is_negative:
-    #   columnas: [ 'mtarjeta_visa_disponible',  # 1 si está sobregirado/en negativo
-    #               'saldo_neto_prestamos',      # 1 si debe más de lo que tiene
-    #               'mvacas_slope_ult_6m']       # 1 si la tendencia es a la baja
+  lag:
+    # Lags de variables creadas en Orden 3
+    columnas: ['total_productos_bancarios','cant_movimientos']
+    cant_lag: 3
+
+  delta_lag:
+    # Delta-Lags de variables creadas en Orden 3
+    columnas: ['total_productos_bancarios','cant_movimientos']
+    cant_lag: 3
+
+# -----------------------------------------------------------------
+# ETAPA FINAL: Limpieza
+# -----------------------------------------------------------------
+fe_orden_final:
+  drop: 
+    columnas: ['mcuentas_saldo']

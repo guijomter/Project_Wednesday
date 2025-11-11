@@ -5,8 +5,7 @@ competencia01:
     canaritos: 10
     rank:
       columnas: ['mcuentas_saldo']
-    drop: 
-      columnas: ['mcuentas_saldo']
+
     sum:
       - variables: ['mcaja_ahorro_dolares', 'mcaja_ahorro_adicional', 'mcaja_ahorro']
         nombre: 'saldo_caja_ahorro_total'
@@ -132,13 +131,15 @@ competencia01:
       n_meses: 4  
 
     lag:
-      columnas: ['mcuentas_saldo', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
+      columnas: ['mcuentas_saldo_rank','cproductos', 'mcuentas_saldo', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
       cant_lag: 3
 
     delta_lag:
-      columnas: ['mcuentas_saldo', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
+      columnas: ['mcuentas_saldo_rank','cproductos', 'mtarjeta_total_consumo', 'cant_transacciones_tarjeta','msaldo_total_tarjetas','mtarjetas_pagominimo_total','total_productos_bancarios','total_servicios_bancarios','cant_productos_financieros','cant_transacciones_tarjeta','cant_transf_extracciones','cant_tansacciones_tot','cant_consumos_tarjetas','cant_adelantes_tarjetas','cant_operaciones_tarjetas','cant_movimientos','cant_debitos_automaticos','cant_descuentos','cant_comisiones']
       cant_lag: 3
 
+    drop: 
+      columnas: ['mcuentas_saldo']
     # slope:
     #   - columnas: [mvacas, mcuenta_corriente]
     #     n_meses: 6

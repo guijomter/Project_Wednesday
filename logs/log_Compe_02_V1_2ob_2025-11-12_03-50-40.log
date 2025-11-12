@@ -1,0 +1,61 @@
+2025-11-12 03:50:40,545 - INFO - __main__ 158 - Script iniciado directamente.
+2025-11-12 03:50:40,545 - INFO - __main__ 46 - Inicio de ejecucion.
+2025-11-12 03:50:40,545 - INFO - __main__ 48 - Número de trials por estudio: 50
+2025-11-12 03:50:47,576 - INFO - __main__ 71 - Archivo de features no encontrado
+2025-11-12 03:50:47,576 - INFO - __main__ 74 - Cargando datos desde GCS: gs://guijomter_bukito3/Compe_02/datasets/competencia_02.csv
+2025-11-12 03:50:47,577 - INFO - src.loader_p 22 - Descargando dataset desde gs://guijomter_bukito3/Compe_02/datasets/competencia_02.csv a /tmp/tmpgrixmy5o.csv
+2025-11-12 03:51:39,997 - INFO - src.loader_p 30 - Dataset descargado. Cargando en polars...
+2025-11-12 03:51:48,674 - INFO - src.loader_p 35 - Dataset cargado con 4717958 filas y 155 columnas
+2025-11-12 03:51:48,674 - INFO - __main__ 77 - Ejecutando feature engineering.
+2025-11-12 03:51:48,674 - INFO - src.features_p 693 - Iniciando pipeline de 5 etapas...
+2025-11-12 03:51:48,674 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_1 ---
+2025-11-12 03:51:48,964 - INFO - src.features_p 128 - Realizando feature engineering con ranking normalizado para 1 atributos
+2025-11-12 03:52:14,218 - INFO - src.features_p 149 - Feature engineering completado. DataFrame resultante con 156 columnas
+2025-11-12 03:52:14,219 - INFO - src.features_p 658 - Operación 'rank' aplicada. Nuevas columnas generadas.
+2025-11-12 03:52:14,219 - INFO - src.features_p 379 - Realizando feature engineering de sumas para 35 combinaciones
+2025-11-12 03:52:31,158 - INFO - src.features_p 416 - Feature engineering de sumas completado. DataFrame resultante con 191 columnas
+2025-11-12 03:52:31,158 - INFO - src.features_p 519 - Realizando feature engineering de 'is_negative' para 1 atributos
+2025-11-12 03:52:43,854 - INFO - src.features_p 542 - Feature engineering de 'is_negative' completado. DataFrame resultante con 192 columnas
+2025-11-12 03:52:43,855 - INFO - src.features_p 677 - Operación 'is_negative' aplicada. Nuevas columnas generadas.
+2025-11-12 03:52:43,855 - INFO - src.features_p 473 - Realizando feature engineering de 'greatest' (máximo entre columnas) para 3 grupos
+2025-11-12 03:52:56,905 - INFO - src.features_p 510 - Feature engineering de 'greatest' completado. DataFrame resultante con 195 columnas
+2025-11-12 03:52:56,906 - INFO - src.features_p 427 - Realizando feature engineering de restas para 2 combinaciones
+2025-11-12 03:53:09,292 - INFO - src.features_p 464 - Feature engineering de restas completado. DataFrame resultante con 197 columnas
+2025-11-12 03:53:09,293 - INFO - src.features_p 275 - Realizando feature engineering de cambio categórico con 2 lags para 13 atributos
+2025-11-12 03:53:40,838 - INFO - src.features_p 301 - Feature engineering de cambio categórico completado. DataFrame resultante con 223 columnas
+2025-11-12 03:53:40,839 - INFO - src.features_p 674 - Operación 'cambio_estado' aplicada. Nuevas columnas generadas.
+2025-11-12 03:53:40,839 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 4 meses para 1 atributos
+2025-11-12 03:54:06,112 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 224 columnas
+2025-11-12 03:54:06,112 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-12 03:54:06,113 - INFO - src.features_p 15 - Realizando feature engineering con 3 lags para 136 atributos
+2025-11-12 03:54:06,114 - WARNING - src.features_p 27 - El atributo mtarjeta_visa_debitos_automaticos no existe en el DataFrame
+2025-11-12 03:55:09,876 - INFO - src.features_p 39 - Feature engineering completado. DataFrame resultante con 629 columnas
+2025-11-12 03:55:09,877 - INFO - src.features_p 648 - Operación 'lag' aplicada. Nuevas columnas generadas.
+2025-11-12 03:55:09,877 - INFO - src.features_p 45 - Realizando feature engineering de delta lag con 3 lags para 136 atributos
+2025-11-12 03:55:09,882 - WARNING - src.features_p 60 - El atributo mtarjeta_visa_debitos_automaticos no existe en el DataFrame
+2025-11-12 03:57:31,217 - INFO - src.features_p 70 - Feature engineering de delta lag completado. DataFrame resultante con 1034 columnas
+2025-11-12 03:57:31,219 - INFO - src.features_p 652 - Operación 'delta_lag' aplicada. Nuevas columnas generadas.
+2025-11-12 03:57:31,220 - INFO - src.features_p 704 - Etapa 'fe_orden_1' completada. Shape actual: (4717958, 1034)
+2025-11-12 03:57:31,220 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_2 ---
+2025-11-12 03:57:31,250 - INFO - src.features_p 379 - Realizando feature engineering de sumas para 5 combinaciones
+2025-11-12 03:59:00,820 - INFO - src.features_p 416 - Feature engineering de sumas completado. DataFrame resultante con 1039 columnas
+2025-11-12 03:59:00,821 - INFO - src.features_p 519 - Realizando feature engineering de 'is_negative' para 3 atributos
+2025-11-12 04:07:32,048 - INFO - src.features_p 542 - Feature engineering de 'is_negative' completado. DataFrame resultante con 1042 columnas
+2025-11-12 04:07:40,697 - INFO - src.features_p 677 - Operación 'is_negative' aplicada. Nuevas columnas generadas.
+2025-11-12 04:07:40,755 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 4 meses para 11 atributos
+2025-11-12 04:14:39,502 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 1053 columnas
+2025-11-12 04:14:46,105 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-12 04:14:46,195 - INFO - src.features_p 15 - Realizando feature engineering con 3 lags para 42 atributos
+2025-11-12 04:22:05,048 - INFO - src.features_p 39 - Feature engineering completado. DataFrame resultante con 1179 columnas
+2025-11-12 04:22:05,765 - INFO - src.features_p 648 - Operación 'lag' aplicada. Nuevas columnas generadas.
+2025-11-12 04:22:05,787 - INFO - src.features_p 45 - Realizando feature engineering de delta lag con 3 lags para 42 atributos
+2025-11-12 04:32:09,980 - INFO - src.features_p 70 - Feature engineering de delta lag completado. DataFrame resultante con 1305 columnas
+2025-11-12 04:32:20,559 - INFO - src.features_p 652 - Operación 'delta_lag' aplicada. Nuevas columnas generadas.
+2025-11-12 04:32:42,069 - INFO - src.features_p 704 - Etapa 'fe_orden_2' completada. Shape actual: (4717958, 1305)
+2025-11-12 04:32:42,070 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_3 ---
+2025-11-12 04:32:43,172 - INFO - src.features_p 379 - Realizando feature engineering de sumas para 2 combinaciones
+2025-11-12 04:42:37,675 - INFO - src.features_p 416 - Feature engineering de sumas completado. DataFrame resultante con 1307 columnas
+2025-11-12 04:42:38,052 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 4 meses para 5 atributos
+2025-11-12 05:17:21,502 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 1312 columnas
+2025-11-12 05:17:29,168 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-12 05:17:29,180 - INFO - src.features_p 15 - Realizando feature engineering con 3 lags para 3 atributos

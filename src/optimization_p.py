@@ -9,7 +9,7 @@ import json
 import os
 from datetime import datetime
 from .config import *
-from .gain_function import calcular_ganancia, ganancia_lgb_binary, ganancia_evaluator, lgb_gan_eval
+from .gain_function import calcular_ganancia, ganancia_lgb_binary, ganancia_evaluator, lgb_gan_eval, calcular_ganancias
 from datetime import timezone, timedelta
 
 logger = logging.getLogger(__name__)
@@ -281,7 +281,8 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
 
     iteracion_data = {
         'Mes_test': MES_TEST,
-        'ganancia_test': float(resultados_test['ganancia_test']),
+        'ganancia_suavizada_test': float(resultados_test['ganancia_suavizada_test']),
+        'ganancia_maxima_test': float(resultados_test['ganancia_maxima_test']),
         'date_time': datetime.now(tz).isoformat(),
         'state': 'COMPLETE',
         'configuracion':{
@@ -299,7 +300,7 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
         json.dump(datos_existentes, f, indent=2)
   
     #logger.info(f"Iteración {trial.number} guardada en {archivo}")
-    logger.info(f"Ganancia: {resultados_test['ganancia_test']:,.0f}" + "---" + f"Total Predicciones positivas: {resultados_test['predicciones_positivas']:,.0f}")
+    logger.info(f"Ganancia suavizada: {resultados_test['ganancia_suavizada_test']:,.0f}" + "---" + f"Ganancia máxima: {resultados_test['ganancia_maxima_test']:,.0f}" )
 
 #####################################################################################
   
@@ -346,12 +347,19 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], 
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
   
     model = lgb.train(mejores_params, train_data, feval=lgb_gan_eval)
+    #guardar modelo entrenado
+    model.save_model(f'resultados/modelo_final_test_{conf.STUDY_NAME}_semilla_{semilla}.txt')
+    logger.info("Modelo guardado en resultados/")
     logger.info("Modelo final para test entrenado. Calculando ganancia en Test...")
 
     # Test
     X_test = df_test.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_test_pesos = df_test['clase_peso'].to_numpy()
-    y_test = np.where(y_test_pesos == 1.00002, 1, 0)
+    y_test = df_test['clase_ternaria'].to_numpy()
+    wetights_test = df_test['clase_peso'].to_numpy()
+    test_data = lgb.Dataset(X_test, label=y_test, weight=wetights_test)
+
+   # y_test_pesos = df_test['clase_peso'].to_numpy()
+   # y_test = np.where(y_test_pesos == 1.00002, 1, 0)
 
     y_pred_proba = model.predict(X_test)
 
@@ -363,24 +371,27 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], 
     
     predicciones_test.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_{semilla}.csv')
 
-    # Buscar el umbral que maximiza la ganancia
-    mejor_ganancia = -np.inf
-    mejor_umbral = 0.5
-    y_pred_binary = np.zeros_like(y_pred_proba, dtype=int)
-    for umbral in np.linspace(0, 1, 201):
-        y_pred_bin = (y_pred_proba >= umbral).astype(int)
-        ganancia = calcular_ganancia(y_test, y_pred_bin)
-        if ganancia > mejor_ganancia:
-            mejor_ganancia = ganancia
-            mejor_umbral = umbral
-            y_pred_binary = y_pred_bin
+#    # Buscar el umbral que maximiza la ganancia
+    # mejor_ganancia = -np.inf
+    # mejor_umbral = 0.5
+    # y_pred_binary = np.zeros_like(y_pred_proba, dtype=int)
+    # for umbral in np.linspace(0, 1, 201):
+    #     y_pred_bin = (y_pred_proba >= umbral).astype(int)
+    #     ganancia = calcular_ganancia(y_test, y_pred_bin)
+    #     if ganancia > mejor_ganancia:
+    #         mejor_ganancia = ganancia
+    #         mejor_umbral = umbral
+    #         y_pred_binary = y_pred_bin
+
+    ganancia_suavizada_test, ganancia_maxima_test = calcular_ganancias(y_pred_proba, test_data)
 
     resultados = {
-        'ganancia_test': float(mejor_ganancia),
-        'umbral_optimo': float(mejor_umbral),
-        'total_predicciones': int(len(y_pred_binary)),
-        'predicciones_positivas': int(np.sum(y_pred_binary == 1)),
-        'porcentaje_positivas': float((np.sum(y_pred_binary == 1) / len(y_pred_binary)) * 100),
+        'ganancia_suavizada_test': float(ganancia_suavizada_test),
+        'ganancia_maxima_test': float(ganancia_maxima_test),
+      #  'umbral_optimo': float(mejor_umbral),
+      #  'total_predicciones': int(len(y_pred_binary)),
+      #  'predicciones_positivas': int(np.sum(y_pred_binary == 1)),
+      #  'porcentaje_positivas': float((np.sum(y_pred_binary == 1) / len(y_pred_binary)) * 100),
         'semilla': semilla
     }
     return resultados
@@ -449,7 +460,9 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
     
     # Entrenar modelos distintos por cada seed
-    ganancia_total = 0
+    ganancia_med_total = 0
+    ganancia_max_total = 0
+
     semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
     
     for seed in semillas:
@@ -458,18 +471,21 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
                           callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)])
         # Predecir y calcular ganancia
         y_pred_proba = model.predict(X_val)
-        _, ganancia_iter, _ = lgb_gan_eval(y_pred_proba, val_data)
+        #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
+        ganancia_med_iter, ganancia_max_iter = calcular_ganancias(y_pred_proba, val_data)
 
         # Sumar a la ganancia de los modelos anteriores
-        ganancia_total += ganancia_iter
-    
+        ganancia_med_total += ganancia_med_iter
+        ganancia_max_total += ganancia_max_iter
+
     # Calcular ganancia media de los modelos entrenados en la iteración
-    ganancia_media = ganancia_total / len(semillas)
+    ganancia_med = ganancia_med_total / len(semillas)
+    ganancia_max = ganancia_max_total / len(semillas)
     
     # Guardar cada iteración en JSON
-    guardar_iteracion(trial, ganancia_media)
-    logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_media:,.0f}")
-    return ganancia_media
+    guardar_iteracion(trial, ganancia_med)
+    logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_med:,.0f}, Ganancia Max = {ganancia_max:,.0f}")
+    return ganancia_med
    
 #######################################################################################################
 

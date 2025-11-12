@@ -117,9 +117,10 @@ def main():
   
     # Resumen de evaluación en test
     logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
-    logger.info(f"✅ Ganancia en test: {resultados_test['ganancia_test']:,.0f}")
-    logger.info(f"🔍 Umbral óptimo encontrado: {resultados_test['umbral_optimo']:.4f}")
-    logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
+    logger.info(f"✅ Ganancia suavizada en test: {resultados_test['ganancia_suavizada_test']:,.0f}")
+    logger.info(f"✅ Ganancia maxima en test: {resultados_test['ganancia_maxima_test']:,.0f}")
+    #logger.info(f"🔍 Umbral óptimo encontrado: {resultados_test['umbral_optimo']:.4f}")
+    #logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
 
 
     #06 Entrenar modelo final

@@ -645,7 +645,10 @@ def optimizar_zlgbm(df: pl.DataFrame, n_trials=50, undersampling: float = 0.01) 
   
     # Ejecutar optimización
     study.optimize(lambda trial: objetivo_ganancia_zlgbm(trial, df, undersampling), n_trials=n_trials)
-  
+    # Guardar mejor modelo del estudio
+    mejor_moodelo = study.best_trial.model
+    mejor_moodelo.save_model(f'resultados/mejor_modelo_ob_zlgbm_{conf.STUDY_NAME}.txt')
+
     # Resultados
     logger.info("=== OPTIMIZACIÓN CON zLGBM COMPLETADA ===")
     logger.info(f"Número de trials completados: {len(study.trials)}")

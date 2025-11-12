@@ -43,7 +43,7 @@ logger = logging.getLogger(__name__)
 def main():
     
     logger.info("Inicio de ejecucion.")
-   
+    logger.warning("ESTA ES UNA PRUEBA DE WARNING") # <-- Agrega esto
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
     
     data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}" # type: ignore

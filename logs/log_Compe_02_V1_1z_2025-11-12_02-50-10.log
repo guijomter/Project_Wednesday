@@ -1,0 +1,19 @@
+2025-11-12 02:50:10,052 - INFO - __main__ 158 - Script iniciado directamente.
+2025-11-12 02:50:10,052 - INFO - __main__ 46 - Inicio de ejecucion.
+2025-11-12 02:50:10,052 - INFO - __main__ 48 - Número de trials por estudio: 50
+2025-11-12 02:50:14,154 - INFO - __main__ 66 - Archivo de features encontrado: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_1z.parquet. Cargando desde GCS.
+2025-11-12 02:50:14,154 - INFO - src.bucket_utils_p 86 - Descargando de GCS: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_1z.parquet
+2025-11-12 02:51:15,491 - INFO - src.bucket_utils_p 90 - Descargado en: /tmp/df_fe_Compe_02_V1_1z.parquet
+2025-11-12 02:51:23,351 - INFO - src.bucket_utils_p 94 - DataFrame cargado en memoria.
+2025-11-12 02:51:23,351 - INFO - src.bucket_utils_p 101 - Archivo temporal /tmp/df_fe_Compe_02_V1_1z.parquet eliminado.
+2025-11-12 02:51:23,351 - INFO - __main__ 89 - Feature Engineering completado: (4717958, 543)
+2025-11-12 02:51:23,351 - INFO - src.optimization_p 600 - Iniciando optimización con 50 trials
+2025-11-12 02:51:23,352 - INFO - src.optimization_p 601 - Configuración: TRAIN=['201901', '201902', '201903', '201904', '201905', '201906', '201907', '201908', '201909', '201910', '201911', '201912', '202001', '202002', '202011', '202012'], VALID=202101, SEMILLA=[839071, 666557]
+2025-11-12 02:51:23,561 - INFO - src.optimization_p 540 - ⚡ Base de datos encontrada: /home/guijomter/buckets/b1/Compe_02/optuna_db/Compe_02_V1_1z.db
+2025-11-12 02:51:23,561 - INFO - src.optimization_p 541 - 🔄 Cargando estudio existente: Compe_02_V1_1z
+2025-11-12 02:51:27,471 - INFO - src.optimization_p 548 - ✅ Estudio cargado exitosamente
+2025-11-12 02:51:27,471 - INFO - src.optimization_p 549 - 📊 Trials previos: 16
+2025-11-12 02:51:28,456 - INFO - src.optimization_p 552 - 🏆 Mejor ganancia hasta ahora: 235,505,165
+2025-11-12 02:51:28,686 - INFO - src.optimization_p 611 - 🔄 Retomando desde trial 16
+2025-11-12 02:51:28,686 - INFO - src.optimization_p 612 - 📝 Trials a ejecutar: 34 (total objetivo: 50)
+2025-11-12 02:51:56,879 - INFO - __main__ 164 - Ejecución finalizada.

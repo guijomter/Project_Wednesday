@@ -25,21 +25,34 @@ from src.bucket_utils_p import guardar_en_buckets, cargar_de_buckets, archivo_ex
 from src.target import crear_clase_ternaria_gcs
 
 ## config basico logging
-os.makedirs("logs", exist_ok=True)
-
+# 2. Definir nombre del log
 fecha = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-monbre_log = f"log_{conf.STUDY_NAME}_{fecha}.log"
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(name)s %(lineno)d - %(message)s',
-    handlers=[
-        logging.FileHandler(f"logs/{monbre_log}", mode="w", encoding="utf-8"),
-        logging.StreamHandler()
-    ]
-)
+# Asumo que 'conf.STUDY_NAME' existe
+nombre_log = f"log_{conf.STUDY_NAME}_{fecha}.log"
+path_log = f"logs/{nombre_log}"
 
+# 3. Obtener el logger que usarás
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO) # Establecer el nivel MÍNIMO para este logger
 
+# 4. Crear el formateador
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(name)s %(lineno)d - %(message)s')
+
+# 5. Crear handler para el archivo
+file_handler = logging.FileHandler(path_log, mode="w", encoding="utf-8")
+file_handler.setFormatter(formatter)
+
+# 6. Crear handler para la consola
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+
+# 7. Añadir los handlers al logger
+if not logger.hasHandlers(): # Evita duplicar handlers si se recarga el script
+    logger.addHandler(file_handler)
+    logger.addHandler(stream_handler)
+
+# Opcional: Evita que el log se propague al logger root (que podría tener otros handlers)
+logger.propagate = False
 
 ## Funcion principal
 def main():
@@ -156,4 +169,10 @@ def main():
     logger.info(f">>> Ejecución finalizada. Revisar logs para mas detalles.")
 
 if __name__ == "__main__":
-    main()
+    logger.info("Script iniciado directamente.")
+    try:
+        main()
+    except Exception as e:
+        logger.critical("Ejecución fallida con una excepción no controlada.", exc_info=True)
+    finally:
+        logger.info("Ejecución finalizada.")

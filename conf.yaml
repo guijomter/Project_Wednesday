@@ -36,7 +36,7 @@ competencia02:
     COSTO_ESTIMULO: 20000
   # Configuración para entrenamiento final
     FINAL_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012","202101","202102"]  # Todos los períodos para entrenar
-    FINAL_PREDIC: "202104"                                 # Período objetivo para predicción
+    FINAL_PREDIC: "202106"                                 # Período objetivo para predicción
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 parametros_lgb:

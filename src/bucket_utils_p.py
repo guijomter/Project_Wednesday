@@ -5,7 +5,7 @@ import logging
 import subprocess
 
 # Configura un logger (o usa el tuyo si ya lo tienes)
-logging.basicConfig(level=logging.INFO)
+#logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def archivo_existe_en_bucket(bucket_path: str) -> bool:

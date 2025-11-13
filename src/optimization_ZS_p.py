@@ -9,7 +9,7 @@ import pandas as pd  # Necesario para FLAML
 import polars as pl
 from flaml.default import preprocess_and_suggest_hyperparams
 
-from .config import config as conf  # Usamos tu config
+from .config import *
 from .gain_function import calcular_ganancia
 
 logger = logging.getLogger(__name__)

@@ -1,0 +1,44 @@
+2025-11-13 15:00:08,614 - INFO - __main__ 171 - Script iniciado directamente.
+2025-11-13 15:00:08,615 - INFO - __main__ 47 - Inicio de ejecucion.
+2025-11-13 15:00:08,615 - INFO - __main__ 49 - Número de trials por estudio: 20
+2025-11-13 15:00:08,615 - INFO - __main__ 57 - === CREACION DE CLASE TERNARIA EN GCS ===
+2025-11-13 15:00:14,729 - INFO - __main__ 61 - === INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===
+2025-11-13 15:00:18,627 - INFO - __main__ 78 - Archivo de features encontrado: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_4ob_ss003_iub.parquet. Cargando desde GCS.
+2025-11-13 15:00:18,627 - INFO - src.bucket_utils_p 86 - Descargando de GCS: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_4ob_ss003_iub.parquet
+2025-11-13 15:01:59,073 - INFO - src.bucket_utils_p 90 - Descargado en: /tmp/df_fe_Compe_02_V1_4ob_ss003_iub.parquet
+2025-11-13 15:02:19,605 - INFO - src.bucket_utils_p 94 - DataFrame cargado en memoria.
+2025-11-13 15:02:20,333 - INFO - src.bucket_utils_p 101 - Archivo temporal /tmp/df_fe_Compe_02_V1_4ob_ss003_iub.parquet eliminado.
+2025-11-13 15:02:20,358 - INFO - __main__ 101 - Feature Engineering completado: (4717958, 981)
+2025-11-13 15:02:20,358 - INFO - src.optimization_p 739 - Iniciando optimización con 20 trials
+2025-11-13 15:02:20,358 - INFO - src.optimization_p 740 - Configuración: TRAIN=['201901', '201902', '201903', '201904', '201905', '201906', '201907', '201908', '201909', '201910', '201911', '201912', '202001', '202002', '202003', '202004', '202005', '202007', '202008', '202009', '202010', '202011', '202012', '202101'], VALID=202102, SEMILLA=[839071, 666557]
+2025-11-13 15:02:20,564 - INFO - src.optimization_p 679 - ⚡ Base de datos encontrada: /home/guijomter/buckets/b1/Compe_02/optuna_db/Compe_02_V1_4ob_ss003_iub.db
+2025-11-13 15:02:20,564 - INFO - src.optimization_p 680 - 🔄 Cargando estudio existente: Compe_02_V1_4ob_ss003_iub
+2025-11-13 15:02:28,453 - INFO - src.optimization_p 687 - ✅ Estudio cargado exitosamente
+2025-11-13 15:02:28,453 - INFO - src.optimization_p 688 - 📊 Trials previos: 20
+2025-11-13 15:02:29,480 - INFO - src.optimization_p 691 - 🏆 Mejor ganancia hasta ahora: 260,756,077
+2025-11-13 15:02:29,708 - INFO - src.optimization_p 750 - 🔄 Retomando desde trial 20
+2025-11-13 15:02:29,708 - INFO - src.optimization_p 751 - 📝 Trials a ejecutar: 0 (total objetivo: 20)
+2025-11-13 15:02:29,708 - INFO - src.optimization_p 762 - ✅ Ya se completaron 20 trials
+2025-11-13 15:02:29,708 - INFO - __main__ 108 - === ANÁLISIS DE RESULTADOS ===
+2025-11-13 15:02:30,651 - INFO - __main__ 112 - Top 5 mejores trials:
+2025-11-13 15:02:30,652 - INFO - __main__ 114 -   Trial 17: 260,756,077
+2025-11-13 15:02:30,653 - INFO - __main__ 114 -   Trial 12: 260,753,319
+2025-11-13 15:02:30,653 - INFO - __main__ 114 -   Trial 8: 259,976,388
+2025-11-13 15:02:30,653 - INFO - __main__ 114 -   Trial 0: 259,123,261
+2025-11-13 15:02:30,653 - INFO - __main__ 114 -   Trial 11: 259,115,544
+2025-11-13 15:02:30,653 - INFO - __main__ 116 - === OPTIMIZACIÓN COMPLETADA ===
+2025-11-13 15:02:30,653 - INFO - __main__ 119 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-11-13 15:02:30,654 - ERROR - src.best_params 57 - No se encontró el archivo resultados/Compe_02_V1_4ob_ss003_iub_iteraciones.json
+2025-11-13 15:02:30,654 - ERROR - src.best_params 58 - Asegúrate de haber ejecutado la optimización con Optuna primero
+2025-11-13 15:02:30,654 - CRITICAL - __main__ 175 - Ejecución fallida con una excepción no controlada.
+Traceback (most recent call last):
+  File "/home/guijomter/Project_Wednesday/main.py", line 173, in <module>
+    main()
+    ~~~~^^
+  File "/home/guijomter/Project_Wednesday/main.py", line 122, in main
+    mejores_params = cargar_mejores_hiperparametros()
+  File "/home/guijomter/Project_Wednesday/src/best_params.py", line 23, in cargar_mejores_hiperparametros
+    with open(archivo, 'r') as f:
+         ~~~~^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'resultados/Compe_02_V1_4ob_ss003_iub_iteraciones.json'
+2025-11-13 15:02:30,685 - INFO - __main__ 177 - Ejecución finalizada.

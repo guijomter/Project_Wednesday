@@ -1,0 +1,20 @@
+2025-11-13 04:36:10,357 - INFO - __main__ 171 - Script iniciado directamente.
+2025-11-13 04:36:10,357 - INFO - __main__ 47 - Inicio de ejecucion.
+2025-11-13 04:36:10,357 - INFO - __main__ 49 - Número de trials por estudio: 50
+2025-11-13 04:36:10,357 - INFO - __main__ 57 - === CREACION DE CLASE TERNARIA EN GCS ===
+2025-11-13 04:36:16,528 - INFO - __main__ 61 - === INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===
+2025-11-13 04:36:20,463 - INFO - __main__ 83 - Archivo de features no encontrado
+2025-11-13 04:36:20,463 - INFO - __main__ 86 - Cargando datos desde GCS: gs://guijomter_bukito3/Compe_02/datasets/competencia_02_calidad.csv
+2025-11-13 04:36:20,463 - INFO - src.loader_p 22 - Descargando dataset desde gs://guijomter_bukito3/Compe_02/datasets/competencia_02_calidad.csv a /tmp/tmpfb0worog.csv
+2025-11-13 04:37:01,655 - ERROR - src.loader_p 39 - Error al cargar el dataset: gsutil cp falló con código 2
+2025-11-13 04:37:01,656 - CRITICAL - __main__ 175 - Ejecución fallida con una excepción no controlada.
+Traceback (most recent call last):
+  File "/home/guijomter/Project_Wednesday/main.py", line 173, in <module>
+    main()
+    ~~~~^^
+  File "/home/guijomter/Project_Wednesday/main.py", line 87, in main
+    df = cargar_datos(data_path_q_gcs)
+  File "/home/guijomter/Project_Wednesday/src/loader_p.py", line 28, in cargar_datos
+    raise Exception(f"gsutil cp falló con código {return_code}")
+Exception: gsutil cp falló con código 2
+2025-11-13 04:37:01,718 - INFO - __main__ 177 - Ejecución finalizada.

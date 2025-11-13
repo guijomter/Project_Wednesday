@@ -1,0 +1,319 @@
+2025-11-13 04:47:19,623 - INFO - __main__ 171 - Script iniciado directamente.
+2025-11-13 04:47:19,623 - INFO - __main__ 47 - Inicio de ejecucion.
+2025-11-13 04:47:19,623 - INFO - __main__ 49 - Número de trials por estudio: 35
+2025-11-13 04:47:19,623 - INFO - __main__ 57 - === CREACION DE CLASE TERNARIA EN GCS ===
+2025-11-13 04:47:24,241 - INFO - __main__ 61 - === INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===
+2025-11-13 04:47:27,487 - INFO - __main__ 83 - Archivo de features no encontrado
+2025-11-13 04:47:27,487 - INFO - __main__ 86 - Cargando datos desde GCS: gs://guijomter_bukito3/Compe_02/datasets/competencia_02_calidad.csv
+2025-11-13 04:47:27,487 - INFO - src.loader_p 22 - Descargando dataset desde gs://guijomter_bukito3/Compe_02/datasets/competencia_02_calidad.csv a /tmp/tmp1a6alryv.csv
+2025-11-13 04:48:20,913 - INFO - src.loader_p 30 - Dataset descargado. Cargando en polars...
+2025-11-13 04:48:31,371 - INFO - src.loader_p 35 - Dataset cargado con 4717958 filas y 155 columnas
+2025-11-13 04:48:31,371 - INFO - __main__ 89 - Ejecutando feature engineering.
+2025-11-13 04:48:31,371 - INFO - src.features_p 693 - Iniciando pipeline de 5 etapas...
+2025-11-13 04:48:31,371 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_1 ---
+2025-11-13 04:48:31,487 - INFO - src.features_p 245 - Realizando feature engineering de ratios para 1 combinaciones
+2025-11-13 04:48:42,986 - INFO - src.features_p 269 - Feature engineering de ratios completado. DataFrame resultante con 156 columnas
+2025-11-13 04:48:42,986 - INFO - src.features_p 128 - Realizando feature engineering con ranking normalizado para 1 atributos
+2025-11-13 04:49:04,406 - INFO - src.features_p 149 - Feature engineering completado. DataFrame resultante con 157 columnas
+2025-11-13 04:49:04,407 - INFO - src.features_p 658 - Operación 'rank' aplicada. Nuevas columnas generadas.
+2025-11-13 04:49:04,407 - INFO - src.features_p 379 - Realizando feature engineering de sumas para 35 combinaciones
+2025-11-13 04:49:19,252 - INFO - src.features_p 416 - Feature engineering de sumas completado. DataFrame resultante con 192 columnas
+2025-11-13 04:49:19,253 - INFO - src.features_p 519 - Realizando feature engineering de 'is_negative' para 1 atributos
+2025-11-13 04:49:30,128 - INFO - src.features_p 542 - Feature engineering de 'is_negative' completado. DataFrame resultante con 193 columnas
+2025-11-13 04:49:30,129 - INFO - src.features_p 677 - Operación 'is_negative' aplicada. Nuevas columnas generadas.
+2025-11-13 04:49:30,129 - INFO - src.features_p 473 - Realizando feature engineering de 'greatest' (máximo entre columnas) para 3 grupos
+2025-11-13 04:49:41,501 - INFO - src.features_p 510 - Feature engineering de 'greatest' completado. DataFrame resultante con 196 columnas
+2025-11-13 04:49:41,502 - INFO - src.features_p 427 - Realizando feature engineering de restas para 2 combinaciones
+2025-11-13 04:49:52,815 - INFO - src.features_p 464 - Feature engineering de restas completado. DataFrame resultante con 198 columnas
+2025-11-13 04:49:52,816 - INFO - src.features_p 275 - Realizando feature engineering de cambio categórico con 2 lags para 13 atributos
+2025-11-13 04:50:19,838 - INFO - src.features_p 301 - Feature engineering de cambio categórico completado. DataFrame resultante con 224 columnas
+2025-11-13 04:50:19,838 - INFO - src.features_p 674 - Operación 'cambio_estado' aplicada. Nuevas columnas generadas.
+2025-11-13 04:50:19,839 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 6 meses para 1 atributos
+2025-11-13 04:50:42,886 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 225 columnas
+2025-11-13 04:50:42,887 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-13 04:50:42,887 - INFO - src.features_p 15 - Realizando feature engineering con 2 lags para 136 atributos
+2025-11-13 04:51:28,318 - INFO - src.features_p 39 - Feature engineering completado. DataFrame resultante con 497 columnas
+2025-11-13 04:51:28,319 - INFO - src.features_p 648 - Operación 'lag' aplicada. Nuevas columnas generadas.
+2025-11-13 04:51:28,319 - INFO - src.features_p 45 - Realizando feature engineering de delta lag con 2 lags para 136 atributos
+2025-11-13 04:52:56,401 - INFO - src.features_p 70 - Feature engineering de delta lag completado. DataFrame resultante con 769 columnas
+2025-11-13 04:52:56,403 - INFO - src.features_p 652 - Operación 'delta_lag' aplicada. Nuevas columnas generadas.
+2025-11-13 04:52:56,403 - INFO - src.features_p 704 - Etapa 'fe_orden_1' completada. Shape actual: (4717958, 769)
+2025-11-13 04:52:56,403 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_2 ---
+2025-11-13 04:52:56,434 - INFO - src.features_p 379 - Realizando feature engineering de sumas para 5 combinaciones
+2025-11-13 04:53:50,632 - INFO - src.features_p 416 - Feature engineering de sumas completado. DataFrame resultante con 774 columnas
+2025-11-13 04:53:50,633 - INFO - src.features_p 519 - Realizando feature engineering de 'is_negative' para 3 atributos
+2025-11-13 04:54:47,988 - INFO - src.features_p 542 - Feature engineering de 'is_negative' completado. DataFrame resultante con 777 columnas
+2025-11-13 04:54:47,990 - INFO - src.features_p 677 - Operación 'is_negative' aplicada. Nuevas columnas generadas.
+2025-11-13 04:54:47,990 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 6 meses para 11 atributos
+2025-11-13 04:56:44,754 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 788 columnas
+2025-11-13 04:56:44,756 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-13 04:56:44,756 - INFO - src.features_p 15 - Realizando feature engineering con 2 lags para 42 atributos
+2025-11-13 04:56:44,760 - WARNING - src.features_p 27 - El atributo mcuentas_saldo_slope_ult_4m no existe en el DataFrame
+2025-11-13 04:58:48,723 - INFO - src.features_p 39 - Feature engineering completado. DataFrame resultante con 870 columnas
+2025-11-13 04:58:48,726 - INFO - src.features_p 648 - Operación 'lag' aplicada. Nuevas columnas generadas.
+2025-11-13 04:58:48,726 - INFO - src.features_p 45 - Realizando feature engineering de delta lag con 2 lags para 42 atributos
+2025-11-13 04:58:48,730 - WARNING - src.features_p 60 - El atributo mcuentas_saldo_slope_ult_4m no existe en el DataFrame
+2025-11-13 05:01:10,396 - INFO - src.features_p 70 - Feature engineering de delta lag completado. DataFrame resultante con 952 columnas
+2025-11-13 05:01:10,398 - INFO - src.features_p 652 - Operación 'delta_lag' aplicada. Nuevas columnas generadas.
+2025-11-13 05:01:10,400 - INFO - src.features_p 704 - Etapa 'fe_orden_2' completada. Shape actual: (4717958, 952)
+2025-11-13 05:01:10,400 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_3 ---
+2025-11-13 05:01:10,430 - INFO - src.features_p 379 - Realizando feature engineering de sumas para 2 combinaciones
+2025-11-13 05:02:18,617 - INFO - src.features_p 416 - Feature engineering de sumas completado. DataFrame resultante con 954 columnas
+2025-11-13 05:02:18,617 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 6 meses para 5 atributos
+2025-11-13 05:04:49,788 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 959 columnas
+2025-11-13 05:04:49,790 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-13 05:04:49,790 - INFO - src.features_p 15 - Realizando feature engineering con 2 lags para 3 atributos
+2025-11-13 05:07:18,297 - INFO - src.features_p 39 - Feature engineering completado. DataFrame resultante con 965 columnas
+2025-11-13 05:07:18,300 - INFO - src.features_p 648 - Operación 'lag' aplicada. Nuevas columnas generadas.
+2025-11-13 05:07:18,300 - INFO - src.features_p 45 - Realizando feature engineering de delta lag con 2 lags para 3 atributos
+2025-11-13 05:09:49,337 - INFO - src.features_p 70 - Feature engineering de delta lag completado. DataFrame resultante con 971 columnas
+2025-11-13 05:09:49,339 - INFO - src.features_p 652 - Operación 'delta_lag' aplicada. Nuevas columnas generadas.
+2025-11-13 05:09:49,341 - INFO - src.features_p 704 - Etapa 'fe_orden_3' completada. Shape actual: (4717958, 971)
+2025-11-13 05:09:49,342 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_4 ---
+2025-11-13 05:09:49,372 - INFO - src.features_p 338 - Realizando feature engineering de slope (tendencia) de últimos 6 meses para 2 atributos
+2025-11-13 05:12:23,475 - INFO - src.features_p 370 - Feature engineering de slope completado. DataFrame resultante con 973 columnas
+2025-11-13 05:12:23,475 - INFO - src.features_p 670 - Operación 'slope' aplicada. Nuevas columnas generadas.
+2025-11-13 05:12:23,475 - INFO - src.features_p 15 - Realizando feature engineering con 2 lags para 2 atributos
+2025-11-13 05:14:56,726 - INFO - src.features_p 39 - Feature engineering completado. DataFrame resultante con 977 columnas
+2025-11-13 05:14:56,728 - INFO - src.features_p 648 - Operación 'lag' aplicada. Nuevas columnas generadas.
+2025-11-13 05:14:56,728 - INFO - src.features_p 45 - Realizando feature engineering de delta lag con 2 lags para 2 atributos
+2025-11-13 05:17:32,782 - INFO - src.features_p 70 - Feature engineering de delta lag completado. DataFrame resultante con 981 columnas
+2025-11-13 05:17:32,785 - INFO - src.features_p 652 - Operación 'delta_lag' aplicada. Nuevas columnas generadas.
+2025-11-13 05:17:32,787 - INFO - src.features_p 704 - Etapa 'fe_orden_4' completada. Shape actual: (4717958, 981)
+2025-11-13 05:17:32,787 - INFO - src.features_p 700 - --- Ejecutando etapa: fe_orden_final ---
+2025-11-13 05:17:32,817 - INFO - src.features_p 158 - Eliminando 1 columnas
+2025-11-13 05:17:33,252 - INFO - src.features_p 173 - Columnas eliminadas. DataFrame resultante con 980 columnas
+2025-11-13 05:17:33,252 - INFO - src.features_p 680 - Operación 'drop' aplicada. Columnas eliminadas: ['mcuentas_saldo']
+2025-11-13 05:17:33,253 - INFO - src.features_p 704 - Etapa 'fe_orden_final' completada. Shape actual: (4717958, 980)
+2025-11-13 05:17:33,253 - INFO - src.features_p 710 - Pipeline de feature engineering finalizado exitosamente.
+2025-11-13 05:17:43,407 - INFO - src.loader_p 116 - Conversión completada:
+2025-11-13 05:17:43,407 - INFO - src.loader_p 117 -   Original - CONTINUA: 4349500, BAJA+1: 20471, BAJA+2: 19706
+2025-11-13 05:17:43,408 - INFO - src.loader_p 118 -   Binario - 0: 4349500, 1: 40177
+2025-11-13 05:17:43,408 - INFO - src.loader_p 120 -   Distribución: 0.92% casos positivos
+2025-11-13 05:17:43,408 - INFO - __main__ 98 - Guardando features en: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_3ob_ss003_new_fe.parquet
+2025-11-13 05:17:43,408 - INFO - src.bucket_utils_p 50 - Guardando Parquet temporal en: /tmp/df_fe_Compe_02_V1_3ob_ss003_new_fe.parquet
+2025-11-13 05:19:48,092 - INFO - src.bucket_utils_p 53 - Guardado local completado.
+2025-11-13 05:19:48,093 - INFO - src.bucket_utils_p 56 - Subiendo a GCS: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_3ob_ss003_new_fe.parquet
+2025-11-13 05:20:14,542 - INFO - src.bucket_utils_p 63 - ¡Subida completada!
+2025-11-13 05:20:15,193 - INFO - src.bucket_utils_p 69 - Archivo temporal /tmp/df_fe_Compe_02_V1_3ob_ss003_new_fe.parquet eliminado.
+2025-11-13 05:20:15,194 - INFO - __main__ 101 - Feature Engineering completado: (4717958, 981)
+2025-11-13 05:20:15,194 - INFO - src.optimization_p 739 - Iniciando optimización con 35 trials
+2025-11-13 05:20:15,194 - INFO - src.optimization_p 740 - Configuración: TRAIN=['201901', '201902', '201903', '201904', '201905', '201906', '201907', '201908', '201909', '201910', '201911', '201912', '202001', '202002', '202003', '202004', '202005', '202007', '202008', '202009', '202010', '202011', '202012', '202101'], VALID=202102, SEMILLA=[839071, 666557]
+2025-11-13 05:20:15,402 - INFO - src.optimization_p 699 - 🆕 No se encontró base de datos previa
+2025-11-13 05:20:15,402 - INFO - src.optimization_p 700 - 📁 Creando nueva base de datos: /home/guijomter/buckets/b1/Compe_02/optuna_db/Compe_02_V1_3ob_ss003_new_fe.db
+2025-11-13 05:20:45,440 - INFO - src.optimization_p 711 - ✅ Nuevo estudio creado: Compe_02_V1_3ob_ss003_new_fe
+2025-11-13 05:20:45,440 - INFO - src.optimization_p 712 - 💾 Storage: sqlite:////home/guijomter/buckets/b1/Compe_02/optuna_db/Compe_02_V1_3ob_ss003_new_fe.db
+2025-11-13 05:20:45,645 - INFO - src.optimization_p 753 - 🆕 Nueva optimización: 35 trials
+2025-11-13 05:21:12,417 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273339 (CMay : 245401 / CMin: 27938)
+2025-11-13 05:28:36,568 - INFO - src.optimization_p 134 - Iteración 0 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 05:28:36,568 - INFO - src.optimization_p 135 - Ganancia: 248,365,774---Parámetros: {params}
+2025-11-13 05:28:36,569 - INFO - src.optimization_p 610 - Trial 0: Ganancia Media = 248,365,774, Ganancia Max = 251,236,571
+2025-11-13 05:29:05,803 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274636 (CMay : 246698 / CMin: 27938)
+2025-11-13 05:37:22,373 - INFO - src.optimization_p 134 - Iteración 1 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 05:37:22,373 - INFO - src.optimization_p 135 - Ganancia: 247,428,865---Parámetros: {params}
+2025-11-13 05:37:22,373 - INFO - src.optimization_p 610 - Trial 1: Ganancia Media = 247,428,865, Ganancia Max = 251,219,429
+2025-11-13 05:37:51,329 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274062 (CMay : 246124 / CMin: 27938)
+2025-11-13 05:43:29,069 - INFO - src.optimization_p 134 - Iteración 2 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 05:43:29,069 - INFO - src.optimization_p 135 - Ganancia: 233,204,733---Parámetros: {params}
+2025-11-13 05:43:29,069 - INFO - src.optimization_p 610 - Trial 2: Ganancia Media = 233,204,733, Ganancia Max = 236,314,857
+2025-11-13 05:43:57,805 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274068 (CMay : 246130 / CMin: 27938)
+2025-11-13 05:49:53,050 - INFO - src.optimization_p 134 - Iteración 3 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 05:49:53,050 - INFO - src.optimization_p 135 - Ganancia: 228,455,708---Parámetros: {params}
+2025-11-13 05:49:53,050 - INFO - src.optimization_p 610 - Trial 3: Ganancia Media = 228,455,708, Ganancia Max = 231,501,143
+2025-11-13 05:50:22,033 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274797 (CMay : 246859 / CMin: 27938)
+2025-11-13 06:00:23,527 - INFO - src.optimization_p 134 - Iteración 4 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:00:23,527 - INFO - src.optimization_p 135 - Ganancia: 256,789,070---Parámetros: {params}
+2025-11-13 06:00:23,528 - INFO - src.optimization_p 610 - Trial 4: Ganancia Media = 256,789,070, Ganancia Max = 259,847,429
+2025-11-13 06:00:52,839 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273242 (CMay : 245304 / CMin: 27938)
+2025-11-13 06:09:08,826 - INFO - src.optimization_p 134 - Iteración 5 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:09:08,826 - INFO - src.optimization_p 135 - Ganancia: 243,264,764---Parámetros: {params}
+2025-11-13 06:09:08,826 - INFO - src.optimization_p 610 - Trial 5: Ganancia Media = 243,264,764, Ganancia Max = 246,794,286
+2025-11-13 06:09:38,003 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273837 (CMay : 245899 / CMin: 27938)
+2025-11-13 06:17:34,805 - INFO - src.optimization_p 134 - Iteración 6 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:17:34,806 - INFO - src.optimization_p 135 - Ganancia: 258,848,864---Parámetros: {params}
+2025-11-13 06:17:34,806 - INFO - src.optimization_p 610 - Trial 6: Ganancia Media = 258,848,864, Ganancia Max = 261,793,143
+2025-11-13 06:18:03,665 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273515 (CMay : 245577 / CMin: 27938)
+2025-11-13 06:27:54,444 - INFO - src.optimization_p 134 - Iteración 7 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:27:54,445 - INFO - src.optimization_p 135 - Ganancia: 228,853,775---Parámetros: {params}
+2025-11-13 06:27:54,445 - INFO - src.optimization_p 610 - Trial 7: Ganancia Media = 228,853,775, Ganancia Max = 231,932,000
+2025-11-13 06:28:24,150 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274811 (CMay : 246873 / CMin: 27938)
+2025-11-13 06:39:28,675 - INFO - src.optimization_p 134 - Iteración 8 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:39:28,675 - INFO - src.optimization_p 135 - Ganancia: 259,823,846---Parámetros: {params}
+2025-11-13 06:39:28,675 - INFO - src.optimization_p 610 - Trial 8: Ganancia Media = 259,823,846, Ganancia Max = 262,824,000
+2025-11-13 06:39:57,460 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273372 (CMay : 245434 / CMin: 27938)
+2025-11-13 06:46:10,804 - INFO - src.optimization_p 134 - Iteración 9 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:46:10,804 - INFO - src.optimization_p 135 - Ganancia: 250,670,108---Parámetros: {params}
+2025-11-13 06:46:10,804 - INFO - src.optimization_p 610 - Trial 9: Ganancia Media = 250,670,108, Ganancia Max = 253,761,143
+2025-11-13 06:46:40,056 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273720 (CMay : 245782 / CMin: 27938)
+2025-11-13 06:54:07,997 - INFO - src.optimization_p 134 - Iteración 10 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 06:54:07,998 - INFO - src.optimization_p 135 - Ganancia: 239,994,949---Parámetros: {params}
+2025-11-13 06:54:07,998 - INFO - src.optimization_p 610 - Trial 10: Ganancia Media = 239,994,949, Ganancia Max = 243,286,857
+2025-11-13 06:54:36,837 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273837 (CMay : 245899 / CMin: 27938)
+2025-11-13 07:01:28,746 - INFO - src.optimization_p 134 - Iteración 11 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:01:28,746 - INFO - src.optimization_p 135 - Ganancia: 258,011,825---Parámetros: {params}
+2025-11-13 07:01:28,746 - INFO - src.optimization_p 610 - Trial 11: Ganancia Media = 258,011,825, Ganancia Max = 260,830,857
+2025-11-13 07:01:58,254 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274062 (CMay : 246124 / CMin: 27938)
+2025-11-13 07:09:28,679 - INFO - src.optimization_p 134 - Iteración 12 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:09:28,680 - INFO - src.optimization_p 135 - Ganancia: 250,970,811---Parámetros: {params}
+2025-11-13 07:09:28,680 - INFO - src.optimization_p 610 - Trial 12: Ganancia Media = 250,970,811, Ganancia Max = 254,079,429
+2025-11-13 07:09:58,178 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273110 (CMay : 245172 / CMin: 27938)
+2025-11-13 07:18:26,756 - INFO - src.optimization_p 134 - Iteración 13 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:18:26,756 - INFO - src.optimization_p 135 - Ganancia: 255,142,460---Parámetros: {params}
+2025-11-13 07:18:26,756 - INFO - src.optimization_p 610 - Trial 13: Ganancia Media = 255,142,460, Ganancia Max = 258,288,000
+2025-11-13 07:18:55,979 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273255 (CMay : 245317 / CMin: 27938)
+2025-11-13 07:27:37,386 - INFO - src.optimization_p 134 - Iteración 14 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:27:37,386 - INFO - src.optimization_p 135 - Ganancia: 248,037,471---Parámetros: {params}
+2025-11-13 07:27:37,386 - INFO - src.optimization_p 610 - Trial 14: Ganancia Media = 248,037,471, Ganancia Max = 251,154,286
+2025-11-13 07:28:06,356 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273134 (CMay : 245196 / CMin: 27938)
+2025-11-13 07:36:16,858 - INFO - src.optimization_p 134 - Iteración 15 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:36:16,859 - INFO - src.optimization_p 135 - Ganancia: 247,101,432---Parámetros: {params}
+2025-11-13 07:36:16,859 - INFO - src.optimization_p 610 - Trial 15: Ganancia Media = 247,101,432, Ganancia Max = 249,859,429
+2025-11-13 07:36:46,129 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274263 (CMay : 246325 / CMin: 27938)
+2025-11-13 07:44:25,591 - INFO - src.optimization_p 134 - Iteración 16 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:44:25,591 - INFO - src.optimization_p 135 - Ganancia: 253,796,517---Parámetros: {params}
+2025-11-13 07:44:25,591 - INFO - src.optimization_p 610 - Trial 16: Ganancia Media = 253,796,517, Ganancia Max = 257,079,429
+2025-11-13 07:44:54,873 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274216 (CMay : 246278 / CMin: 27938)
+2025-11-13 07:56:18,278 - INFO - src.optimization_p 134 - Iteración 17 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 07:56:18,278 - INFO - src.optimization_p 135 - Ganancia: 265,076,838---Parámetros: {params}
+2025-11-13 07:56:18,278 - INFO - src.optimization_p 610 - Trial 17: Ganancia Media = 265,076,838, Ganancia Max = 268,337,714
+2025-11-13 07:56:47,304 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273808 (CMay : 245870 / CMin: 27938)
+2025-11-13 08:05:30,877 - INFO - src.optimization_p 134 - Iteración 18 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 08:05:30,877 - INFO - src.optimization_p 135 - Ganancia: 255,117,478---Parámetros: {params}
+2025-11-13 08:05:30,877 - INFO - src.optimization_p 610 - Trial 18: Ganancia Media = 255,117,478, Ganancia Max = 258,332,571
+2025-11-13 08:06:00,081 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274199 (CMay : 246261 / CMin: 27938)
+2025-11-13 08:14:28,281 - INFO - src.optimization_p 134 - Iteración 19 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 08:14:28,281 - INFO - src.optimization_p 135 - Ganancia: 255,180,283---Parámetros: {params}
+2025-11-13 08:14:28,282 - INFO - src.optimization_p 610 - Trial 19: Ganancia Media = 255,180,283, Ganancia Max = 258,228,571
+2025-11-13 08:14:57,414 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273691 (CMay : 245753 / CMin: 27938)
+2025-11-13 08:24:47,119 - INFO - src.optimization_p 134 - Iteración 20 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 08:24:47,119 - INFO - src.optimization_p 135 - Ganancia: 254,382,395---Parámetros: {params}
+2025-11-13 08:24:47,119 - INFO - src.optimization_p 610 - Trial 20: Ganancia Media = 254,382,395, Ganancia Max = 257,622,857
+2025-11-13 08:25:16,035 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274043 (CMay : 246105 / CMin: 27938)
+2025-11-13 08:34:52,377 - INFO - src.optimization_p 134 - Iteración 21 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 08:34:52,377 - INFO - src.optimization_p 135 - Ganancia: 263,821,321---Parámetros: {params}
+2025-11-13 08:34:52,377 - INFO - src.optimization_p 610 - Trial 21: Ganancia Media = 263,821,321, Ganancia Max = 267,085,143
+2025-11-13 08:35:22,438 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273197 (CMay : 245259 / CMin: 27938)
+2025-11-13 08:46:03,524 - INFO - src.optimization_p 134 - Iteración 22 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 08:46:03,524 - INFO - src.optimization_p 135 - Ganancia: 263,067,512---Parámetros: {params}
+2025-11-13 08:46:03,524 - INFO - src.optimization_p 610 - Trial 22: Ganancia Media = 263,067,512, Ganancia Max = 266,350,857
+2025-11-13 08:46:35,691 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274503 (CMay : 246565 / CMin: 27938)
+2025-11-13 08:58:10,312 - INFO - src.optimization_p 134 - Iteración 23 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 08:58:10,312 - INFO - src.optimization_p 135 - Ganancia: 259,734,089---Parámetros: {params}
+2025-11-13 08:58:10,312 - INFO - src.optimization_p 610 - Trial 23: Ganancia Media = 259,734,089, Ganancia Max = 263,240,571
+2025-11-13 08:58:39,585 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273935 (CMay : 245997 / CMin: 27938)
+2025-11-13 09:11:54,738 - INFO - src.optimization_p 134 - Iteración 24 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 09:11:54,738 - INFO - src.optimization_p 135 - Ganancia: 253,082,253---Parámetros: {params}
+2025-11-13 09:11:54,738 - INFO - src.optimization_p 610 - Trial 24: Ganancia Media = 253,082,253, Ganancia Max = 256,660,571
+2025-11-13 09:12:23,943 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273673 (CMay : 245735 / CMin: 27938)
+2025-11-13 09:22:02,753 - INFO - src.optimization_p 134 - Iteración 25 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 09:22:02,753 - INFO - src.optimization_p 135 - Ganancia: 254,993,195---Parámetros: {params}
+2025-11-13 09:22:02,753 - INFO - src.optimization_p 610 - Trial 25: Ganancia Media = 254,993,195, Ganancia Max = 258,520,000
+2025-11-13 09:22:31,689 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273845 (CMay : 245907 / CMin: 27938)
+2025-11-13 09:33:10,550 - INFO - src.optimization_p 134 - Iteración 26 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 09:33:10,550 - INFO - src.optimization_p 135 - Ganancia: 262,152,684---Parámetros: {params}
+2025-11-13 09:33:10,550 - INFO - src.optimization_p 610 - Trial 26: Ganancia Media = 262,152,684, Ganancia Max = 265,237,143
+2025-11-13 09:33:39,239 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274753 (CMay : 246815 / CMin: 27938)
+2025-11-13 09:42:58,845 - INFO - src.optimization_p 134 - Iteración 27 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 09:42:58,846 - INFO - src.optimization_p 135 - Ganancia: 255,375,382---Parámetros: {params}
+2025-11-13 09:42:58,846 - INFO - src.optimization_p 610 - Trial 27: Ganancia Media = 255,375,382, Ganancia Max = 258,666,286
+2025-11-13 09:43:27,732 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274079 (CMay : 246141 / CMin: 27938)
+2025-11-13 09:52:57,077 - INFO - src.optimization_p 134 - Iteración 28 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 09:52:57,077 - INFO - src.optimization_p 135 - Ganancia: 251,804,712---Parámetros: {params}
+2025-11-13 09:52:57,077 - INFO - src.optimization_p 610 - Trial 28: Ganancia Media = 251,804,712, Ganancia Max = 254,985,143
+2025-11-13 09:53:26,034 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=274254 (CMay : 246316 / CMin: 27938)
+2025-11-13 10:03:52,975 - INFO - src.optimization_p 134 - Iteración 29 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 10:03:52,975 - INFO - src.optimization_p 135 - Ganancia: 252,872,230---Parámetros: {params}
+2025-11-13 10:03:52,975 - INFO - src.optimization_p 610 - Trial 29: Ganancia Media = 252,872,230, Ganancia Max = 256,096,571
+2025-11-13 10:04:22,457 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273733 (CMay : 245795 / CMin: 27938)
+2025-11-13 10:15:33,185 - INFO - src.optimization_p 134 - Iteración 30 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 10:15:33,185 - INFO - src.optimization_p 135 - Ganancia: 263,435,580---Parámetros: {params}
+2025-11-13 10:15:33,185 - INFO - src.optimization_p 610 - Trial 30: Ganancia Media = 263,435,580, Ganancia Max = 266,581,714
+2025-11-13 10:16:05,333 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273990 (CMay : 246052 / CMin: 27938)
+2025-11-13 10:30:08,626 - INFO - src.optimization_p 134 - Iteración 31 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 10:30:08,626 - INFO - src.optimization_p 135 - Ganancia: 256,345,374---Parámetros: {params}
+2025-11-13 10:30:08,626 - INFO - src.optimization_p 610 - Trial 31: Ganancia Media = 256,345,374, Ganancia Max = 259,708,000
+2025-11-13 10:30:36,736 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273678 (CMay : 245740 / CMin: 27938)
+2025-11-13 10:43:56,026 - INFO - src.optimization_p 134 - Iteración 32 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 10:43:56,026 - INFO - src.optimization_p 135 - Ganancia: 255,151,083---Parámetros: {params}
+2025-11-13 10:43:56,026 - INFO - src.optimization_p 610 - Trial 32: Ganancia Media = 255,151,083, Ganancia Max = 258,462,857
+2025-11-13 10:44:24,376 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273878 (CMay : 245940 / CMin: 27938)
+2025-11-13 10:54:30,382 - INFO - src.optimization_p 134 - Iteración 33 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 10:54:30,382 - INFO - src.optimization_p 135 - Ganancia: 256,470,341---Parámetros: {params}
+2025-11-13 10:54:30,382 - INFO - src.optimization_p 610 - Trial 33: Ganancia Media = 256,470,341, Ganancia Max = 259,999,429
+2025-11-13 10:54:58,888 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=273788 (CMay : 245850 / CMin: 27938)
+2025-11-13 11:07:20,733 - INFO - src.optimization_p 134 - Iteración 34 guardada en resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 11:07:20,733 - INFO - src.optimization_p 135 - Ganancia: 264,784,754---Parámetros: {params}
+2025-11-13 11:07:20,733 - INFO - src.optimization_p 610 - Trial 34: Ganancia Media = 264,784,754, Ganancia Max = 267,869,714
+2025-11-13 11:07:25,699 - INFO - src.optimization_p 759 - 🏆 Mejor ganancia: 265,076,838
+2025-11-13 11:07:26,647 - INFO - src.optimization_p 760 - Mejores parámetros: {'num_iterations': 157, 'num_leaves': 188, 'learning_rate': 0.04499323717863434, 'feature_fraction': 0.625674093782697, 'min_child_samples': 25, 'max_depth': 8, 'reg_lambda': 2.5537689672725987, 'reg_alpha': 5.613346870718665, 'min_gain_to_split': 3.979165880143313}
+2025-11-13 11:07:26,647 - INFO - __main__ 108 - === ANÁLISIS DE RESULTADOS ===
+2025-11-13 11:07:28,051 - INFO - __main__ 112 - Top 5 mejores trials:
+2025-11-13 11:07:28,052 - INFO - __main__ 114 -   Trial 17: 265,076,838
+2025-11-13 11:07:28,052 - INFO - __main__ 114 -   Trial 34: 264,784,754
+2025-11-13 11:07:28,052 - INFO - __main__ 114 -   Trial 21: 263,821,321
+2025-11-13 11:07:28,052 - INFO - __main__ 114 -   Trial 30: 263,435,580
+2025-11-13 11:07:28,052 - INFO - __main__ 114 -   Trial 22: 263,067,512
+2025-11-13 11:07:28,052 - INFO - __main__ 116 - === OPTIMIZACIÓN COMPLETADA ===
+2025-11-13 11:07:28,052 - INFO - __main__ 119 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-11-13 11:07:28,053 - INFO - src.best_params 49 - Mejores hiperparámetros cargados desde resultados/Compe_02_V1_3ob_ss003_new_fe_iteraciones.json
+2025-11-13 11:07:28,053 - INFO - src.best_params 50 - Mejor ganancia encontrada: 265,076,838
+2025-11-13 11:07:28,053 - INFO - src.best_params 51 - Trial número: 17
+2025-11-13 11:07:28,053 - INFO - src.best_params 52 - Parámetros: {'num_iterations': 157, 'num_leaves': 188, 'learning_rate': 0.04499323717863434, 'feature_fraction': 0.625674093782697, 'min_child_samples': 25, 'max_depth': 8, 'reg_lambda': 2.5537689672725987, 'reg_alpha': 5.613346870718665, 'min_gain_to_split': 3.979165880143313, 'bagging_freq': 1, 'objective': 'binary', 'metric': 'None', 'random_state': 839071}
+2025-11-13 11:07:28,053 - INFO - src.optimization_p 417 - === EVALUACIÓN EN CONJUNTO DE TEST (Promediando N Modelos) ===
+2025-11-13 11:07:28,053 - INFO - src.optimization_p 418 - Período de test: 202104
+2025-11-13 11:07:28,054 - INFO - src.optimization_p 419 - Semilla base: 839071, N Modelos: 35
+2025-11-13 11:07:35,200 - INFO - src.optimization_p 932 - Undersampling aplicado: tasa=0.03, registros originales=3580681 (C May: 3550880 / C Min: 29801), registros finales=301415 (CMay : 271614 / CMin: 29801)
+2025-11-13 11:07:36,456 - INFO - src.optimization_p 433 - Dimensiones df_train_completo: (301415, 981), Dimensiones df_test: (163418, 981)
+2025-11-13 11:07:37,709 - INFO - src.optimization_p 443 - Tipo de dato de train_data: <class 'lightgbm.basic.Dataset'>, Dimensiones de train_data: (301415, 979)
+2025-11-13 11:07:38,615 - INFO - src.optimization_p 454 - Iniciando entrenamiento de 35 modelos...
+2025-11-13 11:07:38,617 - INFO - src.optimization_p 464 - Entrenando modelo 1/35 (Semilla: 3060817664)...
+2025-11-13 11:08:29,485 - INFO - src.optimization_p 464 - Entrenando modelo 2/35 (Semilla: 992140286)...
+2025-11-13 11:08:56,759 - INFO - src.optimization_p 464 - Entrenando modelo 3/35 (Semilla: 3237557171)...
+2025-11-13 11:09:24,833 - INFO - src.optimization_p 464 - Entrenando modelo 4/35 (Semilla: 2314383897)...
+2025-11-13 11:09:51,483 - INFO - src.optimization_p 464 - Entrenando modelo 5/35 (Semilla: 404200786)...
+2025-11-13 11:10:18,819 - INFO - src.optimization_p 464 - Entrenando modelo 6/35 (Semilla: 3847701201)...
+2025-11-13 11:10:47,100 - INFO - src.optimization_p 464 - Entrenando modelo 7/35 (Semilla: 2865421062)...
+2025-11-13 11:11:24,892 - INFO - src.optimization_p 464 - Entrenando modelo 8/35 (Semilla: 3643192183)...
+2025-11-13 11:11:53,396 - INFO - src.optimization_p 464 - Entrenando modelo 9/35 (Semilla: 1117668684)...
+2025-11-13 11:12:21,058 - INFO - src.optimization_p 464 - Entrenando modelo 10/35 (Semilla: 3510756625)...
+2025-11-13 11:12:48,421 - INFO - src.optimization_p 464 - Entrenando modelo 11/35 (Semilla: 2571145538)...
+2025-11-13 11:13:16,703 - INFO - src.optimization_p 464 - Entrenando modelo 12/35 (Semilla: 2213045784)...
+2025-11-13 11:13:44,270 - INFO - src.optimization_p 464 - Entrenando modelo 13/35 (Semilla: 2153453051)...
+2025-11-13 11:14:11,846 - INFO - src.optimization_p 464 - Entrenando modelo 14/35 (Semilla: 3163014560)...
+2025-11-13 11:14:39,995 - INFO - src.optimization_p 464 - Entrenando modelo 15/35 (Semilla: 3698929166)...
+2025-11-13 11:15:07,521 - INFO - src.optimization_p 464 - Entrenando modelo 16/35 (Semilla: 766887731)...
+2025-11-13 11:15:34,934 - INFO - src.optimization_p 464 - Entrenando modelo 17/35 (Semilla: 1371336364)...
+2025-11-13 11:16:03,600 - INFO - src.optimization_p 464 - Entrenando modelo 18/35 (Semilla: 1730670187)...
+2025-11-13 11:16:31,384 - INFO - src.optimization_p 464 - Entrenando modelo 19/35 (Semilla: 1386299423)...
+2025-11-13 11:16:59,318 - INFO - src.optimization_p 464 - Entrenando modelo 20/35 (Semilla: 1650770698)...
+2025-11-13 11:17:27,154 - INFO - src.optimization_p 464 - Entrenando modelo 21/35 (Semilla: 1328894906)...
+2025-11-13 11:17:54,385 - INFO - src.optimization_p 464 - Entrenando modelo 22/35 (Semilla: 1071595191)...
+2025-11-13 11:18:22,460 - INFO - src.optimization_p 464 - Entrenando modelo 23/35 (Semilla: 1340790701)...
+2025-11-13 11:18:49,687 - INFO - src.optimization_p 464 - Entrenando modelo 24/35 (Semilla: 2400442488)...
+2025-11-13 11:19:16,625 - INFO - src.optimization_p 464 - Entrenando modelo 25/35 (Semilla: 3254065775)...
+2025-11-13 11:19:44,819 - INFO - src.optimization_p 464 - Entrenando modelo 26/35 (Semilla: 3649064159)...
+2025-11-13 11:20:12,406 - INFO - src.optimization_p 464 - Entrenando modelo 27/35 (Semilla: 3430280109)...
+2025-11-13 11:20:39,629 - INFO - src.optimization_p 464 - Entrenando modelo 28/35 (Semilla: 3008447690)...
+2025-11-13 11:21:07,613 - INFO - src.optimization_p 464 - Entrenando modelo 29/35 (Semilla: 3130094902)...
+2025-11-13 11:21:45,396 - INFO - src.optimization_p 464 - Entrenando modelo 30/35 (Semilla: 2117805207)...
+2025-11-13 11:22:13,237 - INFO - src.optimization_p 464 - Entrenando modelo 31/35 (Semilla: 785296104)...
+2025-11-13 11:22:40,734 - INFO - src.optimization_p 464 - Entrenando modelo 32/35 (Semilla: 2677631363)...
+2025-11-13 11:23:07,793 - INFO - src.optimization_p 464 - Entrenando modelo 33/35 (Semilla: 2024077945)...
+2025-11-13 11:23:36,221 - INFO - src.optimization_p 464 - Entrenando modelo 34/35 (Semilla: 2982947774)...
+2025-11-13 11:24:03,259 - INFO - src.optimization_p 464 - Entrenando modelo 35/35 (Semilla: 2185230116)...
+2025-11-13 11:24:31,674 - INFO - src.optimization_p 483 - Entrenamiento de los N modelos completado.
+2025-11-13 11:24:31,689 - INFO - src.optimization_p 488 - Predicciones promediadas. Calculando ganancia en Test...
+2025-11-13 11:24:31,868 - INFO - src.optimization_p 511 - Resultados Test (N=35): Ganancia Suavizada = 362,732,328, Ganancia Máxima = 364,660,000
+2025-11-13 11:24:31,903 - CRITICAL - __main__ 175 - Ejecución fallida con una excepción no controlada.
+Traceback (most recent call last):
+  File "/home/guijomter/Project_Wednesday/main.py", line 173, in <module>
+    main()
+    ~~~~^^
+  File "/home/guijomter/Project_Wednesday/main.py", line 128, in main
+    guardar_resultados_test(resultados_test)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/guijomter/Project_Wednesday/src/optimization_p.py", line 290, in guardar_resultados_test
+    'semilla': resultados_test['semilla'],
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 'semilla'
+2025-11-13 11:24:31,951 - INFO - __main__ 177 - Ejecución finalizada.

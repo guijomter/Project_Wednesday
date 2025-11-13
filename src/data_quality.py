@@ -4,7 +4,7 @@ import sys
 import yaml  # <--- Importamos la biblioteca YAML
 from collections import defaultdict
 import subprocess
-from bucket_utils_p import archivo_existe_en_bucket
+from src.bucket_utils_p import archivo_existe_en_bucket
 import os
 
 def dq_interpolar_desde_yaml(

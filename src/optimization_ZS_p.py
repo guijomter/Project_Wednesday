@@ -63,8 +63,8 @@ def _prepare_matrices(
         X_train_pl = df_train.drop(cols_to_drop)
         X_val_pl = df_val.drop(cols_to_drop)
 
-    y_train = df_train.get_column("clase_ternaria").to_numpy(dtype=np.int8)
-    y_val = df_val.get_column("clase_ternaria").to_numpy(dtype=np.int8)
+    y_train = df_train.get_column("clase_ternaria").to_numpy()
+    y_val = df_val.get_column("clase_ternaria").to_numpy()
 
     # Handoff a Pandas para FLAML
     X_train_pd = X_train_pl.to_pandas()

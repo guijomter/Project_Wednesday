@@ -483,16 +483,16 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         # 6. Guardar modelo entrenado
         model.save_model(f'resultados/modelo_final_test_{conf.STUDY_NAME}_semilla_{seed}.txt')
 
-        # 7. Guardar en resultados predicciones ordenadas por probabilidad descendente y su correspondiente valor verdadero, con el id de cliente
+        # 7. Guardar en resultados predicciones...
+        df_resultados_seed = df_test.select(
+            'numero_de_cliente', 
+            'clase_ternaria'
+        ).with_columns(
+            pl.Series('probabilidad', y_pred_proba_seed),
+            pl.lit(seed).alias('semilla_modelo')
+        ).sort('probabilidad', descending=True)
 
-        predicciones_test_seed = pl.DataFrame({
-            'probabilidad': y_pred_proba_seed,
-            'clase_ternaria': y_test,
-            'semilla_modelo': seed,
-            'cliente_id': df_test['cliente_id'].to_numpy()
-        }).sort('probabilidad', descending=True)
-        predicciones_test_seed.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_modelo_{seed}.csv')
-
+        df_resultados_seed.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_modelo_{seed}.csv')
 
     logger.info("Entrenamiento de los N modelos completado.")
     
@@ -503,16 +503,17 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
 
     # --- Cálculo de Ganancia y Resultados ---
 
-    # Guardar predicciones promediadas ordenadas por probabilidad descendente
-    predicciones_test = pl.DataFrame({
-        'probabilidad': y_pred_proba,
-        'clase_ternaria': y_test
-    }).sort('probabilidad', descending=True)
-    
-    # Actualizar nombre de archivo para reflejar que son N modelos promediados
-    predicciones_test.write_csv(f'resultados/predicciones_test_promediadas_{conf.STUDY_NAME}_semilla_{semilla_base}_N{n_semillas}.csv')
+    df_resultados_promedio = df_test.select(
+        'numero_de_cliente', 
+        'clase_ternaria'
+    ).with_columns(
+        pl.Series('probabilidad', y_pred_proba) # y_pred_proba es el array NumPy promediado
+    ).sort('probabilidad', descending=True)
 
+    df_resultados_promedio.write_csv(f'resultados/predicciones_test_promediadas_{conf.STUDY_NAME}_semilla_{semilla_base}_N{n_semillas}.csv')
+    
     # Calcular ganancias usando la predicción promediada
+    
     ganancia_suavizada_test, ganancia_maxima_test = calcular_ganancias(y_pred_proba, test_data)
 
     resultados = {

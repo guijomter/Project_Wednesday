@@ -3,6 +3,7 @@ import lightgbm as lgb
 import pandas as pd
 import numpy as np
 import logging
+import copy
 import os
 from datetime import datetime
 #from .config import FINAL_TRAIN, FINAL_PREDIC, SEMILLA
@@ -225,54 +226,79 @@ def entrenar_modelo_final_pesos(X_train: pd.DataFrame, y_train: pd.Series, pesos
 ###########################################################################################################################
 
 
-def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame, y_train: pd.Series, pesos:  pd.Series , mejores_params: dict) -> list:
+def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame, 
+                                y_train: pd.Series, 
+                                pesos: pd.Series, 
+                                mejores_params: dict, 
+                                n_semillas: int, 
+                                semilla_base=SEMILLA[0]) -> list:
     """
-    Entrena el modelo final con los mejores hiperparámetros.
-  
+    Entrena N modelos finales con los mejores hiperparámetros, usando N semillas
+    generadas a partir de una semilla base.
+    
     Args:
         X_train: Features de entrenamiento
         y_train: Target de entrenamiento
+        pesos: Pesos para las muestras
         mejores_params: Mejores hiperparámetros de Optuna
-  
+        n_semillas: Número de modelos a entrenar
+        semilla_base: Semilla para generar la lista de N semillas
+    
     Returns:
-        lgb.Booster: Modelo entrenado
+        list: Lista de N modelos (lgb.Booster) entrenados
     """
-    logger.info("Iniciando entrenamiento del modelo final")
+    logger.info(f"Iniciando entrenamiento de {n_semillas} modelos finales (base: {semilla_base})")
     
     # Crear dataset de LightGBM
-  
     train_data = lgb.Dataset(X_train, label=y_train, weight=pesos)
     
-    modelos_finales = []
-    for seed in SEMILLA:
-        mejores_params['random_state'] = seed  # Asegurarse de que la semilla está en los parámetros
-        params = {
-        'objective': 'binary',
-        'metric': 'None',  # Usamos nuestra métrica personalizada
-        'verbose': -1,
-        **mejores_params  # Agregar los mejores hiperparámetros
-        }
+    # --- INICIO DE LA MODIFICACIÓN ---
+    # 1. Generar N semillas aleatorias reproducibles a partir de la semilla base
+    rng = np.random.RandomState(semilla_base)
+    semillas_nuevas = rng.randint(0, 2**32 - 1, size=n_semillas)
+    # --- FIN DE LA MODIFICACIÓN ---
 
-    # Entrenar modelo con la semilla actual
+    modelos_finales = []
+    
+    # 2. Iterar sobre la NUEVA lista de semillas
+    for seed in semillas_nuevas:
+        
+        # 3. Usar deepcopy para no modificar 'mejores_params' entre iteraciones
+        params = copy.deepcopy(mejores_params)
+
+        # 4. Asignar la semilla actual a todos los parámetros relevantes
+        params['random_state'] = seed
+        params['seed'] = seed
+        params['bagging_seed'] = seed + 1
+        params['feature_fraction_seed'] = seed + 2
+        
+        # 5. Agregar parámetros fijos
+        params['objective'] = 'binary'
+        params['metric'] = 'None'  # Usamos nuestra métrica personalizada
+        params['verbose'] = -1
+        
+        logger.info(f"Entrenando modelo con semilla: {seed}...")
+        
+        # Entrenar modelo con la semilla actual
         modelo = lgb.train(
             params,
             train_data,
             valid_sets=None,
-            feval=lgb_gan_eval
+            feval=lgb_gan_eval # Asumo que esta función está definida
         )
 
-     # Guardar el modelo entrenado a un archivo en la carpeta de resultados
-
+        # Guardar el modelo entrenado a un archivo en la carpeta de resultados
         os.makedirs(f"resultados/{conf.STUDY_NAME}", exist_ok=True)
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         modelo_path = f"resultados/{conf.STUDY_NAME}/modelo_final_semilla_{seed}_{timestamp}.txt"
 
         modelo.save_model(modelo_path)
         logger.info(f"Modelo final (semilla {seed}) guardado en: {modelo_path}")
+        
         # Agregar el modelo a la lista de modelos
         modelos_finales.append(modelo)
 
-    logger.info("Entrenamiento de modelos finales completado")
+    logger.info(f"Entrenamiento de {len(modelos_finales)} modelos finales completado.")
     return modelos_finales
 
 

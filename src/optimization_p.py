@@ -7,6 +7,7 @@ import numpy as np
 import logging
 import json
 import os
+import copy
 from datetime import datetime
 from .config import *
 from .gain_function import calcular_ganancia, ganancia_lgb_binary, ganancia_evaluator, lgb_gan_eval, calcular_ganancias
@@ -304,22 +305,119 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
 
 #####################################################################################
   
-def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], undersampling: float = 1) -> dict:
+# def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], undersampling: float = 1) -> dict:
+#     """
+#     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
+#     Solo calcula la ganancia, sin usar sklearn.
+  
+#     Args:
+#         df: Polars DataFrame con todos los datos
+#         mejores_params: Mejores hiperparámetros encontrados por Optuna
+  
+#     Returns:
+#         dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
+#     """
+
+#     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
+#     logger.info(f"Período de test: {MES_TEST}")
+  
+#     # Filtrado Polars
+#     if isinstance(MES_TRAIN, list):
+#         periodos = MES_TRAIN + [MES_VALIDACION]
+#     else:
+#         periodos = [MES_TRAIN, MES_VALIDACION]
+    
+#     df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
+#     df_test = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TEST))
+    
+#     # Aplicar undersampling si es necesario
+    
+#     df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=SEMILLA[0])
+    
+#     # Entrenar modelo con mejores parámetros
+#     logger.info("Entrenando modelo con mejores hiperparámetros...")
+#     logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}, Dimensiones df_test: {df_test.height, df_test.width}')
+
+
+#     # Datasets
+#     X = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+#     y = df_train_completo['clase_ternaria'].to_numpy()
+#     weights = df_train_completo['clase_peso'].to_numpy()
+    
+#     train_data = lgb.Dataset(X, label=y, weight=weights)
+#     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
+  
+#     model = lgb.train(mejores_params, train_data, feval=lgb_gan_eval)
+#     #guardar modelo entrenado
+#     model.save_model(f'resultados/modelo_final_test_{conf.STUDY_NAME}_semilla_{semilla}.txt')
+#     logger.info("Modelo guardado en resultados/")
+#     logger.info("Modelo final para test entrenado. Calculando ganancia en Test...")
+
+#     # Test
+#     X_test = df_test.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+#     y_test = df_test['clase_ternaria'].to_numpy()
+#     wetights_test = df_test['clase_peso'].to_numpy()
+#     test_data = lgb.Dataset(X_test, label=y_test, weight=wetights_test)
+
+#    # y_test_pesos = df_test['clase_peso'].to_numpy()
+#    # y_test = np.where(y_test_pesos == 1.00002, 1, 0)
+
+#     y_pred_proba = model.predict(X_test)
+
+#     # Guardar predicciones ordenadas por probabilidad descendente (usando Polars para crear el DF y guardar CSV)
+#     predicciones_test = pl.DataFrame({
+#         'probabilidad': y_pred_proba,
+#         'clase_ternaria': y_test
+#     }).sort('probabilidad', descending=True)
+    
+#     predicciones_test.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_{semilla}.csv')
+
+# #    # Buscar el umbral que maximiza la ganancia
+#     # mejor_ganancia = -np.inf
+#     # mejor_umbral = 0.5
+#     # y_pred_binary = np.zeros_like(y_pred_proba, dtype=int)
+#     # for umbral in np.linspace(0, 1, 201):
+#     #     y_pred_bin = (y_pred_proba >= umbral).astype(int)
+#     #     ganancia = calcular_ganancia(y_test, y_pred_bin)
+#     #     if ganancia > mejor_ganancia:
+#     #         mejor_ganancia = ganancia
+#     #         mejor_umbral = umbral
+#     #         y_pred_binary = y_pred_bin
+
+#     ganancia_suavizada_test, ganancia_maxima_test = calcular_ganancias(y_pred_proba, test_data)
+
+#     resultados = {
+#         'ganancia_suavizada_test': float(ganancia_suavizada_test),
+#         'ganancia_maxima_test': float(ganancia_maxima_test),
+#       #  'umbral_optimo': float(mejor_umbral),
+#       #  'total_predicciones': int(len(y_pred_binary)),
+#       #  'predicciones_positivas': int(np.sum(y_pred_binary == 1)),
+#       #  'porcentaje_positivas': float((np.sum(y_pred_binary == 1) / len(y_pred_binary)) * 100),
+#         'semilla': semilla
+#     }
+#     return resultados
+
+def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: int, semilla_base=SEMILLA[0], undersampling: float = 1) -> dict:
     """
     Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
-    Solo calcula la ganancia, sin usar sklearn.
-  
+    Entrena N modelos con distintas semillas, promedia sus predicciones y 
+    calcula la ganancia sobre el promedio.
+    
     Args:
         df: Polars DataFrame con todos los datos
         mejores_params: Mejores hiperparámetros encontrados por Optuna
-  
+        n_semillas: int, número de modelos a entrenar y promediar
+        semilla_base: int, semilla base para generar las N semillas
+        undersampling: float, tasa de undersampling
+    
     Returns:
         dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
     """
 
-    logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
+    logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST (Promediando N Modelos) ===")
     logger.info(f"Período de test: {MES_TEST}")
-  
+    logger.info(f"Semilla base: {semilla_base}, N Modelos: {n_semillas}")
+
     # Filtrado Polars
     if isinstance(MES_TRAIN, list):
         periodos = MES_TRAIN + [MES_VALIDACION]
@@ -329,28 +427,20 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], 
     df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
     df_test = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TEST))
     
-    # Aplicar undersampling si es necesario
+    # Aplicar undersampling si es necesario (usando la semilla base)
+    df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=semilla_base)
     
-    df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=SEMILLA[0])
-    
-    # Entrenar modelo con mejores parámetros
-    logger.info("Entrenando modelo con mejores hiperparámetros...")
     logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}, Dimensiones df_test: {df_test.height, df_test.width}')
 
-
-    # Datasets
+    # --- Preparar Datasets (se hace una sola vez) ---
+    
+    # Train
     X = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
     y = df_train_completo['clase_ternaria'].to_numpy()
     weights = df_train_completo['clase_peso'].to_numpy()
     
     train_data = lgb.Dataset(X, label=y, weight=weights)
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
-  
-    model = lgb.train(mejores_params, train_data, feval=lgb_gan_eval)
-    #guardar modelo entrenado
-    model.save_model(f'resultados/modelo_final_test_{conf.STUDY_NAME}_semilla_{semilla}.txt')
-    logger.info("Modelo guardado en resultados/")
-    logger.info("Modelo final para test entrenado. Calculando ganancia en Test...")
 
     # Test
     X_test = df_test.drop(['clase_ternaria', 'clase_peso']).to_pandas()
@@ -358,52 +448,80 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0], 
     wetights_test = df_test['clase_peso'].to_numpy()
     test_data = lgb.Dataset(X_test, label=y_test, weight=wetights_test)
 
-   # y_test_pesos = df_test['clase_peso'].to_numpy()
-   # y_test = np.where(y_test_pesos == 1.00002, 1, 0)
 
-    y_pred_proba = model.predict(X_test)
+    # --- Loop de Entrenamiento y Predicción ---
+    
+    logger.info(f"Iniciando entrenamiento de {n_semillas} modelos...")
 
-    # Guardar predicciones ordenadas por probabilidad descendente (usando Polars para crear el DF y guardar CSV)
+    # 1. Generar N semillas aleatorias reproducibles a partir de la semilla base
+    rng = np.random.RandomState(semilla_base)
+    semillas_modelos = rng.randint(0, 2**32 - 1, size=n_semillas)
+    
+    # 2. Lista para almacenar las predicciones de cada modelo
+    lista_predicciones = []
+
+    for i, seed in enumerate(semillas_modelos):
+        logger.info(f"Entrenando modelo {i+1}/{n_semillas} (Semilla: {seed})...")
+        
+        # 3. Copiar parámetros y asignar la semilla de esta iteración
+        # Se usa deepcopy para asegurar que el diccionario original 'mejores_params' no se modifique
+        params_seed = copy.deepcopy(mejores_params)
+        
+        # Asignar semillas a parámetros de LightGBM
+        params_seed['random_state'] = seed
+        params_seed['seed'] = seed
+        params_seed['bagging_seed'] = seed + 1  # Usar seeds distintas para distintos tipos de aleatoriedad
+        params_seed['feature_fraction_seed'] = seed + 2
+        
+        # 4. Entrenar el modelo
+        model = lgb.train(params_seed, train_data, feval=lgb_gan_eval)
+        
+        # 5. Predecir sobre test y guardar en la lista
+        y_pred_proba_seed = model.predict(X_test)
+        lista_predicciones.append(y_pred_proba_seed)
+
+    logger.info("Entrenamiento de los N modelos completado.")
+    
+    # 6. Promediar las predicciones de todos los modelos
+    # 'lista_predicciones' es una lista de arrays. np.mean(..., axis=0) promedia "verticalmente"
+    y_pred_proba = np.mean(lista_predicciones, axis=0)
+    logger.info("Predicciones promediadas. Calculando ganancia en Test...")
+
+    # --- Cálculo de Ganancia y Resultados ---
+
+    # Guardar predicciones promediadas ordenadas por probabilidad descendente
     predicciones_test = pl.DataFrame({
         'probabilidad': y_pred_proba,
         'clase_ternaria': y_test
     }).sort('probabilidad', descending=True)
     
-    predicciones_test.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_{semilla}.csv')
+    # Actualizar nombre de archivo para reflejar que son N modelos promediados
+    predicciones_test.write_csv(f'resultados/predicciones_test_promediadas_{conf.STUDY_NAME}_semilla_{semilla_base}_N{n_semillas}.csv')
 
-#    # Buscar el umbral que maximiza la ganancia
-    # mejor_ganancia = -np.inf
-    # mejor_umbral = 0.5
-    # y_pred_binary = np.zeros_like(y_pred_proba, dtype=int)
-    # for umbral in np.linspace(0, 1, 201):
-    #     y_pred_bin = (y_pred_proba >= umbral).astype(int)
-    #     ganancia = calcular_ganancia(y_test, y_pred_bin)
-    #     if ganancia > mejor_ganancia:
-    #         mejor_ganancia = ganancia
-    #         mejor_umbral = umbral
-    #         y_pred_binary = y_pred_bin
-
+    # Calcular ganancias usando la predicción promediada
     ganancia_suavizada_test, ganancia_maxima_test = calcular_ganancias(y_pred_proba, test_data)
 
     resultados = {
         'ganancia_suavizada_test': float(ganancia_suavizada_test),
         'ganancia_maxima_test': float(ganancia_maxima_test),
-      #  'umbral_optimo': float(mejor_umbral),
-      #  'total_predicciones': int(len(y_pred_binary)),
-      #  'predicciones_positivas': int(np.sum(y_pred_binary == 1)),
-      #  'porcentaje_positivas': float((np.sum(y_pred_binary == 1) / len(y_pred_binary)) * 100),
-        'semilla': semilla
+        'semilla_base': semilla_base,
+        'n_semillas': n_semillas
     }
+    
+    logger.info(f"Resultados Test (N={n_semillas}): Ganancia Suavizada = {ganancia_suavizada_test:,.0f}, Ganancia Máxima = {ganancia_maxima_test:,.0f}")
     return resultados
+
 
 ############################################################################ OBJETIVO GANANCIA SEEDS 
 
-def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersampling: float = 1) -> float:
+def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semillas: int, undersampling: float = 1) -> float:
     """
     Parameters:
     trial: trial de optuna
     df: dataframe con datos
-  
+    n_semillas: int, número de semillas aleatorias a generar y promediar
+    undersampling: float, tasa de undersampling
+
     Description:
     Función objetivo que maximiza ganancia en mes de validación.
     Utiliza configuración YAML para períodos y semilla.
@@ -462,8 +580,13 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     # Entrenar modelos distintos por cada seed
     ganancia_med_total = 0
     ganancia_max_total = 0
+    
+    
+    base_seed = SEMILLA[0]
+    rng = np.random.RandomState(base_seed)
+    semillas = rng.randint(0, 2**32 - 1, size=n_semillas)
 
-    semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
+    #semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
     
     for seed in semillas:
         params['random_state'] = seed
@@ -592,7 +715,7 @@ def crear_o_cargar_estudio(study_name: str = None, semilla: int = None) -> optun
 
 #########################################################################################################
 
-def optimizar(df: pl.DataFrame, n_trials: int, study_name: str = None, undersampling: float = 0.01) -> optuna.Study:
+def optimizar(df: pl.DataFrame, n_trials: int, study_name: str = None, n_semillas: int = 1, undersampling: float = 0.01) -> optuna.Study:
     """
     Args:
         df: DataFrame con datos
@@ -632,7 +755,7 @@ def optimizar(df: pl.DataFrame, n_trials: int, study_name: str = None, undersamp
     # Ejecutar optimización
     if trials_a_ejecutar > 0:
         # Llama a la función objetivo que ya soporta Polars
-        study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df, undersampling), n_trials=trials_a_ejecutar)
+        study.optimize(lambda trial: objetivo_ganancia_seeds(trial, df, n_semillas, undersampling), n_trials=trials_a_ejecutar)
         logger.info(f"🏆 Mejor ganancia: {study.best_value:,.0f}")
         logger.info(f"Mejores parámetros: {study.best_params}")
     else:

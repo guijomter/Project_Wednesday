@@ -102,7 +102,7 @@ def main():
     
     #03 Ejecutar optimizacion de hiperparametros
     
-    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=conf.parametros_lgb.undersampling)
+    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=N_SEMILLERO, undersampling=conf.parametros_lgb.undersampling)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -122,7 +122,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros()
   
     # Evaluar en test
-    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
+    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
   
     # Guardar resultados de test
     guardar_resultados_test(resultados_test)
@@ -143,7 +143,7 @@ def main():
 
     # Entrenar modelo final
     logger.info("Entrenar modelo final")
-    modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params)
+    modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0])
 
     # Generar predicciones finales
     logger.info("Generar predicciones finales")

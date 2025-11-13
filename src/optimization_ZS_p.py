@@ -32,11 +32,11 @@ def _split_train_validation(
     logger.debug(f"Dividiendo datos ZS: Train={MES_TRAIN}, Val={MES_VALIDACION}")
     
     if isinstance(MES_TRAIN, list):
-        df_train = df.filter(pl.col("foto_mes").is_in(MES_TRAIN))
+        df_train = df.filter(pl.col("foto_mes").cast(pl.Utf8).is_in(MES_TRAIN))
     else:
-        df_train = df.filter(pl.col("foto_mes") == MES_TRAIN)
+        df_train = df.filter(pl.col("foto_mes").cast(pl.Utf8) == MES_TRAIN)
 
-    df_val = df.filter(pl.col("foto_mes") == MES_VALIDACION)
+    df_val = df.filter(pl.col("foto_mes").cast(pl.Utf8) == MES_VALIDACION)
 
     # Aseguramos el tipo de dato, aunque ya debería estar correcto
     df_train = df_train.with_columns(pl.col("clase_ternaria").cast(pl.Int8))

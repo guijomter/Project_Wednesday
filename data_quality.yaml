@@ -1,15 +1,190 @@
-# data_quality.yaml
-# Lista de correcciones de calidad de datos a aplicar
+# Archivo de configuración para el pipeline de Data Quality (DQ)
+# Define qué atributos deben ser interpolados (a NULL) en qué meses.
 
 corrections:
-  - attribute: 'ventas'
-    bad_month: 202501
-
-  - attribute: 'costos'
-    bad_month: 202502
-
-  - attribute: 'ventas'
-    bad_month: 202503
-  
-  - attribute: 'margen'
-    bad_month: 202412
+  - attribute: 'active_quarter'
+    bad_month: 202006
+  - attribute: 'internet'
+    bad_month: 202006
+  - attribute: 'mrentabilidad'
+    bad_month: 201905
+  - attribute: 'mrentabilidad'
+    bad_month: 202006
+  - attribute: 'mrentabilidad'
+    bad_month: 201910
+  - attribute: 'mrentabilidad_annual'
+    bad_month: 201905
+  - attribute: 'mrentabilidad_annual'
+    bad_month: 202006
+  - attribute: 'mrentabilidad_annual'
+    bad_month: 201910
+  - attribute: 'mcomisiones'
+    bad_month: 201905
+  - attribute: 'mcomisiones'
+    bad_month: 202006
+  - attribute: 'mcomisiones'
+    bad_month: 201910
+  - attribute: 'mactivos_margen'
+    bad_month: 201905
+  - attribute: 'mactivos_margen'
+    bad_month: 202006
+  - attribute: 'mactivos_margen'
+    bad_month: 201910
+  - attribute: 'mpasivos_margen'
+    bad_month: 201905
+  - attribute: 'mpasivos_margen'
+    bad_month: 202006
+  - attribute: 'mpasivos_margen'
+    bad_month: 201910
+  - attribute: 'mcuentas_saldo'
+    bad_month: 202006
+  - attribute: 'ctarjeta_debito_transacciones'
+    bad_month: 202006
+  - attribute: 'mautoservicio'
+    bad_month: 202006
+  - attribute: 'ctarjeta_visa_transacciones'
+    bad_month: 202006
+  - attribute: 'mtarjeta_visa_consumo'
+    bad_month: 202006
+  - attribute: 'ctarjeta_master_transacciones'
+    bad_month: 202006
+  - attribute: 'mtarjeta_master_consumo'
+    bad_month: 202006
+  - attribute: 'ctarjeta_visa_debitos_automaticos'
+    bad_month: 201904
+  - attribute: 'mtarjeta_visa_debitos_automaticos'
+    bad_month: 201904
+  - attribute: 'ccajeros_propios_descuentos'
+    bad_month: 202009
+  - attribute: 'ccajeros_propios_descuentos'
+    bad_month: 202006
+  - attribute: 'ccajeros_propios_descuentos'
+    bad_month: 202102
+  - attribute: 'ccajeros_propios_descuentos'
+    bad_month: 202010
+  - attribute: 'ccajeros_propios_descuentos'
+    bad_month: 202002
+  - attribute: 'ccajeros_propios_descuentos'
+    bad_month: 201910
+  - attribute: 'mcajeros_propios_descuentos'
+    bad_month: 202009
+  - attribute: 'mcajeros_propios_descuentos'
+    bad_month: 202006
+  - attribute: 'mcajeros_propios_descuentos'
+    bad_month: 202102
+  - attribute: 'mcajeros_propios_descuentos'
+    bad_month: 202010
+  - attribute: 'mcajeros_propios_descuentos'
+    bad_month: 202002
+  - attribute: 'mcajeros_propios_descuentos'
+    bad_month: 201910
+  - attribute: 'ctarjeta_visa_descuentos'
+    bad_month: 202009
+  - attribute: 'ctarjeta_visa_descuentos'
+    bad_month: 202006
+  - attribute: 'ctarjeta_visa_descuentos'
+    bad_month: 202102
+  - attribute: 'ctarjeta_visa_descuentos'
+    bad_month: 202010
+  - attribute: 'ctarjeta_visa_descuentos'
+    bad_month: 202002
+  - attribute: 'ctarjeta_visa_descuentos'
+    bad_month: 201910
+  - attribute: 'mtarjeta_visa_descuentos'
+    bad_month: 202009
+  - attribute: 'mtarjeta_visa_descuentos'
+    bad_month: 202006
+  - attribute: 'mtarjeta_visa_descuentos'
+    bad_month: 202102
+  - attribute: 'mtarjeta_visa_descuentos'
+    bad_month: 202010
+  - attribute: 'mtarjeta_visa_descuentos'
+    bad_month: 202002
+  - attribute: 'mtarjeta_visa_descuentos'
+    bad_month: 201910
+  - attribute: 'ctarjeta_master_descuentos'
+    bad_month: 202009
+  - attribute: 'ctarjeta_master_descuentos'
+    bad_month: 202006
+  - attribute: 'ctarjeta_master_descuentos'
+    bad_month: 202102
+  - attribute: 'ctarjeta_master_descuentos'
+    bad_month: 202010
+  - attribute: 'ctarjeta_master_descuentos'
+    bad_month: 202002
+  - attribute: 'ctarjeta_master_descuentos'
+    bad_month: 201910
+  - attribute: 'mtarjeta_master_descuentos'
+    bad_month: 202009
+  - attribute: 'mtarjeta_master_descuentos'
+    bad_month: 202006
+  - attribute: 'mtarjeta_master_descuentos'
+    bad_month: 202102
+  - attribute: 'mtarjeta_master_descuentos'
+    bad_month: 202010
+  - attribute: 'mtarjeta_master_descuentos'
+    bad_month: 202002
+  - attribute: 'mtarjeta_master_descuentos'
+    bad_month: 201910
+  - attribute: 'ccomisiones_otras'
+    bad_month: 201905
+  - attribute: 'ccomisiones_otras'
+    bad_month: 202006
+  - attribute: 'ccomisiones_otras'
+    bad_month: 201910
+  - attribute: 'mcomisiones_otras'
+    bad_month: 201905
+  - attribute: 'mcomisiones_otras'
+    bad_month: 202006
+  - attribute: 'mcomisiones_otras'
+    bad_month: 201910
+  - attribute: 'cextraccion_autoservicio'
+    bad_month: 202006
+  - attribute: 'mextraccion_autoservicio'
+    bad_month: 202006
+  - attribute: 'ccheques_depositados'
+    bad_month: 202006
+  - attribute: 'mcheques_depositados'
+    bad_month: 202006
+  - attribute: 'ccheques_emitidos'
+    bad_month: 202006
+  - attribute: 'mcheques_emitidos'
+    bad_month: 202006
+  - attribute: 'ccheques_depositados_rechazados'
+    bad_month: 202006
+  - attribute: 'mcheques_depositados_rechazados'
+    bad_month: 202006
+  - attribute: 'ccheques_emitidos_rechazados'
+    bad_month: 202006
+  - attribute: 'mcheques_emitidos_rechazados'
+    bad_month: 202006
+  - attribute: 'tcallcenter'
+    bad_month: 202006
+  - attribute: 'ccallcenter_transacciones'
+    bad_month: 202006
+  - attribute: 'thomebanking'
+    bad_month: 202006
+  - attribute: 'chomebanking_transacciones'
+    bad_month: 202006
+  - attribute: 'chomebanking_transacciones'
+    bad_month: 201910
+  - attribute: 'ccajas_transacciones'
+    bad_month: 202006
+  - attribute: 'ccajas_consultas'
+    bad_month: 202006
+  - attribute: 'ccajas_depositos'
+    bad_month: 202006
+  - attribute: 'ccajas_depositos'
+    bad_month: 202105
+  - attribute: 'ccajas_extracciones'
+    bad_month: 202006
+  - attribute: 'ccajas_otras'
+    bad_month: 202006
+  - attribute: 'catm_trx'
+    bad_month: 202006
+  - attribute: 'matm'
+    bad_month: 202006
+  - attribute: 'catm_trx_other'
+    bad_month: 202006
+  - attribute: 'matm_other'
+    bad_month: 202006

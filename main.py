@@ -23,7 +23,7 @@ from src.config import *
 #from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
 from src.bucket_utils_p import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
 from src.target import crear_clase_ternaria_gcs
-from src.data_quality import dq_interpolar_gcs
+from src.data_quality import data_quality_gcs
 
 ## config basico logging
 os.makedirs("logs", exist_ok=True)
@@ -60,7 +60,7 @@ def main():
     ##01 Data Quality - Interpolacion de datos faltantes (meses rotos)
     logger.info("=== INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===")
 
-    dq_interpolar_gcs(
+    data_quality_gcs(
         input_bucket_path=data_path_gcs,
         output_bucket_path=data_path_q_gcs,
         yaml_config_path="data_quality.yaml"

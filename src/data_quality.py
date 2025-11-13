@@ -165,39 +165,83 @@ def dq_interpolar_desde_yaml(
 
 ##############################################################################################################
 
-def dq_interpolar_gcs(
+def ctrx_adjust(input_csv_path: str, output_csv_path: str):
+    """
+    [PASO 2 LOCAL] Carga un dataset y aplica la lógica de negocio 
+    a 'ctrx_quarter' basada en 'cliente_antiguedad'.
+    """
+    
+    con = duckdb.connect(database=':memory:')
+    
+    try:
+        # 1. Cargar datos (el resultado del Paso 1)
+        print(f"[Polars Paso 2] Cargando {input_csv_path}...")
+        df_polars = pl.read_csv(input_csv_path)
+
+        # 2. Definir la consulta SQL
+        query = """
+        SELECT
+            * EXCLUDE (ctrx_quarter),
+            CASE
+                WHEN cliente_antiguedad = 1 THEN ctrx_quarter * 5.0
+                WHEN cliente_antiguedad = 2 THEN ctrx_quarter * 2.0
+                WHEN cliente_antiguedad = 3 THEN ctrx_quarter * 1.2
+                ELSE ctrx_quarter
+            END AS ctrx_quarter
+        FROM df_polars
+        """
+        
+        print("[DuckDB Paso 2] Ajustando 'ctrx_quarter' según antigüedad...")
+        
+        # 3. Ejecutar
+        result_df = con.execute(query).pl()
+        
+        # 4. Guardar resultado final
+        print(f"[Polars Paso 2] Guardando resultado final en {output_csv_path}...")
+        result_df.write_csv(output_csv_path)
+        
+        print("[DQ] Proceso local (Paso 2) completado.")
+
+    except Exception as e:
+        print(f"[Error Paso 2] {e}", file=sys.stderr)
+        raise
+    finally:
+        con.close()
+
+
+############################################################################################################
+
+def data_quality_gcs(
     input_bucket_path: str, 
     output_bucket_path: str, 
     yaml_config_path: str
 ):
     """
-    Orquesta el proceso de DQ "GCS-a-GCS":
-    1. Verifica si el archivo de SALIDA ya existe en GCS.
-    2. Si no existe:
-        a. Define rutas temporales locales para entrada y salida.
-        b. Descarga el archivo de ENTRADA de GCS.
-        c. Procesa el archivo local (con dq_interpolar_desde_yaml).
-        d. Sube el resultado a GCS.
-        e. Elimina archivos temporales locales.
-        
-    NOTA: Se asume que 'yaml_config_path' es una RUTA LOCAL
-    accesible por el script.
+    Orquesta el pipeline de DQ "GCS-a-GCS" en dos pasos locales:
+    1. Descarga el archivo de entrada.
+    2. Llama a _local_step_1_interpolate.
+    3. Llama a _local_step_2_ctrx_adjust.
+    4. Sube el resultado final.
+    5. Limpia todos los archivos temporales.
     """
     
-    # 1. Verificar si el archivo de SALIDA ya existe
+    # 1. Verificar si el archivo de SALIDA FINAL ya existe
     if archivo_existe_en_bucket(output_bucket_path):
-        print(f"Proceso DQ omitido. El archivo {output_bucket_path} ya existe.")
+        print(f"Proceso DQ COMBINADO omitido. El archivo {output_bucket_path} ya existe.")
         return
 
-    print(f"Iniciando procesamiento DQ GCS-a-GCS...")
+    print(f"Iniciando pipeline DQ GCS-a-GCS (Encadenado)...")
 
     # 2a. Definir rutas temporales locales
-    # Usamos os.path.basename para obtener nombres de archivo únicos
-    local_temp_input = f"./temp_input_dq_{os.path.basename(input_bucket_path)}"
-    local_temp_output = f"./temp_output_dq_{os.path.basename(output_bucket_path)}"
+    base_input_name = os.path.basename(input_bucket_path)
+    base_output_name = os.path.basename(output_bucket_path)
+    
+    local_temp_input = f"./temp_input_{base_input_name}"
+    local_temp_intermediate = f"./temp_intermediate_{base_output_name}"
+    local_temp_output = f"./temp_output_final_{base_output_name}"
 
     try:
-        # 2b. Descargar el archivo de ENTRADA desde GCS
+        # 2b. Descargar el archivo de ENTRADA (Solo 1 descarga)
         print(f"Descargando {input_bucket_path} a {local_temp_input}...")
         subprocess.run(
             ["gsutil", "cp", input_bucket_path, local_temp_input],
@@ -205,37 +249,42 @@ def dq_interpolar_gcs(
             capture_output=True
         )
         
-        # 2c. Procesar el archivo local temporal
-        # (Aquí llamamos a la función de DQ que ya teníamos)
+        # --- 2c. Ejecutar PASO 1 LOCAL ---
+        print("\n--- Iniciando DQ Paso 1 (Interpolación) ---")
         dq_interpolar_desde_yaml(
             input_csv_path=local_temp_input, 
-            output_csv_path=local_temp_output, 
+            output_csv_path=local_temp_intermediate, 
             yaml_config_path=yaml_config_path
         )
         
-        # 2d. Subir el resultado a GCS
-        print(f"Subiendo {local_temp_output} a {output_bucket_path}...")
+        # --- 2d. Ejecutar PASO 2 LOCAL ---
+        print("\n--- Iniciando DQ Paso 2 (Ajuste ctrx_quarter) ---")
+        ctrx_adjust(
+            input_csv_path=local_temp_intermediate, # <-- Input es el output del Paso 1
+            output_csv_path=local_temp_output      # <-- Output final
+        )
+        
+        # 2e. Subir el resultado FINAL (Solo 1 subida)
+        print(f"\nSubiendo resultado final {local_temp_output} a {output_bucket_path}...")
         subprocess.run(
             ["gsutil", "cp", local_temp_output, output_bucket_path],
             check=True,
             capture_output=True
         )
-        print("¡Subida de archivo DQ completada!")
+        print("¡Subida de archivo DQ (Pipeline) completada!")
 
     except subprocess.CalledProcessError as e:
-        print(f"Error de 'gsutil'. ¿El archivo de entrada existe? ¿Tienes permisos?")
+        print(f"Error de 'gsutil' (Pipeline).")
         print(f"Detalle: {e.stderr.decode()}", file=sys.stderr)
     except Exception as e:
-        print(f"Ocurrió un error durante el procesamiento GCS: {e}", file=sys.stderr)
+        print(f"Ocurrió un error durante el GCS (Pipeline): {e}", file=sys.stderr)
     
     finally:
-        # 2e. Limpiar ambos archivos temporales locales
-        print("Limpiando archivos temporales de DQ...")
-        if os.path.exists(local_temp_input):
-            os.remove(local_temp_input)
-            print(f"Eliminado: {local_temp_input}")
-        if os.path.exists(local_temp_output):
-            os.remove(local_temp_output)
-            print(f"Eliminado: {local_temp_output}")
+        # 2f. Limpiar TODOS los archivos temporales locales
+        print("Limpiando archivos temporales del pipeline...")
+        for f in [local_temp_input, local_temp_intermediate, local_temp_output]:
+            if os.path.exists(f):
+                os.remove(f)
+                print(f"Eliminado: {f}")
             
-    print("Proceso de Data Quality (DQ) GCS-a-GCS finalizado.")
+    print("Proceso de Data Quality (Pipeline) GCS-a-GCS finalizado.")

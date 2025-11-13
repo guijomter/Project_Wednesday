@@ -52,7 +52,7 @@ corrections:
     bad_month: 202006
   - attribute: 'ctarjeta_visa_debitos_automaticos'
     bad_month: 201904
-  - attribute: 'mtarjeta_visa_debitos_automaticos'
+  - attribute: 'mttarjeta_visa_debitos_automaticos'
     bad_month: 201904
   - attribute: 'ccajeros_propios_descuentos'
     bad_month: 202009

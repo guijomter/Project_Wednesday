@@ -308,8 +308,15 @@ def crear_grafico_ganancia_avanzado_multi(y_true, y_pred_proba_list, seeds=None,
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
     ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:,.0f}'))
     plt.show()
- 
 
+    #guardar gráfico con timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    os.makedirs("resultados", exist_ok=True)
+    ruta_archivo = f"resultados/{conf.STUDY_NAME}_ganancia_multi_{timestamp}.png"
+    plt.savefig(ruta_archivo, dpi=300, bbox_inches='tight', facecolor='white')
+    plt.close()
+    logger.info(f"Gráfico múltiple guardado: {ruta_archivo}")
+    
     #plt.tight_layout()
     return resultados
 

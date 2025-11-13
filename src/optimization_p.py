@@ -480,6 +480,20 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         y_pred_proba_seed = model.predict(X_test)
         lista_predicciones.append(y_pred_proba_seed)
 
+        # 6. Guardar modelo entrenado
+        model.save_model(f'resultados/modelo_final_test_{conf.STUDY_NAME}_semilla_{seed}.txt')
+
+        # 7. Guardar en resultados predicciones ordenadas por probabilidad descendente y su correspondiente valor verdadero, con el id de cliente
+
+        predicciones_test_seed = pl.DataFrame({
+            'probabilidad': y_pred_proba_seed,
+            'clase_ternaria': y_test,
+            'semilla_modelo': seed,
+            'cliente_id': df_test['cliente_id'].to_numpy()
+        }).sort('probabilidad', descending=True)
+        predicciones_test_seed.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_modelo_{seed}.csv')
+
+
     logger.info("Entrenamiento de los N modelos completado.")
     
     # 6. Promediar las predicciones de todos los modelos
@@ -547,6 +561,7 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
         'verbosity': -1,
+        'is_unbalance': trial.suggest_categorical('is_unbalance', [True, False]),
         #'scale_pos_weight': 97,
         #'pos_bagging_fraction': 1.0, 
         #'neg_bagging_fraction': 0.01, 

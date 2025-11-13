@@ -28,6 +28,7 @@ competencia01:
 competencia02:
     DATA_PATH_RAW: "datasets/competencia_02_crudo.csv.gz"
     DATA_PATH: "datasets/competencia_02.csv"
+    DATA_PATH_Q: "datasets/competencia_02_calidad.csv"
     SEMILLA: [839071, 666557] #, 390653, 408341, 858577] #, 156893, 220481, 557412, 111058, 401171]
     MES_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202011","202012"] # SACAR TAMBIE´N 201910 # Períodos para entrenamiento. Período pandemaia excluido "202003","202004","202005","202006","202007","202008","202009","202010",
     MES_VALIDACION: "202101"

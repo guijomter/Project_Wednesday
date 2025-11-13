@@ -1,0 +1,15 @@
+# data_quality.yaml
+# Lista de correcciones de calidad de datos a aplicar
+
+corrections:
+  - attribute: 'ventas'
+    bad_month: 202501
+
+  - attribute: 'costos'
+    bad_month: 202502
+
+  - attribute: 'ventas'
+    bad_month: 202503
+  
+  - attribute: 'margen'
+    bad_month: 202412

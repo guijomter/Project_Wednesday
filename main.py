@@ -23,6 +23,7 @@ from src.config import *
 #from src.bucket_utils import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
 from src.bucket_utils_p import guardar_en_buckets, cargar_de_buckets, archivo_existe_en_bucket
 from src.target import crear_clase_ternaria_gcs
+from src.data_quality import dq_interpolar_gcs
 
 ## config basico logging
 os.makedirs("logs", exist_ok=True)
@@ -49,10 +50,21 @@ def main():
     
     data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}" # type: ignore
     data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
-    
+    data_path_q_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_Q}"
+
     #00 Crear clase_ternaria en GCS si no existe
-     
+
+    logger.info("=== CREACION DE CLASE TERNARIA EN GCS ===")
     crear_clase_ternaria_gcs(data_path_raw_gcs, data_path_gcs)
+
+    ##01 Data Quality - Interpolacion de datos faltantes (meses rotos)
+    logger.info("=== INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===")
+
+    dq_interpolar_gcs(
+        input_bucket_path=data_path_gcs,
+        output_bucket_path=data_path_q_gcs,
+        yaml_config_path="data_quality.yaml"
+    )
 
     #print(f"Ruta GCS del dataset: {data_path_gcs}")
 
@@ -71,8 +83,8 @@ def main():
         logger.info("Archivo de features no encontrado")
         
         # Cargar datos desde GCS
-        logger.info(f"Cargando datos desde GCS: {data_path_gcs}")
-        df = cargar_datos(data_path_gcs)
+        logger.info(f"Cargando datos desde GCS: {data_path_q_gcs}")
+        df = cargar_datos(data_path_q_gcs)
 
         logger.info("Ejecutando feature engineering.")
         # (Esto asume que 'df' y 'feature_engineering' existen)

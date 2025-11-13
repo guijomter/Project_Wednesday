@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 def _resolve_seed() -> int:
     """Obtiene la primera semilla de la lista de configuración."""
-    if isinstance(conf.SEMILLA, list):
-        return conf.SEMILLA[0]
-    return int(conf.SEMILLA)
+    if isinstance(SEMILLA, list):
+        return SEMILLA[0]
+    return int(SEMILLA)
 
 
 def _split_train_validation(
@@ -29,14 +29,14 @@ def _split_train_validation(
     Divide los datos en train y validación según los meses de config.
     ASUME que df['clase_ternaria'] ya es binario (0/1).
     """
-    logger.debug(f"Dividiendo datos ZS: Train={conf.MES_TRAIN}, Val={conf.MES_VALIDACION}")
+    logger.debug(f"Dividiendo datos ZS: Train={MES_TRAIN}, Val={MES_VALIDACION}")
     
-    if isinstance(conf.MES_TRAIN, list):
-        df_train = df.filter(pl.col("foto_mes").is_in(conf.MES_TRAIN))
+    if isinstance(MES_TRAIN, list):
+        df_train = df.filter(pl.col("foto_mes").is_in(MES_TRAIN))
     else:
-        df_train = df.filter(pl.col("foto_mes") == conf.MES_TRAIN)
+        df_train = df.filter(pl.col("foto_mes") == MES_TRAIN)
 
-    df_val = df.filter(pl.col("foto_mes") == conf.MES_VALIDACION)
+    df_val = df.filter(pl.col("foto_mes") == MES_VALIDACION)
 
     # Aseguramos el tipo de dato, aunque ya debería estar correcto
     df_train = df_train.with_columns(pl.col("clase_ternaria").cast(pl.Int8))
@@ -229,8 +229,8 @@ def _persistir_resultados(
             trial_number = 0
 
     configuracion = {
-        "semilla": conf.SEMILLA if isinstance(conf.SEMILLA, list) else [conf.SEMILLA],
-        "mes_train": conf.MES_TRAIN if isinstance(conf.MES_TRAIN, list) else [conf.MES_TRAIN],
+        "semilla": SEMILLA if isinstance(SEMILLA, list) else [SEMILLA],
+        "mes_train": MES_TRAIN if isinstance(MES_TRAIN, list) else [MES_TRAIN],
     }
 
     registro = {

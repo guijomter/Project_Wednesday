@@ -26,7 +26,7 @@ from src.target import crear_clase_ternaria_gcs
 from src.data_quality import data_quality_gcs
 
 ## config basico logging
-os.makedirs("logs", exist_ok=True)
+os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
 
 fecha = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 monbre_log = f"log_{conf.STUDY_NAME}_{fecha}.log"
@@ -34,7 +34,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(name)s %(lineno)d - %(message)s',
     handlers=[
-        logging.FileHandler(f"logs/{monbre_log}", mode="w", encoding="utf-8"),
+        logging.FileHandler(f"{conf.BUCKET_NAME}/logs/{monbre_log}", mode="w", encoding="utf-8"),
         logging.StreamHandler()
     ]
 )

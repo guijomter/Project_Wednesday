@@ -259,7 +259,7 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
         archivo_base = conf.STUDY_NAME
   
     # Nombre del archivo único para todas las iteraciones
-    archivo = f"resultados/{archivo_base}_resultado_test.json"
+    archivo = f"{conf.BUCKET_NAME}/resultados/{archivo_base}_resultado_test.json"
   
     # Cargar datos existentes si el archivo ya existe
     if os.path.exists(archivo):
@@ -287,7 +287,7 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
         'date_time': datetime.now(tz).isoformat(),
         'state': 'COMPLETE',
         'configuracion':{
-            'semilla': resultados_test['semilla'],
+            'semillas': resultados_test['n_semillas'],
             'meses_train': periodos_entrenamiento
         },
         'resultados':resultados_test

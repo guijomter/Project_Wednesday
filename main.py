@@ -129,11 +129,16 @@ def main():
   
     # Resumen de evaluación en test
     logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
-    logger.info(f"✅ Ganancia suavizada en test: {resultados_test['ganancia_suavizada_test']:,.0f}")
-    logger.info(f"✅ Ganancia maxima en test: {resultados_test['ganancia_maxima_test']:,.0f}")
-    logger.info(f"🔍 Envíos de máxima ganancia en test: {resultados_test['envios_max_gan']:,.0f}")
-    #logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
 
+    if not resultados_test:
+        logger.warning("No se generaron resultados de test para mostrar.")
+    else:
+    # Iteramos sobre cada mes en los resultados
+        for mes, resultados_mes in resultados_test.items():
+            logger.info(f"--- Mes: {mes} ---")
+            logger.info(f"  ✅ Ganancia suavizada: {resultados_mes['ganancia_suavizada_test']:,.0f}")
+            logger.info(f"  ✅ Ganancia máxima: {resultados_mes['ganancia_maxima_test']:,.0f}")
+            logger.info(f"  🔍 Envíos de máx. ganancia: {resultados_mes['envios_max_gan']:,.0f}")
 
     #06 Entrenar modelo final
     logger.info("=== ENTRENAMIENTO FINAL ===")

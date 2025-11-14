@@ -8,10 +8,9 @@ import logging
 import json
 import os
 import copy
-from datetime import datetime
 from .config import *
 from .gain_function import calcular_ganancia, ganancia_lgb_binary, ganancia_evaluator, lgb_gan_eval, calcular_ganancias
-from datetime import timezone, timedelta
+from datetime import timezone, timedelta, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -247,20 +246,26 @@ def evaluar_en_test(df: pl.DataFrame, mejores_params, semilla=SEMILLA[0]) -> dic
     return resultados
 #######################################################################################################
 
-def guardar_resultados_test(resultados_test, archivo_base=None):
+def guardar_resultados_test(resultados_test: dict, archivo_base=None):
     """
     Guarda los resultados de la evaluación en test en un archivo JSON.
-    """
-    """
+    
+    Maneja 'resultados_test' como un diccionario (clave=mes_test) y
+    guarda una entrada separada en la lista del JSON por cada mes evaluado.
+    
     Args:
+        resultados_test: dict, 
+            Diccionario donde cada clave es un mes de test (str)
+            y cada valor es un dict con los resultados de ese mes.
         archivo_base: Nombre base del archivo (si es None, usa el de config.yaml)
     """
+    
     if archivo_base is None:
         archivo_base = conf.STUDY_NAME
-  
+    
     # Nombre del archivo único para todas las iteraciones
     archivo = f"{conf.BUCKET_NAME}/resultados/{archivo_base}_resultado_test.json"
-  
+    
     # Cargar datos existentes si el archivo ya existe
     if os.path.exists(archivo):
         with open(archivo, 'r') as f:
@@ -273,41 +278,62 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     else:
         datos_existentes = []
     
+    # --- Preparar datos constantes para esta ejecución ---
     tz = timezone(timedelta(hours=-3))
+    # Usar el mismo timestamp para todas las entradas de esta ejecución
+    timestamp_ejecucion = datetime.now(tz).isoformat() 
 
     if isinstance(MES_TRAIN, list):
         periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
     else:
         periodos_entrenamiento = [MES_TRAIN, MES_VALIDACION]
 
-    iteracion_data = {
-        'Mes_test': MES_TEST,
-        'ganancia_suavizada_test': float(resultados_test['ganancia_suavizada_test']),
-        'ganancia_maxima_test': float(resultados_test['ganancia_maxima_test']),
-        'date_time': datetime.now(tz).isoformat(),
-        'state': 'COMPLETE',
-        'configuracion':{
-            'semillas': resultados_test['n_semillas'],
-            'meses_train': periodos_entrenamiento
-        },
-        'resultados':resultados_test
-    }
+    # --- Iterar sobre CADA mes en los resultados ---
+    # 'resultados_test' es ahora un dict: {'mes1': {...}, 'mes2': {...}}
+    
+    if not isinstance(resultados_test, dict) or not resultados_test:
+         logger.warning("No se recibieron resultados para guardar.")
+         return
 
-    # Agregar nueva iteración
-    datos_existentes.append(iteracion_data)
-  
+    # Iteramos sobre cada par (mes, resultados) en el diccionario
+    for mes_test_actual, resultados_del_mes in resultados_test.items():
+        
+        # Construir la entrada para este mes específico
+        iteracion_data = {
+            # Usar la clave del diccionario como el mes de test
+            'Mes_test': mes_test_actual, 
+            'ganancia_suavizada_test': float(resultados_del_mes['ganancia_suavizada_test']),
+            'ganancia_maxima_test': float(resultados_del_mes['ganancia_maxima_test']),
+            'date_time': timestamp_ejecucion, # Timestamp de la ejecución
+            'state': 'COMPLETE',
+            'configuracion': {
+                # Obtener n_semillas de los resultados de ESE mes
+                'semillas': resultados_del_mes.get('n_semillas', 'N/A'), 
+                'meses_train': periodos_entrenamiento
+            },
+            # Guardar el sub-diccionario completo de ese mes
+            'resultados': resultados_del_mes 
+        }
+
+        # Agregar la iteración de ESTE MES a la lista
+        datos_existentes.append(iteracion_data)
+        
+        # Loguear el resultado de este mes
+        logger.info(f"Mes {mes_test_actual} -> Ganancia suavizada: {resultados_del_mes['ganancia_suavizada_test']:,.0f}" + "---" + f"Ganancia máxima: {resultados_del_mes['ganancia_maxima_test']:,.0f}" )
+
+    # --- Guardar el archivo JSON (fuera del loop) ---
+    
     # Obtener la ruta del directorio del archivo
     directorio_destino = os.path.dirname(archivo)
     
     # Crear el directorio y todos los directorios padres necesarios
     os.makedirs(directorio_destino, exist_ok=True)
 
-    # Guardar todas las iteraciones en el archivo
+    # Guardar todas las iteraciones (nuevas y viejas) en el archivo
     with open(archivo, 'w') as f:
         json.dump(datos_existentes, f, indent=2)
-  
-    #logger.info(f"Iteración {trial.number} guardada en {archivo}")
-    logger.info(f"Ganancia suavizada: {resultados_test['ganancia_suavizada_test']:,.0f}" + "---" + f"Ganancia máxima: {resultados_test['ganancia_maxima_test']:,.0f}" )
+    
+    logger.info(f"Resultados de {len(resultados_test)} mes(es) guardados en {archivo}")
 
 #####################################################################################
   
@@ -405,9 +431,11 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
 
 def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: int, semilla_base=SEMILLA[0], undersampling: float = 1) -> dict:
     """
-    Evalúa el modelo con los mejores hiperparámetros en el conjunto de test.
-    Entrena N modelos con distintas semillas, promedia sus predicciones y 
-    calcula la ganancia sobre el promedio.
+    Evalúa el modelo con los mejores hiperparámetros en el(los) conjunto(s) de test.
+    
+    Entrena N modelos con distintas semillas. Luego, para CADA mes en MES_TEST:
+    1. Promedia sus predicciones.
+    2. Calcula la ganancia sobre el promedio para ese mes.
     
     Args:
         df: Polars DataFrame con todos los datos
@@ -417,13 +445,28 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         undersampling: float, tasa de undersampling
     
     Returns:
-        dict: Resultados de la evaluación en test (ganancia + estadísticas básicas)
+        dict: Un diccionario donde cada clave es un mes de test (str)
+              y cada valor es un dict con los resultados de ese mes.
     """
 
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST (Promediando N Modelos) ===")
-    logger.info(f"Período de test: {MES_TEST}")
+
+    # --- 1. Preparar Lista de Meses de Test ---
+    
+    # Asegurar que MES_TEST sea una lista para iterar
+    if isinstance(MES_TEST, (str, int)):
+        meses_test_lista = [str(MES_TEST)]
+    elif isinstance(MES_TEST, list):
+        meses_test_lista = [str(m) for m in MES_TEST]
+    else:
+        logger.error(f"MES_TEST tiene un tipo no válido: {type(MES_TEST)}")
+        return {} # O lanzar un error
+
+    logger.info(f"Períodos de test a evaluar: {meses_test_lista}")
     logger.info(f"Semilla base: {semilla_base}, N Modelos: {n_semillas}")
 
+    # --- 2. Preparar Datos de Entrenamiento (Una sola vez) ---
+    
     # Filtrado Polars
     if isinstance(MES_TRAIN, list):
         periodos = MES_TRAIN + [MES_VALIDACION]
@@ -431,31 +474,22 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         periodos = [MES_TRAIN, MES_VALIDACION]
     
     df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
-    df_test = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TEST))
     
     # Aplicar undersampling si es necesario (usando la semilla base)
     df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=semilla_base)
     
-    logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}, Dimensiones df_test: {df_test.height, df_test.width}')
+    logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}')
 
-    # --- Preparar Datasets (se hace una sola vez) ---
+    # Convertir a lgb.Dataset
+    X_train = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_train = df_train_completo['clase_ternaria'].to_numpy()
+    weights_train = df_train_completo['clase_peso'].to_numpy()
     
-    # Train
-    X = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y = df_train_completo['clase_ternaria'].to_numpy()
-    weights = df_train_completo['clase_peso'].to_numpy()
-    
-    train_data = lgb.Dataset(X, label=y, weight=weights)
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
     logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
 
-    # Test
-    X_test = df_test.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_test = df_test['clase_ternaria'].to_numpy()
-    wetights_test = df_test['clase_peso'].to_numpy()
-    test_data = lgb.Dataset(X_test, label=y_test, weight=wetights_test)
 
-
-    # --- Loop de Entrenamiento y Predicción ---
+    # --- 3. Loop de Entrenamiento (N Semillas) ---
     
     logger.info(f"Iniciando entrenamiento de {n_semillas} modelos...")
 
@@ -463,77 +497,116 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
     rng = np.random.RandomState(semilla_base)
     semillas_modelos = rng.randint(0, 2**32 - 1, size=n_semillas)
     
-    # 2. Lista para almacenar las predicciones de cada modelo
-    lista_predicciones = []
+    # 2. Lista para almacenar los modelos entrenados
+    modelos_entrenados = [] # Guardará tuplas (modelo, seed)
 
     for i, seed in enumerate(semillas_modelos):
         logger.info(f"Entrenando modelo {i+1}/{n_semillas} (Semilla: {seed})...")
         
         # 3. Copiar parámetros y asignar la semilla de esta iteración
-        # Se usa deepcopy para asegurar que el diccionario original 'mejores_params' no se modifique
         params_seed = copy.deepcopy(mejores_params)
         
         # Asignar semillas a parámetros de LightGBM
         params_seed['random_state'] = seed
-        params_seed['seed'] = seed
-        params_seed['bagging_seed'] = seed + 1  # Usar seeds distintas para distintos tipos de aleatoriedad
+      #  params_seed['seed'] = seed
+        params_seed['bagging_seed'] = seed + 1  # Usar seeds distintas
         params_seed['feature_fraction_seed'] = seed + 2
         
         # 4. Entrenar el modelo
         model = lgb.train(params_seed, train_data, feval=lgb_gan_eval)
         
-        # 5. Predecir sobre test y guardar en la lista
-        y_pred_proba_seed = model.predict(X_test)
-        lista_predicciones.append(y_pred_proba_seed)
-
-        # 6. Guardar modelo entrenado
+        # 5. Guardar modelo entrenado en disco
         model.save_model(f'resultados/modelo_final_test_{conf.STUDY_NAME}_semilla_{seed}.txt')
 
-        # 7. Guardar en resultados predicciones...
-        df_resultados_seed = df_test.select(
+        # 6. Guardar modelo en memoria para predicción
+        modelos_entrenados.append((model, seed))
+
+    logger.info("Entrenamiento de los N modelos completado.")
+
+    # --- 4. Loop de Evaluación (Por cada Mes de Test) ---
+
+    todos_los_resultados = {} # Diccionario para guardar todos los resultados
+
+    for mes_test_actual_str in meses_test_lista:
+        logger.info(f"--- Evaluando en Período de Test: {mes_test_actual_str} ---")
+
+        # 4.1. Filtrar y preparar datos de test para ESTE mes
+        df_test_mes = df.filter(pl.col('foto_mes').cast(pl.Utf8) == mes_test_actual_str)
+        
+        if df_test_mes.height == 0:
+            logger.warning(f"No se encontraron datos para el mes de test: {mes_test_actual_str}. Saltando...")
+            continue
+
+        logger.info(f'Dimensiones df_test ({mes_test_actual_str}): {df_test_mes.height, df_test_mes.width}')
+
+        X_test_mes = df_test_mes.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_test_mes = df_test_mes['clase_ternaria'].to_numpy()
+        weights_test_mes = df_test_mes['clase_peso'].to_numpy()
+        test_data_mes = lgb.Dataset(X_test_mes, label=y_test_mes, weight=weights_test_mes)
+
+        # 4.2. Lista para almacenar las predicciones de cada modelo (para este mes)
+        lista_predicciones_mes = []
+
+        # 4.3. Predecir con cada modelo entrenado
+        for model, seed in modelos_entrenados:
+            logger.debug(f"Prediciendo con modelo (Semilla: {seed}) en mes {mes_test_actual_str}...")
+            
+            y_pred_proba_seed = model.predict(X_test_mes)
+            lista_predicciones_mes.append(y_pred_proba_seed)
+
+            # 4.4. Guardar resultados individuales (por modelo, por mes)
+            df_resultados_seed = df_test_mes.select(
+                'numero_de_cliente', 
+                'clase_peso'
+            ).with_columns(
+                pl.Series('probabilidad', y_pred_proba_seed),
+                pl.lit(seed).alias('semilla_modelo')
+            ).sort('probabilidad', descending=True)
+
+            # Modificar path para incluir el mes
+            fname = f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_mes_{mes_test_actual_str}_semilla_modelo_{seed}.csv'
+            df_resultados_seed.write_csv(fname)
+        
+        logger.info(f"Predicciones completadas para el mes {mes_test_actual_str}. Promediando...")
+
+        # 4.5. Promediar las predicciones (para este mes)
+        y_pred_proba_promedio = np.mean(lista_predicciones_mes, axis=0)
+        
+        # --- 4.6. Cálculo de Ganancia y Resultados (para este mes) ---
+
+        df_resultados_promedio = df_test_mes.select(
             'numero_de_cliente', 
             'clase_peso'
         ).with_columns(
-            pl.Series('probabilidad', y_pred_proba_seed),
-            pl.lit(seed).alias('semilla_modelo')
+            pl.Series('probabilidad', y_pred_proba_promedio) # y_pred_proba es el array NumPy promediado
         ).sort('probabilidad', descending=True)
 
-        df_resultados_seed.write_csv(f'resultados/predicciones_test_ordenadas_{conf.STUDY_NAME}_semilla_modelo_{seed}.csv')
+        # Modificar path para incluir el mes
+        fname_promedio = f'resultados/predicciones_test_promediadas_{conf.STUDY_NAME}_mes_{mes_test_actual_str}_semilla_{semilla_base}_N{n_semillas}.csv'
+        df_resultados_promedio.write_csv(fname_promedio)
+        
+        # Calcular ganancias usando la predicción promediada (para este mes)
+        ganancia_suavizada_test, ganancia_maxima_test, envios_max_gan = calcular_ganancias(y_pred_proba_promedio, test_data_mes)
 
-    logger.info("Entrenamiento de los N modelos completado.")
+        resultados_mes = {
+            'ganancia_suavizada_test': float(ganancia_suavizada_test),
+            'ganancia_maxima_test': float(ganancia_maxima_test),
+            'envios_max_gan': int(envios_max_gan),
+            'porcentaje_envios_max_gan': float(envios_max_gan / len(y_test_mes)),
+            'semilla_base': semilla_base,
+            'n_semillas': n_semillas,
+            'mes_test': mes_test_actual_str # Añadir el mes al dict de resultados
+        }
+        
+        logger.info(f"Resultados Test Mes {mes_test_actual_str} (N={n_semillas}): Ganancia Suavizada = {ganancia_suavizada_test:,.0f}, Ganancia Máxima = {ganancia_maxima_test:,.0f}, Envios Máx Gan = {envios_max_gan}")
+        
+        # 4.7. Guardar resultados en el diccionario principal
+        todos_los_resultados[mes_test_actual_str] = resultados_mes
+
+    # --- Fin del Loop de Evaluación ---
     
-    # 6. Promediar las predicciones de todos los modelos
-    # 'lista_predicciones' es una lista de arrays. np.mean(..., axis=0) promedia "verticalmente"
-    y_pred_proba = np.mean(lista_predicciones, axis=0)
-    logger.info("Predicciones promediadas. Calculando ganancia en Test...")
-
-    # --- Cálculo de Ganancia y Resultados ---
-
-    df_resultados_promedio = df_test.select(
-        'numero_de_cliente', 
-        'clase_peso'
-    ).with_columns(
-        pl.Series('probabilidad', y_pred_proba) # y_pred_proba es el array NumPy promediado
-    ).sort('probabilidad', descending=True)
-
-    df_resultados_promedio.write_csv(f'resultados/predicciones_test_promediadas_{conf.STUDY_NAME}_semilla_{semilla_base}_N{n_semillas}.csv')
-    
-    # Calcular ganancias usando la predicción promediada
-    
-    ganancia_suavizada_test, ganancia_maxima_test, envios_max_gan = calcular_ganancias(y_pred_proba, test_data)
-
-    resultados = {
-        'ganancia_suavizada_test': float(ganancia_suavizada_test),
-        'ganancia_maxima_test': float(ganancia_maxima_test),
-        'envios_max_gan': int(envios_max_gan),
-        'porcentaje_envios_max_gan': float(envios_max_gan / len(y_test)),
-        'semilla_base': semilla_base,
-        'n_semillas': n_semillas
-    }
-    
-    logger.info(f"Resultados Test (N={n_semillas}): Ganancia Suavizada = {ganancia_suavizada_test:,.0f}, Ganancia Máxima = {ganancia_maxima_test:,.0f}, Envios Máx Gan = {envios_max_gan}")
-    return resultados
-
+    logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST COMPLETADA ===")
+    return todos_los_resultados
 
 ############################################################################ OBJETIVO GANANCIA SEEDS 
 

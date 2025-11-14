@@ -180,7 +180,7 @@ def calcular_ganancias(y_pred, data):
     df_ordenado = df_eval.sort('y_pred_proba', descending=True)
 
     df_ordenado = df_ordenado.with_columns([
-        pl.when(pl.col('y_true_weight') == 1.00002)
+        pl.when(pl.col('y_true_weight') == 3.0)
         .then(GANANCIA_ACIERTO)
         .otherwise(-COSTO_ESTIMULO)
         .alias('ganancia_individual')
@@ -202,7 +202,7 @@ def calcular_ganancias(y_pred, data):
     ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()
 
     # Devuelve los números directamente
-    return ganancia_suavizada, ganancia_maxima
+    return ganancia_suavizada, ganancia_maxima, idx_max
 
 
 #####################################################################################################################################

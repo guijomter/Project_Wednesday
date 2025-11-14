@@ -96,8 +96,8 @@ def convertir_clase_ternaria_a_target_peso(df: pl.DataFrame) -> pl.DataFrame:
     # Asignar pesos y convertir clase binaria en una sola operación eficiente con with_columns
     df_result = df.with_columns([
         # Crear columna de pesos basada en condiciones
-        pl.when(pl.col('clase_ternaria') == 'BAJA+2').then(1.00002)
-          .when(pl.col('clase_ternaria') == 'BAJA+1').then(1.00001)
+        pl.when(pl.col('clase_ternaria') == 'BAJA+2').then(3.0)
+          .when(pl.col('clase_ternaria') == 'BAJA+1').then(2.0)
           .otherwise(1.0).alias('clase_peso'),
           
         # Convertir clase ternaria a binaria

@@ -520,16 +520,17 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
     
     # Calcular ganancias usando la predicción promediada
     
-    ganancia_suavizada_test, ganancia_maxima_test = calcular_ganancias(y_pred_proba, test_data)
+    ganancia_suavizada_test, ganancia_maxima_test, envios_max_gan = calcular_ganancias(y_pred_proba, test_data)
 
     resultados = {
         'ganancia_suavizada_test': float(ganancia_suavizada_test),
         'ganancia_maxima_test': float(ganancia_maxima_test),
+        'envios_max_gan': int(envios_max_gan),
         'semilla_base': semilla_base,
         'n_semillas': n_semillas
     }
     
-    logger.info(f"Resultados Test (N={n_semillas}): Ganancia Suavizada = {ganancia_suavizada_test:,.0f}, Ganancia Máxima = {ganancia_maxima_test:,.0f}")
+    logger.info(f"Resultados Test (N={n_semillas}): Ganancia Suavizada = {ganancia_suavizada_test:,.0f}, Ganancia Máxima = {ganancia_maxima_test:,.0f}, Envios Máx Gan = {envios_max_gan}")
     return resultados
 
 

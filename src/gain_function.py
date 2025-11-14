@@ -160,7 +160,7 @@ def lgb_gan_eval(y_pred, data):
     Llama a calcular_ganancias y formatea la salida.
     """
     # 1. Llama a la función núcleo
-    ganancia_suavizada, ganancia_maxima = calcular_ganancias(y_pred, data)
+    ganancia_suavizada, ganancia_maxima, _  = calcular_ganancias(y_pred, data)
     
     # 2. Formatea la salida para lgb.train
     return [

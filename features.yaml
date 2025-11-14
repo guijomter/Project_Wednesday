@@ -123,7 +123,7 @@ fe_orden_2:
         # De Greatest (Orden 1)
         'max_delinquency_tarjetas', 'max_dias_mora_tarjetas', 'tarjetas_antiguedad',
         # De Slope (Orden 1) - Asumiendo n_meses=4
-        'mcuentas_saldo_slope_ult_4m'
+        'mcuentas_saldo_slope_ult_6m'
       ]
       cant_lag: 2
 
@@ -148,8 +148,8 @@ fe_orden_2:
       'master_saldo_pendiente', 'visa_saldo_pendiente',
       # De Greatest (Orden 1)
       'max_delinquency_tarjetas', 'max_dias_mora_tarjetas', 'tarjetas_antiguedad',
-      # De Slope (Orden 1) - Asumiendo n_meses=4
-      'mcuentas_saldo_slope_ult_4m'
+      # De Slope (Orden 1) - Asumiendo n_meses=6
+      'mcuentas_saldo_slope_ult_6m'
     ]
     cant_lag: 2
 # -----------------------------------------------------------------
@@ -186,12 +186,12 @@ fe_orden_4:
 
   lag:
     # Lags de variables creadas en Orden 3
-    columnas: ['total_productos_bancarios','cant_movimientos']
+    columnas: ['total_productos_bancarios','cant_movimientos', 'cant_productos_financieros_slope_ult_6m','cant_tansacciones_tot_slope_ult_6m','cant_operaciones_tarjetas_slope_ult_6m','mflujo_dinero_total_slope_ult_6m','mtarjetas_consumos_totales_slope_ult_6m']
     cant_lag: 2
 
   delta_lag:
     # Delta-Lags de variables creadas en Orden 3
-    columnas: ['total_productos_bancarios','cant_movimientos']
+    columnas: ['total_productos_bancarios','cant_movimientos', 'cant_productos_financieros_slope_ult_6m','cant_tansacciones_tot_slope_ult_6m','cant_operaciones_tarjetas_slope_ult_6m','mflujo_dinero_total_slope_ult_6m','mtarjetas_consumos_totales_slope_ult_6m']
     cant_lag: 2
 
 # -----------------------------------------------------------------

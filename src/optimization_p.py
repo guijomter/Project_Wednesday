@@ -526,6 +526,7 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         'ganancia_suavizada_test': float(ganancia_suavizada_test),
         'ganancia_maxima_test': float(ganancia_maxima_test),
         'envios_max_gan': int(envios_max_gan),
+        'porcentaje_envios_max_gan': float(envios_max_gan / len(y_test)),
         'semilla_base': semilla_base,
         'n_semillas': n_semillas
     }
@@ -603,7 +604,7 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     # Entrenar modelos distintos por cada seed
     ganancia_med_total = 0
     ganancia_max_total = 0
-    
+    envios_max_gan_total = 0
     
     base_seed = SEMILLA[0]
     rng = np.random.RandomState(base_seed)
@@ -618,19 +619,21 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         # Predecir y calcular ganancia
         y_pred_proba = model.predict(X_val)
         #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
-        ganancia_med_iter, ganancia_max_iter = calcular_ganancias(y_pred_proba, val_data)
+        ganancia_med_iter, ganancia_max_iter, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
 
         # Sumar a la ganancia de los modelos anteriores
         ganancia_med_total += ganancia_med_iter
         ganancia_max_total += ganancia_max_iter
+        envios_max_gan_total += envios_max_gan
 
     # Calcular ganancia media de los modelos entrenados en la iteración
     ganancia_med = ganancia_med_total / len(semillas)
     ganancia_max = ganancia_max_total / len(semillas)
+    envios_max_gan = envios_max_gan_total / len(semillas)
     
     # Guardar cada iteración en JSON
     guardar_iteracion(trial, ganancia_med)
-    logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_med:,.0f}, Ganancia Max = {ganancia_max:,.0f}")
+    logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_med:,.0f}, Ganancia Max = {ganancia_max:,.0f}, Envios Max Gan = {envios_max_gan:,.0f}")
     return ganancia_med
    
 #######################################################################################################

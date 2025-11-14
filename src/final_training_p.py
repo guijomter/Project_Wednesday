@@ -268,7 +268,7 @@ def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame,
 
         # 4. Asignar la semilla actual a todos los parámetros relevantes
         params['random_state'] = seed
-        params['seed'] = seed
+       # params['seed'] = seed
         params['bagging_seed'] = seed + 1
         params['feature_fraction_seed'] = seed + 2
         
@@ -284,7 +284,7 @@ def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame,
             params,
             train_data,
             valid_sets=None,
-            feval=lgb_gan_eval # Asumo que esta función está definida
+            feval=lgb_gan_eval 
         )
 
         # Guardar el modelo entrenado a un archivo en la carpeta de resultados

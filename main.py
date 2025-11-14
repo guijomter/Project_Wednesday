@@ -131,7 +131,7 @@ def main():
     logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
     logger.info(f"✅ Ganancia suavizada en test: {resultados_test['ganancia_suavizada_test']:,.0f}")
     logger.info(f"✅ Ganancia maxima en test: {resultados_test['ganancia_maxima_test']:,.0f}")
-    #logger.info(f"🔍 Umbral óptimo encontrado: {resultados_test['umbral_optimo']:.4f}")
+    logger.info(f"🔍 Envíos de máxima ganancia en test: {resultados_test['envios_max_gan']:,.0f}")
     #logger.info(f"🎯 Predicciones positivas: {resultados_test['predicciones_positivas']:,} ({resultados_test['porcentaje_positivas']:.2f}%)")
 
 
@@ -147,7 +147,7 @@ def main():
 
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
-    resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, 0.08093)
+    resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, resultados_test['porcentaje_envios_max_gan'])
   
     # Guardar predicciones
     logger.info("Guardar predicciones")

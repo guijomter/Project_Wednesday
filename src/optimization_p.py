@@ -636,7 +636,7 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
         'learning_rate': trial.suggest_float('learning_rate', conf.parametros_lgb.learning_rate[0], conf.parametros_lgb.learning_rate[1], log=True),
         'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
-        'bagging_fraction': 1.0, # Fijo según tu código original en esta función
+        'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
         'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
         'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
         'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
@@ -647,7 +647,8 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         #'scale_pos_weight': 97,
         #'pos_bagging_fraction': 1.0, 
         #'neg_bagging_fraction': 0.01, 
-        'bagging_freq': 1, 'silent': True, 'bin': 31
+        'bagging_freq': trial.suggest_int('bagging_freq', conf.parametros_lgb.bagging_freq[0], conf.parametros_lgb.bagging_freq[1]),
+        'silent': True, 'bin': 31
     }
     
     # Preparar dataset para entrenamiento y validación

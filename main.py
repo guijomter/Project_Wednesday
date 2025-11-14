@@ -4,6 +4,7 @@ import polars as pl
 import os
 import datetime
 import logging
+import numpy as np
 
 #from src.loader import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
 from src.loader_p import cargar_datos, convertir_clase_ternaria_a_target, convertir_clase_ternaria_a_target_peso
@@ -150,9 +151,20 @@ def main():
     logger.info("Entrenar modelo final")
     modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0])
 
+    # Calcular porcentaje de envíos promedio si hay múltiples meses de test
+   
+    lista_porcentajes = [
+            resultados_mes['porcentaje_envios_max_gan'] 
+            for resultados_mes in resultados_test.values()
+        ]
+   
+    porcentaje_promedio = np.mean(lista_porcentajes)
+        
+    logger.info(f"Usando porcentaje de envíos promedio (calculado de {len(lista_porcentajes)} meses de test): {porcentaje_promedio:.4f}")
+
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
-    resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, resultados_test['porcentaje_envios_max_gan'])
+    resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, porcentaje_promedio)
   
     # Guardar predicciones
     logger.info("Guardar predicciones")

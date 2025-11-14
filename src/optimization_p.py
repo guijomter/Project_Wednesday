@@ -296,6 +296,12 @@ def guardar_resultados_test(resultados_test, archivo_base=None):
     # Agregar nueva iteración
     datos_existentes.append(iteracion_data)
   
+    # Obtener la ruta del directorio del archivo
+    directorio_destino = os.path.dirname(archivo)
+    
+    # Crear el directorio y todos los directorios padres necesarios
+    os.makedirs(directorio_destino, exist_ok=True)
+
     # Guardar todas las iteraciones en el archivo
     with open(archivo, 'w') as f:
         json.dump(datos_existentes, f, indent=2)
@@ -486,7 +492,7 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         # 7. Guardar en resultados predicciones...
         df_resultados_seed = df_test.select(
             'numero_de_cliente', 
-            'clase_ternaria'
+            'clase_peso'
         ).with_columns(
             pl.Series('probabilidad', y_pred_proba_seed),
             pl.lit(seed).alias('semilla_modelo')
@@ -505,7 +511,7 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
 
     df_resultados_promedio = df_test.select(
         'numero_de_cliente', 
-        'clase_ternaria'
+        'clase_peso'
     ).with_columns(
         pl.Series('probabilidad', y_pred_proba) # y_pred_proba es el array NumPy promediado
     ).sort('probabilidad', descending=True)

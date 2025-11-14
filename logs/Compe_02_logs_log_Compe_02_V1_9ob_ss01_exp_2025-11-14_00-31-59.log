@@ -1,0 +1,40 @@
+2025-11-14 00:31:59,380 - INFO - __main__ 171 - Script iniciado directamente.
+2025-11-14 00:31:59,381 - INFO - __main__ 47 - Inicio de ejecucion.
+2025-11-14 00:31:59,381 - INFO - __main__ 49 - Número de trials por estudio: 20
+2025-11-14 00:31:59,381 - INFO - __main__ 57 - === CREACION DE CLASE TERNARIA EN GCS ===
+2025-11-14 00:32:01,377 - INFO - __main__ 61 - === INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===
+2025-11-14 00:32:05,133 - INFO - __main__ 78 - Archivo de features encontrado: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_9ob_ss01_exp.parquet. Cargando desde GCS.
+2025-11-14 00:32:05,243 - INFO - src.bucket_utils_p 86 - Descargando de GCS: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V1_9ob_ss01_exp.parquet
+2025-11-14 00:33:32,144 - INFO - src.bucket_utils_p 90 - Descargado en: /tmp/df_fe_Compe_02_V1_9ob_ss01_exp.parquet
+2025-11-14 00:33:48,766 - INFO - src.bucket_utils_p 94 - DataFrame cargado en memoria.
+2025-11-14 00:33:48,767 - INFO - src.bucket_utils_p 101 - Archivo temporal /tmp/df_fe_Compe_02_V1_9ob_ss01_exp.parquet eliminado.
+2025-11-14 00:33:48,768 - INFO - __main__ 101 - Feature Engineering completado: (4717958, 981)
+2025-11-14 00:33:48,768 - INFO - src.optimization_p 761 - Iniciando optimización con 20 trials
+2025-11-14 00:33:48,768 - INFO - src.optimization_p 762 - Configuración: TRAIN=['201901', '201902', '201903', '201904', '201905', '201906', '201907', '201908', '201909', '201910', '201911', '201912', '202001', '202002', '202003', '202004', '202005', '202007', '202008', '202009', '202010', '202011', '202012', '202101'], VALID=202102, SEMILLA=[839071, 666557]
+2025-11-14 00:33:48,949 - INFO - src.optimization_p 721 - 🆕 No se encontró base de datos previa
+2025-11-14 00:33:48,950 - INFO - src.optimization_p 722 - 📁 Creando nueva base de datos: /home/guijomter/buckets/b1/Compe_02/optuna_db/Compe_02_V1_9ob_ss01_exp.db
+2025-11-14 00:34:18,978 - INFO - src.optimization_p 733 - ✅ Nuevo estudio creado: Compe_02_V1_9ob_ss01_exp
+2025-11-14 00:34:18,978 - INFO - src.optimization_p 734 - 💾 Storage: sqlite:////home/guijomter/buckets/b1/Compe_02/optuna_db/Compe_02_V1_9ob_ss01_exp.db
+2025-11-14 00:34:19,180 - INFO - src.optimization_p 775 - 🆕 Nueva optimización: 20 trials
+2025-11-14 00:34:58,159 - INFO - src.optimization_p 954 - Undersampling aplicado: tasa=0.1, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=501336 (CMay : 473398 / CMin: 27938)
+2025-11-14 01:01:19,975 - INFO - src.optimization_p 134 - Iteración 0 guardada en resultados/Compe_02_V1_9ob_ss01_exp_iteraciones.json
+2025-11-14 01:01:19,975 - INFO - src.optimization_p 135 - Ganancia: 241,304,300---Parámetros: {params}
+2025-11-14 01:01:19,976 - INFO - src.optimization_p 632 - Trial 0: Ganancia Media = 241,304,300, Ganancia Max = 244,932,000
+2025-11-14 01:01:58,819 - INFO - src.optimization_p 954 - Undersampling aplicado: tasa=0.1, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=498613 (CMay : 470675 / CMin: 27938)
+2025-11-14 01:17:19,242 - INFO - src.optimization_p 134 - Iteración 1 guardada en resultados/Compe_02_V1_9ob_ss01_exp_iteraciones.json
+2025-11-14 01:17:19,243 - INFO - src.optimization_p 135 - Ganancia: 266,002,107---Parámetros: {params}
+2025-11-14 01:17:19,243 - INFO - src.optimization_p 632 - Trial 1: Ganancia Media = 266,002,107, Ganancia Max = 268,940,800
+2025-11-14 01:17:51,083 - INFO - src.optimization_p 954 - Undersampling aplicado: tasa=0.1, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=501397 (CMay : 473459 / CMin: 27938)
+2025-11-14 01:23:45,249 - INFO - src.optimization_p 134 - Iteración 2 guardada en resultados/Compe_02_V1_9ob_ss01_exp_iteraciones.json
+2025-11-14 01:23:45,249 - INFO - src.optimization_p 135 - Ganancia: 214,768,589---Parámetros: {params}
+2025-11-14 01:23:45,250 - INFO - src.optimization_p 632 - Trial 2: Ganancia Media = 214,768,589, Ganancia Max = 218,173,600
+2025-11-14 01:24:17,009 - INFO - src.optimization_p 954 - Undersampling aplicado: tasa=0.1, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=500283 (CMay : 472345 / CMin: 27938)
+2025-11-14 01:33:31,677 - INFO - src.optimization_p 134 - Iteración 3 guardada en resultados/Compe_02_V1_9ob_ss01_exp_iteraciones.json
+2025-11-14 01:33:31,678 - INFO - src.optimization_p 135 - Ganancia: 246,005,929---Parámetros: {params}
+2025-11-14 01:33:31,678 - INFO - src.optimization_p 632 - Trial 3: Ganancia Media = 246,005,929, Ganancia Max = 249,439,200
+2025-11-14 01:34:02,878 - INFO - src.optimization_p 954 - Undersampling aplicado: tasa=0.1, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=500410 (CMay : 472472 / CMin: 27938)
+2025-11-14 01:48:09,591 - INFO - src.optimization_p 134 - Iteración 4 guardada en resultados/Compe_02_V1_9ob_ss01_exp_iteraciones.json
+2025-11-14 01:48:09,592 - INFO - src.optimization_p 135 - Ganancia: 233,186,937---Parámetros: {params}
+2025-11-14 01:48:09,592 - INFO - src.optimization_p 632 - Trial 4: Ganancia Media = 233,186,937, Ganancia Max = 236,284,000
+2025-11-14 01:48:41,930 - INFO - src.optimization_p 954 - Undersampling aplicado: tasa=0.1, registros originales=3418526 (C May: 3390588 / C Min: 27938), registros finales=501397 (CMay : 473459 / CMin: 27938)
+2025-11-14 01:54:42,013 - INFO - __main__ 177 - Ejecución finalizada.

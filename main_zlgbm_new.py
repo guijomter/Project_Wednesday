@@ -101,8 +101,12 @@ def main():
 
     logger.info(f"Feature Engineering completado: {df_fe.height, df_fe.width}")  
     
-    #03 Ejecutar optimizacion de hiperparametros
+    # Eliminar variables de prestamos personales
+
+    palabras = ["mprestamos_personales", "cprestamos_personales","mprestamos_totales", "cant_prestamos"]
+    df_fe = df_fe.select(~cs.contains(*palabras))
     
+
    
    # study = optimizar_zlgbm(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=conf.parametros_lgb.undersampling)
    

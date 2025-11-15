@@ -1280,7 +1280,7 @@ def entrenar_zlgbm_unico(df: pl.DataFrame, params_override: dict = None, undersa
         'boosting': 'gbdt',
         'objective': 'binary',
         'metric': 'custom',
-        'first_metric_only': False,
+        'first_metric_only': True,
         'boost_from_average': True,
         'feature_pre_filter': False,
         'force_row_wise': True,

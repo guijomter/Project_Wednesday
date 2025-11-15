@@ -113,10 +113,11 @@ def main():
     }
 
     # Entrenas el modelo final
-    modelo_entrenado = entrenar_zlgbm_unico(df_fe, params_override=best_params, undersampling=0.05)
+    modelo_entrenado = entrenar_zlgbm_unico(df_fe, params_override=best_params, undersampling=0.03)
 
     # Ahora puedes guardar el modelo o usarlo
     modelo_entrenado.save_model(f"resultados/modelo_final_zlgbm_{conf.STUDY_NAME}.txt")
+    logger.info(f"Modelo ZLGBM entrenado y guardado como: resultados/modelo_final_zlgbm_{conf.STUDY_NAME}.txt")
 
     # # #04 Análisis adicional
     # logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -143,7 +144,7 @@ def main():
     #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
   
     # Guardar resultados de test
-    guardar_resultados_test(resultados_test)
+    #guardar_resultados_test(resultados_test)
   
     # Resumen de evaluación en test
     logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
@@ -185,7 +186,7 @@ def main():
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
     
-    resultados = generar_predicciones_finales_zglbm(
+    _ = generar_predicciones_finales_zglbm(
         model=modelo_entrenado,           # <--- AQUÍ PASAS TU MODELO YA ENTRENADO
         X_predict=X_predict,              # Features del futuro (FINAL_PREDIC)
         clientes_predict=clientes_predict,# IDs del futuro

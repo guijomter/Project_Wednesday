@@ -195,8 +195,8 @@ def calcular_ganancias(y_pred, data):
     if idx_max is None:
         return 0.0, 0.0 # Devuelve ceros si no hay datos
 
-    start_idx = max(0, idx_max - 500)
-    end_idx = min(df_ordenado.height, idx_max + 501)
+    start_idx = max(0, idx_max - 1000)
+    end_idx = min(df_ordenado.height, idx_max + 1001)
     
     ganancia_suavizada = df_ordenado['ganancia_acumulada'].slice(start_idx, end_idx - start_idx).mean()
     ganancia_maxima = df_ordenado.select(pl.col('ganancia_acumulada').max()).item()

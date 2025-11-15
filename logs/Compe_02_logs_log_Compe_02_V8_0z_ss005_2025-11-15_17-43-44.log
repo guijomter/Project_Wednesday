@@ -1,0 +1,36 @@
+2025-11-15 17:43:44,469 - INFO - __main__ 217 - Script iniciado directamente.
+2025-11-15 17:43:44,469 - INFO - __main__ 48 - Inicio de ejecucion.
+2025-11-15 17:43:44,470 - INFO - __main__ 50 - Número de trials por estudio: 20
+2025-11-15 17:43:44,470 - INFO - __main__ 58 - === CREACION DE CLASE TERNARIA EN GCS ===
+2025-11-15 17:43:46,654 - INFO - __main__ 62 - === INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===
+2025-11-15 17:43:50,893 - INFO - __main__ 79 - Archivo de features encontrado: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V8_0z_ss005.parquet. Cargando desde GCS.
+2025-11-15 17:43:51,009 - INFO - src.bucket_utils_p 86 - Descargando de GCS: gs://guijomter_bukito3/Compe_02/data/df_fe_Compe_02_V8_0z_ss005.parquet
+2025-11-15 17:46:09,898 - INFO - src.bucket_utils_p 90 - Descargado en: /tmp/df_fe_Compe_02_V8_0z_ss005.parquet
+2025-11-15 17:46:31,964 - INFO - src.bucket_utils_p 94 - DataFrame cargado en memoria.
+2025-11-15 17:46:31,964 - INFO - src.bucket_utils_p 101 - Archivo temporal /tmp/df_fe_Compe_02_V8_0z_ss005.parquet eliminado.
+2025-11-15 17:46:31,965 - INFO - __main__ 102 - Feature Engineering completado: (4717958, 1399)
+2025-11-15 17:46:31,965 - INFO - src.optimization_p 1304 - Parámetros actualizados con configuración personalizada.
+2025-11-15 17:46:59,279 - INFO - src.optimization_p 1394 - Undersampling aplicado: tasa=0.05, registros originales=3771198 (C May: 3738534 / C Min: 32664), registros finales=413401 (CMay : 380737 / CMin: 32664)
+2025-11-15 17:47:06,658 - INFO - src.optimization_p 1327 - Targets y pesos preparados para LGBM Single Run
+2025-11-15 20:02:49,254 - INFO - src.optimization_p 1342 - Modelo zLGBM final entrenado
+2025-11-15 20:02:50,291 - INFO - __main__ 133 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-11-15 20:02:50,292 - INFO - src.optimization_p 794 - === EVALUACIÓN DE MODELO ÚNICO EN CONJUNTO DE TEST ===
+2025-11-15 20:02:50,292 - INFO - src.optimization_p 806 - Períodos de test a evaluar: ['202106']
+2025-11-15 20:02:50,293 - INFO - src.optimization_p 812 - --- Evaluando en Período de Test: 202106 ---
+2025-11-15 20:03:10,332 - INFO - src.optimization_p 830 - Dimensiones df_test (202106): (164313, 1399)
+2025-11-15 20:03:18,212 - INFO - src.optimization_p 846 - Predicciones guardadas en: resultados/predicciones_test_Compe_02_V8_0z_ss005_mes_202106_single_model.csv
+2025-11-15 20:03:18,386 - INFO - src.optimization_p 860 - Resultados Test Mes 202106: Ganancia Máxima = 359,800,000 (Envíos: 12209)
+2025-11-15 20:03:18,386 - INFO - src.optimization_p 865 - === EVALUACIÓN COMPLETADA ===
+2025-11-15 20:03:18,791 - CRITICAL - __main__ 221 - Ejecución fallida con una excepción no controlada.
+Traceback (most recent call last):
+  File "/home/guijomter/Project_Wednesday/main_zlgbm_new.py", line 219, in <module>
+    main()
+    ~~~~^^
+  File "/home/guijomter/Project_Wednesday/main_zlgbm_new.py", line 146, in main
+    guardar_resultados_test(resultados_test)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/guijomter/Project_Wednesday/src/optimization_p.py", line 288, in guardar_resultados_test
+    periodos_entrenamiento = MES_TRAIN + [MES_VALIDACION]
+                                          ^^^^^^^^^^^^^^
+NameError: name 'MES_VALIDACION' is not defined
+2025-11-15 20:03:19,123 - INFO - __main__ 223 - Ejecución finalizada.

@@ -4,6 +4,7 @@ import optuna
 import lightgbm as lgb
 import polars as pl
 import numpy as np
+import pandas as pd
 import logging
 import json
 import os
@@ -607,6 +608,167 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
     
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST COMPLETADA ===")
     return todos_los_resultados
+########################################################################################################
+
+def evaluar_en_test_colab(df: pl.DataFrame, mejores_params: dict, n_semillas: int, semilla_base=SEMILLA[0], undersampling: float = 1) -> dict:
+    """
+    Evalúa el modelo con los mejores hiperparámetros en el(los) conjunto(s) de test.
+    Genera un Excel por mes de test con:
+      - Hoja 1: Probabilidades por modelo y clase real.
+      - Hoja 2: Clase real ordenada por ranking de probabilidad para cada modelo.
+    """
+
+    logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST (Promediando N Modelos) ===")
+
+    # --- 1. Preparar Lista de Meses de Test ---
+    if isinstance(MES_TEST, (str, int)):
+        meses_test_lista = [str(MES_TEST)]
+    elif isinstance(MES_TEST, list):
+        meses_test_lista = [str(m) for m in MES_TEST]
+    else:
+        logger.error(f"MES_TEST tiene un tipo no válido: {type(MES_TEST)}")
+        return {}
+
+    logger.info(f"Períodos de test a evaluar: {meses_test_lista}")
+    logger.info(f"Semilla base: {semilla_base}, N Modelos: {n_semillas}")
+
+    # --- 2. Preparar Datos de Entrenamiento (Una sola vez) ---
+    if isinstance(MES_TRAIN, list):
+        periodos = MES_TRAIN + [MES_VALIDACION]
+    else:
+        periodos = [MES_TRAIN, MES_VALIDACION]
+    
+    df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
+    
+    # Aplicar undersampling
+    df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=semilla_base)
+    
+    # Convertir a lgb.Dataset
+    X_train = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_train = df_train_completo['clase_ternaria'].to_numpy()
+    weights_train = df_train_completo['clase_peso'].to_numpy()
+    
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+
+    # --- 3. Loop de Entrenamiento (N Semillas) ---
+    logger.info(f"Iniciando entrenamiento de {n_semillas} modelos...")
+
+    rng = np.random.RandomState(semilla_base)
+    semillas_modelos = rng.randint(0, 2**32 - 1, size=n_semillas)
+    
+    modelos_entrenados = [] 
+
+    for i, seed in enumerate(semillas_modelos):
+        logger.info(f"Entrenando modelo {i+1}/{n_semillas} (Semilla: {seed})...")
+        
+        params_seed = copy.deepcopy(mejores_params)
+        params_seed['random_state'] = seed
+        params_seed['bagging_seed'] = seed + 1
+        params_seed['feature_fraction_seed'] = seed + 2
+        
+        model = lgb.train(params_seed, train_data, feval=lgb_gan_eval)
+        # Opcional: guardar modelo físico si quieres
+        # model.save_model(f'resultados/modelo_..._{seed}.txt') 
+        modelos_entrenados.append((model, seed))
+
+    logger.info("Entrenamiento completado.")
+
+    # --- 4. Loop de Evaluación (Por cada Mes de Test) ---
+
+    todos_los_resultados = {} 
+
+    for mes_test_actual_str in meses_test_lista:
+        logger.info(f"--- Evaluando en Período de Test: {mes_test_actual_str} ---")
+
+        # 4.1. Filtrar datos
+        df_test_mes = df.filter(pl.col('foto_mes').cast(pl.Utf8) == mes_test_actual_str)
+        
+        if df_test_mes.height == 0:
+            logger.warning(f"No hay datos para {mes_test_actual_str}")
+            continue
+
+        X_test_mes = df_test_mes.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_test_mes = df_test_mes['clase_ternaria'].to_numpy()
+        weights_test_mes = df_test_mes['clase_peso'].to_numpy()
+        test_data_mes = lgb.Dataset(X_test_mes, label=y_test_mes, weight=weights_test_mes)
+
+        # --- PREPARACIÓN DATOS EXCEL ---
+        
+        # Vector de Clase Real (1 si peso es 3.0 [osea 1.00002 de ganancia aprox], 0 sino)
+        # Aseguramos convertir de Polars a Numpy
+        clase_peso_np = df_test_mes['clase_peso'].to_numpy()
+        # Asumimos que 1.00002 es el valor de ganancia alta, ajusta si tu lógica de peso es estricta 3.0
+        # Aquí uso la lógica que pediste: si clase_peso > 1 (usualmente los positivos tienen peso alto) o == 3.0
+        clase_real_binaria = np.where(weights_test_mes >= 3.0, 1, 0) 
+        ids_clientes = df_test_mes['numero_de_cliente'].to_numpy()
+
+        # Estructura para HOJA 1: Info Cliente + Predicciones
+        data_sheet1 = {
+            'numero_de_cliente': ids_clientes,
+            'clase_real': clase_real_binaria
+        }
+
+        # Estructura para HOJA 2: Rankings
+        data_sheet2 = {}
+
+        lista_predicciones_mes = []
+
+        # 4.2. Predecir con cada modelo
+        for model, seed in modelos_entrenados:
+            # Predecir
+            y_pred_proba_seed = model.predict(X_test_mes)
+            lista_predicciones_mes.append(y_pred_proba_seed)
+
+            # A) Agregar columna a HOJA 1
+            col_name = f'prob_seed_{seed}'
+            data_sheet1[col_name] = y_pred_proba_seed
+
+            # B) Calcular columna para HOJA 2 (Sort by prob desc)
+            # Obtenemos los índices que ordenarían el array de mayor a menor
+            indices_ordenados = np.argsort(-y_pred_proba_seed)
+            
+            # Reordenamos la clase real usando esos índices
+            clase_real_ordenada = clase_real_binaria[indices_ordenados]
+            
+            # Guardamos en la estructura de la hoja 2
+            data_sheet2[f'rank_seed_{seed}'] = clase_real_ordenada
+
+        # 4.3. Crear DataFrames de Pandas
+        df_sheet1 = pd.DataFrame(data_sheet1)
+        df_sheet2 = pd.DataFrame(data_sheet2)
+
+        # 4.4. Guardar Excel
+        os.makedirs("resultados", exist_ok=True)
+        excel_path = f'resultados/analisis_semillas_{conf.STUDY_NAME}_{mes_test_actual_str}.xlsx'
+        
+        logger.info(f"Guardando Excel en: {excel_path} ...")
+        with pd.ExcelWriter(excel_path, engine='openpyxl') as writer: # o engine='xlsxwriter'
+            df_sheet1.to_excel(writer, sheet_name='Predicciones_Clientes', index=False)
+            df_sheet2.to_excel(writer, sheet_name='Ranking_ClaseReal', index=False)
+        
+        logger.info("Excel guardado exitosamente.")
+
+        # 4.5. Promedio y Ganancias (Lógica original)
+        y_pred_proba_promedio = np.mean(lista_predicciones_mes, axis=0)
+        
+        ganancia_suavizada_test, ganancia_maxima_test, envios_max_gan = calcular_ganancias(y_pred_proba_promedio, test_data_mes)
+
+        resultados_mes = {
+            'ganancia_suavizada_test': float(ganancia_suavizada_test),
+            'ganancia_maxima_test': float(ganancia_maxima_test),
+            'envios_max_gan': int(envios_max_gan),
+            'porcentaje_envios_max_gan': float(envios_max_gan / len(y_test_mes)),
+            'semilla_base': semilla_base,
+            'n_semillas': n_semillas,
+            'mes_test': mes_test_actual_str
+        }
+        
+        logger.info(f"Resultados Promedio Mes {mes_test_actual_str}: Ganancia Máx = {ganancia_maxima_test:,.0f}")
+        todos_los_resultados[mes_test_actual_str] = resultados_mes
+
+    logger.info("=== EVALUACIÓN COMPLETADA ===")
+    return todos_los_resultados
+
 
 ############################################################################ OBJETIVO GANANCIA SEEDS 
 

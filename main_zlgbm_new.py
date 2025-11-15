@@ -108,8 +108,8 @@ def main():
    
     # Supongamos que estos son los ganadores de tu estudio anterior
     best_params = {
-        'min_child_samples': 10, 
-        'gradient_bound': 0.319
+        'min_child_samples': 20, 
+        'gradient_bound': 0.5
     }
 
     # Entrenas el modelo final

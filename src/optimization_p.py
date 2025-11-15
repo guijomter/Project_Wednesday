@@ -932,10 +932,10 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         'num_iterations': 9999,
         'canaritos': 100,
         'min_sum_hessian_in_leaf': 0.001,
-        'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
+        'min_child_samples': 20, # trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
         'num_leaves': 999,
         'learning_rate': 1.0,
-        'gradient_bound': trial.suggest_float('gradient_bound', conf.parametros_lgb.gradient_bound[0], conf.parametros_lgb.gradient_bound[1]),
+        'gradient_bound': 0.1 # trial.suggest_float('gradient_bound', conf.parametros_lgb.gradient_bound[0], conf.parametros_lgb.gradient_bound[1]),
         'bin': 31
     }
   

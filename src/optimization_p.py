@@ -885,8 +885,8 @@ def optimizar_zlgbm(df: pl.DataFrame, n_trials=50, undersampling: float = 0.01) 
     # Ejecutar optimización
     study.optimize(lambda trial: objetivo_ganancia_zlgbm(trial, df, undersampling), n_trials=n_trials)
     # Guardar mejor modelo del estudio
-    mejor_moodelo = study.best_trial.model
-    mejor_moodelo.save_model(f'resultados/mejor_modelo_ob_zlgbm_{conf.STUDY_NAME}.txt')
+    mejor_modelo = study.best_trial.model
+    mejor_modelo.save_model(f'resultados/mejor_modelo_ob_zlgbm_{conf.STUDY_NAME}.txt')
 
     # Resultados
     logger.info("=== OPTIMIZACIÓN CON zLGBM COMPLETADA ===")
@@ -994,7 +994,7 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     
     logger.info(f"Trial {trial.number}: Ganancia meseta = {ganancia_med:,.0f}")
   
-    return ganancia_med, ganancia_max
+    return ganancia_med
 
 
 #################################################

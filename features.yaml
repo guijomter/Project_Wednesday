@@ -3,7 +3,7 @@
 # ETAPA 1: Creación de features base (dependen solo de datos originales)
 # -----------------------------------------------------------------
 fe_orden_1:
-  # canaritos: 10 # Descomentar si se quieren usar
+  canaritos: 5 # Descomentar si se quieren usar
 
   ratios:
       - numerador: mpayroll 

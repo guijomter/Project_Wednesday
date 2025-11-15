@@ -1289,7 +1289,7 @@ def entrenar_zlgbm_unico(df: pl.DataFrame, params_override: dict = None, undersa
         'num_threads': 4,
         'feature_fraction': 0.50,
         'num_iterations': 9999,
-        'canaritos': 100,
+        'canaritos': 5,
         'min_sum_hessian_in_leaf': 0.001,
         'min_child_samples': 20, 
         'num_leaves': 999,

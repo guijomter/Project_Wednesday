@@ -925,7 +925,7 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         'boost_from_average': True,
         'feature_pre_filter': False,
         'force_row_wise': True,
-        'verbosity': -100,
+        'verbosity': -1,
         'random_state': SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
         'num_threads': 4,
         'feature_fraction': 0.50,
@@ -957,33 +957,41 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     weights_train = df_train['clase_peso'].to_numpy()
     weights_val = df_val['clase_peso'].to_numpy()
 
+    
+
     # Features a pandas (recomendado para máxima compatibilidad con LGBM por ahora)
     # Se excluyen 'clase_ternaria' y 'clase_peso'
     X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
     X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
 
+    logger.info('Targets y pesos preparados para LGBM')
+
     # Crear datasets de LightGBM
     train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
     val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
-   
+
+    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
+
     # Entrenar modelo
     model = lgb.train(
         params, 
         train_data,
         valid_sets=[val_data],
-        feval=lgb_gan_eval  
-       # callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
+        feval=lgb_gan_eval,  
+        callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
     )
+    logger.info("Modelo zLGBM entrenado en train/val")
 
     # Predecir y calcular ganancia
     y_pred_proba = model.predict(X_val)
 
     #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
     ganancia_med, ganancia_max, _ = calcular_ganancias(y_pred_proba, val_data)
+    logger.info("Ganancia calculada en validación")
 
     # Guardar iteración en JSON
     guardar_iteracion(trial, ganancia_med)
-  
+    
     logger.info(f"Trial {trial.number}: Ganancia meseta = {ganancia_med:,.0f}")
   
     return ganancia_med, ganancia_max

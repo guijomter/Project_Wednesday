@@ -143,7 +143,7 @@ def cargar_mejores_hiperparametros_zlgbm(archivo_base: str = None) -> dict:
             'num_iterations': 9999,   # dejo libre la cantidad de arboles, zLightGBM se detiene solo
             'canaritos': 100,
             'min_sum_hessian_in_leaf': 0.001,
-            'min_child_samples': 20
+            'min_child_samples': 20,
             #'min_data_in_leaf': 20,  # default de LightGBM
             'num_leaves': 999, # default de LightGBM
             'learning_rate': 1,

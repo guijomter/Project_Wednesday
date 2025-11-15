@@ -27,7 +27,8 @@ from src.target import crear_clase_ternaria_gcs
 from src.data_quality import data_quality_gcs
 
 
-study_name = "Compe_02_V2_1ob_ss01"
+file_name = "Compe_02_V2_1ob_ss01"
+study_name = "Compe_02_V2_0ob_ss005"
 
 ## config basico logging
 os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
@@ -75,7 +76,7 @@ def main():
     #01-02 Feature Engineering + Target binario
 
     # 1. Definimos la ruta de GCS del archivo .parquet donde se guardará el FE
-    gcs_fe_path = f"{conf.GCS_BUCKET_URI}/data/df_fe_{study_name}.parquet"
+    gcs_fe_path = f"{conf.GCS_BUCKET_URI}/data/df_fe_{file_name}.parquet"
 
     # # Si existe el archivo de FE en buckets, se lo carga en un dataframe
     # if archivo_existe_en_bucket(gcs_fe_path):
@@ -127,7 +128,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros(archivo_base=study_name)
   
     # Evaluar en test
-    resultados_test = evaluar_en_test_colab(df_fe, mejores_params, n_semillas=25, semilla_base=SEMILLA[0], undersampling=0.1)
+    resultados_test = evaluar_en_test_colab(df_fe, mejores_params, n_semillas=25, semilla_base=SEMILLA[0], undersampling=0.05)
   
     # # Guardar resultados de test
     # guardar_resultados_test(resultados_test)

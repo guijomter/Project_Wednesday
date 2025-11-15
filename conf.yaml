@@ -1,6 +1,6 @@
 # config.yaml
 
-STUDY_NAME : "Compe_02_V2_3ob_ss003"  
+STUDY_NAME : "Compe_02_V6_0z_ss005"  
 BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"

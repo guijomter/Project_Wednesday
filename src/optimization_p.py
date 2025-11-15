@@ -1303,50 +1303,50 @@ def entrenar_zlgbm_unico(df: pl.DataFrame, params_override: dict = None, undersa
         params.update(params_override)
         logger.info(f"Parámetros actualizados con configuración personalizada.")
 
-    # 3. Preparar dataset para entrenamiento y validación con Polars
-    if isinstance(MES_TRAIN, list):
-        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
+    # 3. Preparar dataset para entrenamiento con Polars
+    if isinstance(FINAL_TRAIN, list):
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in FINAL_TRAIN]))
     else:
-        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(FINAL_TRAIN))
     
-    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
+    #df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
     
     # Aplicar undersampling
     df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling)
     
     # Targets y pesos a numpy
     y_train = df_train['clase_ternaria'].to_numpy()
-    y_val = df_val['clase_ternaria'].to_numpy()
+    #y_val = df_val['clase_ternaria'].to_numpy()
     weights_train = df_train['clase_peso'].to_numpy()
-    weights_val = df_val['clase_peso'].to_numpy()
+    #weights_val = df_val['clase_peso'].to_numpy()
 
     # Features a pandas
     X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    #X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
 
     logger.info('Targets y pesos preparados para LGBM Single Run')
 
     # Crear datasets de LightGBM
     train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
-    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+    #val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
 
     # 4. Entrenar modelo
     # Nota: Si usas num_iterations muy alto, es recomendable descomentar los callbacks
     model = lgb.train(
         params, 
         train_data,
-        valid_sets=[val_data],
+     #   valid_sets=[val_data],
         feval=lgb_gan_eval
         # callbacks=[lgb.early_stopping(50), lgb.log_evaluation(100)] # Recomendado activar para un solo run
     )
     logger.info("Modelo zLGBM final entrenado")
 
     # 5. Validación final (opcional, solo para loguear performance)
-    y_pred_proba = model.predict(X_val)
-    ganancia_med, ganancia_max, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
+    #y_pred_proba = model.predict(X_val)
+    #ganancia_med, ganancia_max, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
     
-    logger.info(f"Ganancia final en validación ({MES_VALIDACION}): {ganancia_med:,.0f}")
-    logger.info(f"Ganancia máxima posible en validación ({MES_VALIDACION}): {ganancia_max:,.0f} con envíos = {envios_max_gan}")
+   # logger.info(f"Ganancia final en validación ({MES_VALIDACION}): {ganancia_med:,.0f}")
+    #logger.info(f"Ganancia máxima posible en validación ({MES_VALIDACION}): {ganancia_max:,.0f} con envíos = {envios_max_gan}")
 
     # 6. Retornar el objeto modelo
     return model

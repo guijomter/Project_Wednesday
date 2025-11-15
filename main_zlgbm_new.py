@@ -113,7 +113,7 @@ def main():
     }
 
     # Entrenas el modelo final
-    modelo_entrenado = entrenar_zlgbm_unico(df_fe, params_override=best_params, undersampling=0.1)
+    modelo_entrenado = entrenar_zlgbm_unico(df_fe, params_override=best_params, undersampling=0.05)
 
     # Ahora puedes guardar el modelo o usarlo
     modelo_entrenado.save_model(f"resultados/modelo_final_zlgbm_{conf.STUDY_NAME}.txt")

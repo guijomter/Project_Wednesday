@@ -610,6 +610,101 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
 
 ############################################################################ OBJETIVO GANANCIA SEEDS 
 
+def evaluar_en_test_zlgbm(df: pl.DataFrame, model: lgb.Booster) -> dict:
+    """
+    Evalúa un modelo YA ENTRENADO en el(los) conjunto(s) de test definidos en MES_TEST.
+    
+    Para CADA mes en MES_TEST:
+    1. Filtra los datos.
+    2. Predice usando el modelo pasado por parámetro.
+    3. Calcula métricas de ganancia.
+    4. Guarda las predicciones en CSV.
+    
+    Args:
+        df: Polars DataFrame con todos los datos (incluyendo mes de test).
+        model: Objeto lgb.Booster ya entrenado.
+    
+    Returns:
+        dict: Un diccionario donde cada clave es un mes de test (str)
+              y cada valor es un dict con los resultados de ese mes.
+    """
+
+    logger.info("=== EVALUACIÓN DE MODELO ÚNICO EN CONJUNTO DE TEST ===")
+
+    # --- 1. Preparar Lista de Meses de Test ---
+    # Usamos la variable global MES_TEST (o podrías pasarla como argumento si prefieres)
+    if isinstance(MES_TEST, (str, int)):
+        meses_test_lista = [str(MES_TEST)]
+    elif isinstance(MES_TEST, list):
+        meses_test_lista = [str(m) for m in MES_TEST]
+    else:
+        logger.error(f"MES_TEST tiene un tipo no válido: {type(MES_TEST)}")
+        return {}
+
+    logger.info(f"Períodos de test a evaluar: {meses_test_lista}")
+
+    todos_los_resultados = {} # Diccionario para guardar todos los resultados
+
+    # --- 2. Loop de Evaluación (Por cada Mes de Test) ---
+    for mes_test_actual_str in meses_test_lista:
+        logger.info(f"--- Evaluando en Período de Test: {mes_test_actual_str} ---")
+
+        # 2.1. Filtrar y preparar datos de test para ESTE mes
+        df_test_mes = df.filter(pl.col('foto_mes').cast(pl.Utf8) == mes_test_actual_str)
+        
+        if df_test_mes.height == 0:
+            logger.warning(f"No se encontraron datos para el mes de test: {mes_test_actual_str}. Saltando...")
+            continue
+
+        # Preparamos X, y, weights
+        # Importante: Asegurarse de dropear las mismas columnas que en el train
+        X_test_mes = df_test_mes.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_test_mes = df_test_mes['clase_ternaria'].to_numpy()
+        weights_test_mes = df_test_mes['clase_peso'].to_numpy()
+        
+        # Creamos dataset de LGBM (necesario para la función calcular_ganancias)
+        test_data_mes = lgb.Dataset(X_test_mes, label=y_test_mes, weight=weights_test_mes)
+
+        logger.info(f'Dimensiones df_test ({mes_test_actual_str}): {df_test_mes.height, df_test_mes.width}')
+
+        # 2.2. Predecir (Usando el modelo recibido)
+        y_pred_proba = model.predict(X_test_mes)
+
+        # 2.3. Guardar predicciones en CSV
+        df_resultados = df_test_mes.select(
+            'numero_de_cliente', 
+            'clase_peso'
+        ).with_columns(
+            pl.Series('probabilidad', y_pred_proba)
+        ).sort('probabilidad', descending=True)
+
+        # Nombre de archivo simplificado
+        fname = f'resultados/predicciones_test_{conf.STUDY_NAME}_mes_{mes_test_actual_str}_single_model.csv'
+        df_resultados.write_csv(fname)
+        logger.info(f"Predicciones guardadas en: {fname}")
+        
+        # 2.4. Calcular Ganancia y Métricas
+        # Usamos la función auxiliar que ya tienes definida en tu entorno
+        ganancia_suavizada_test, ganancia_maxima_test, envios_max_gan = calcular_ganancias(y_pred_proba, test_data_mes)
+
+        resultados_mes = {
+            'ganancia_suavizada_test': float(ganancia_suavizada_test),
+            'ganancia_maxima_test': float(ganancia_maxima_test),
+            'envios_max_gan': int(envios_max_gan),
+            'porcentaje_envios_max_gan': float(envios_max_gan / len(y_test_mes)),
+            'mes_test': mes_test_actual_str
+        }
+        
+        logger.info(f"Resultados Test Mes {mes_test_actual_str}: Ganancia Máxima = {ganancia_maxima_test:,.0f} (Envíos: {envios_max_gan})")
+        
+        # Guardar en el diccionario principal
+        todos_los_resultados[mes_test_actual_str] = resultados_mes
+
+    logger.info("=== EVALUACIÓN COMPLETADA ===")
+    return todos_los_resultados
+
+
+####################################################################################################################
 def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semillas: int, undersampling: float = 1) -> float:
     """
     Parameters:
@@ -932,10 +1027,10 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         'num_iterations': 9999,
         'canaritos': 100,
         'min_sum_hessian_in_leaf': 0.001,
-        'min_child_samples': 20, # trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
+        'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
         'num_leaves': 999,
         'learning_rate': 1.0,
-        'gradient_bound': 0.1, # trial.suggest_float('gradient_bound', conf.parametros_lgb.gradient_bound[0], conf.parametros_lgb.gradient_bound[1]),
+        'gradient_bound': trial.suggest_float('gradient_bound', conf.parametros_lgb.gradient_bound[0], conf.parametros_lgb.gradient_bound[1]),
         'bin': 31
     }
   
@@ -977,8 +1072,8 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         params, 
         train_data,
         valid_sets=[val_data],
-        feval=lgb_gan_eval,  
-        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
+        feval=lgb_gan_eval  
+     #   callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
     logger.info("Modelo zLGBM entrenado en train/val")
 
@@ -995,7 +1090,104 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
     logger.info(f"Trial {trial.number}: Ganancia meseta = {ganancia_med:,.0f}")
   
     return ganancia_med
+##########################################################################################
 
+def entrenar_zlgbm_unico(df: pl.DataFrame, params_override: dict = None, undersampling: float = 1.0):
+    """
+    Entrena un único modelo zLightGBM sin dependencias de Optuna.
+
+    Parameters:
+    -----------
+    df : pl.DataFrame
+        Dataframe con datos.
+    params_override : dict, optional
+        Diccionario con los mejores hiperparámetros encontrados. 
+        Si es None, usa los defaults hardcodeados.
+    undersampling : float
+        Tasa de undersampling.
+
+    Returns:
+    --------
+    model : lgb.Booster
+        El modelo entrenado listo para guardar o predecir.
+    """
+    
+    # 1. Definición de Hiperparámetros Base
+    # Estos son los defaults, pero se sobreescriben con lo que pases en params_override
+    params = {
+        'boosting': 'gbdt',
+        'objective': 'binary',
+        'metric': 'custom',
+        'first_metric_only': False,
+        'boost_from_average': True,
+        'feature_pre_filter': False,
+        'force_row_wise': True,
+        'verbosity': -1,
+        'random_state': SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA,
+        'num_threads': 4,
+        'feature_fraction': 0.50,
+        'num_iterations': 9999,
+        'canaritos': 100,
+        'min_sum_hessian_in_leaf': 0.001,
+        'min_child_samples': 20, 
+        'num_leaves': 999,
+        'learning_rate': 1.0,
+        'gradient_bound': 0.1,
+        'bin': 31
+    }
+
+    # 2. Actualizar parámetros si se pasaron argumentos (ej. los ganadores de Optuna)
+    if params_override:
+        params.update(params_override)
+        logger.info(f"Parámetros actualizados con configuración personalizada.")
+
+    # 3. Preparar dataset para entrenamiento y validación con Polars
+    if isinstance(MES_TRAIN, list):
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
+    else:
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
+    
+    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
+    
+    # Aplicar undersampling
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling)
+    
+    # Targets y pesos a numpy
+    y_train = df_train['clase_ternaria'].to_numpy()
+    y_val = df_val['clase_ternaria'].to_numpy()
+    weights_train = df_train['clase_peso'].to_numpy()
+    weights_val = df_val['clase_peso'].to_numpy()
+
+    # Features a pandas
+    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+
+    logger.info('Targets y pesos preparados para LGBM Single Run')
+
+    # Crear datasets de LightGBM
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+
+    # 4. Entrenar modelo
+    # Nota: Si usas num_iterations muy alto, es recomendable descomentar los callbacks
+    model = lgb.train(
+        params, 
+        train_data,
+        valid_sets=[val_data],
+        feval=lgb_gan_eval
+        # callbacks=[lgb.early_stopping(50), lgb.log_evaluation(100)] # Recomendado activar para un solo run
+    )
+    logger.info("Modelo zLGBM final entrenado")
+
+    # 5. Validación final (opcional, solo para loguear performance)
+    y_pred_proba = model.predict(X_val)
+    ganancia_med, ganancia_max, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
+    
+    logger.info(f"Ganancia final en validación ({MES_VALIDACION}): {ganancia_med:,.0f}")
+    logger.info(f"Ganancia máxima posible en validación ({MES_VALIDACION}): {ganancia_max:,.0f} con envíos = {envios_max_gan}")
+
+    # 6. Retornar el objeto modelo
+    return model
 
 #################################################
 

@@ -365,6 +365,78 @@ def generar_predicciones_finales_seeds(modelos_finales: list, X_predict, cliente
     logger.info(f"  Porcentaje solicitado: {porcentaje_positivas:.4f}")
 
     return resultados
+#########################################################################################################################
+
+def generar_predicciones_finales_zglbm(model: lgb.Booster, X_predict: pd.DataFrame, clientes_predict: np.ndarray, porcentaje_envios: float) -> pl.DataFrame:
+    """
+    Genera las predicciones finales usando un ÚNICO modelo zlgbm ya entrenado.
+    Aplica un corte por ranking basado en el porcentaje de envíos deseado.
+
+    Args:
+        model: El modelo final entrenado (objeto lgb.Booster).
+        X_predict: Features para predicción (Pandas DataFrame).
+        clientes_predict: Array con los IDs de clientes.
+        porcentaje_envios: Porcentaje de predicciones positivas (corte) calculado previamente.
+
+    Returns:
+        pl.DataFrame: DataFrame con numero_de_cliente y predict (0 o 1).
+    """
+    logger.info("=== GENERANDO PREDICCIONES FINALES (SINGLE MODEL) ===")
+    
+    # 1. Generar probabilidades
+    # Al ser un modelo ya entrenado, simplemente llamamos a predict
+    y_pred_prob = model.predict(X_predict)
+    
+    total_registros = len(y_pred_prob)
+    
+    # 2. Calcular cantidad de envíos (Corte)
+    cantidad_envios = int(np.round(total_registros * porcentaje_envios))
+    logger.info(f"Total registros a predecir: {total_registros:,}")
+    logger.info(f"Corte aplicado: {porcentaje_envios:.4%} -> Envíos estimados: {cantidad_envios:,}")
+
+    # 3. Ranking y Binarización (Top-K)
+    # Ordenamos los índices de mayor a menor probabilidad
+    indices_ordenados = np.argsort(-y_pred_prob)
+    
+    # Creamos vector de ceros
+    y_pred_binary = np.zeros(total_registros, dtype=int)
+    
+    # Asignamos 1 a los primeros 'cantidad_envios'
+    if cantidad_envios > 0:
+        indices_top = indices_ordenados[:cantidad_envios]
+        y_pred_binary[indices_top] = 1
+    
+    # 4. Crear DataFrames de resultados
+    
+    # A) DataFrame de Probabilidades (Opcional pero recomendado guardar)
+    df_probs = pl.DataFrame({
+        'numero_de_cliente': clientes_predict,
+        'probabilidad': y_pred_prob
+    })
+    
+    # B) DataFrame de Entrega (Kaggle)
+    df_entrega = pl.DataFrame({
+        'numero_de_cliente': clientes_predict,
+        'predict': y_pred_binary
+    })
+    
+    # 5. Guardar Archivos
+    os.makedirs("resultados", exist_ok=True)
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    
+    # Guardar probabilidades
+    path_probs = f"resultados/predicciones_prob_final_zlgbm_{conf.STUDY_NAME}_{timestamp}.csv"
+    df_probs.write_csv(path_probs)
+    
+    # Guardar entrega final
+    path_entrega = f"resultados/entrega_final_zlgbm_{conf.STUDY_NAME}_envios{cantidad_envios}_{timestamp}.csv"
+    df_entrega.write_csv(path_entrega)
+
+    logger.info(f"Archivo de entrega guardado en: {path_entrega}")
+    logger.info(f"Archivo de probabilidades guardado en: {path_probs}")
+
+    return df_entrega
+
 
 ##########################################################################################################################
 

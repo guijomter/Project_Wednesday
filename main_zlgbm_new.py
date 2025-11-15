@@ -12,11 +12,11 @@ from src.loader_p import cargar_datos, convertir_clase_ternaria_a_target, conver
 #from src.features import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering
 from src.features_p import feature_engineering_lag, feature_engineering_percentil, feature_engineering_min_ultimos_n_meses, feature_engineering_max_ultimos_n_meses, feature_engineering, run_feature_pipeline
 #from src.optimization import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar
-from src.optimization_p import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar, optimizar_zlgbm
+from src.optimization_p import optimizar, evaluar_en_test, guardar_resultados_test, evaluar_en_test_pesos, optimizar_con_seed_pesos, optimizar, optimizar_zlgbm, entrenar_zlgbm_unico, evaluar_en_test_zlgbm
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros, cargar_mejores_hiperparametros_zlgbm
 #from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
-from src.final_training_p import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
+from src.final_training_p import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds, generar_predicciones_finales_zglbm
 #from src.output_manager import guardar_predicciones_finales
 from src.output_manager_p import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
@@ -103,28 +103,44 @@ def main():
     
     #03 Ejecutar optimizacion de hiperparametros
     
-   # study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=N_SEMILLERO, undersampling=conf.parametros_lgb.undersampling)
-    study = optimizar_zlgbm(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=conf.parametros_lgb.undersampling)
+   
+   # study = optimizar_zlgbm(df_fe, n_trials=conf.parametros_lgb.n_trial, undersampling=conf.parametros_lgb.undersampling)
+   
+    # Supongamos que estos son los ganadores de tu estudio anterior
+    best_params = {
+        'min_child_samples': 10, 
+        'gradient_bound': 0.319
+    }
 
-    # #04 Análisis adicional
-    logger.info("=== ANÁLISIS DE RESULTADOS ===")
-    trials_df = study.trials_dataframe()
-    if len(trials_df) > 0:
-        top_5 = trials_df.nlargest(5, 'value')
-        logger.info("Top 5 mejores trials:")
-        for idx, trial in top_5.iterrows():
-            logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
+    # Entrenas el modelo final
+    modelo_entrenado = entrenar_zlgbm_unico(df_fe, params_override=best_params, undersampling=0.1)
+
+    # Ahora puedes guardar el modelo o usarlo
+    modelo_entrenado.save_model(f"resultados/modelo_final_zlgbm_{conf.STUDY_NAME}.txt")
+
+    # # #04 Análisis adicional
+    # logger.info("=== ANÁLISIS DE RESULTADOS ===")
+    # trials_df = study.trials_dataframe()
+    # if len(trials_df) > 0:
+    #     top_5 = trials_df.nlargest(5, 'value')
+    #     logger.info("Top 5 mejores trials:")
+    #     for idx, trial in top_5.iterrows():
+    #         logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
   
-    logger.info("=== OPTIMIZACIÓN COMPLETADA ===")
+    # logger.info("=== OPTIMIZACIÓN COMPLETADA ===")
   
     #05 Test en mes desconocido
     logger.info("=== EVALUACIÓN EN CONJUNTO DE TEST ===")
   
+
+    # 2. Evaluar ese modelo en los meses de test
+    resultados_test = evaluar_en_test_zlgbm(df_fe, modelo_entrenado)
+
     # Cargar mejores hiperparámetros
-    mejores_params = cargar_mejores_hiperparametros_zlgbm()
+    # SIN OPTIMIZACIÓN ## mejores_params = cargar_mejores_hiperparametros_zlgbm()
   
     # Evaluar en test
-    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
+    #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
   
     # Guardar resultados de test
     guardar_resultados_test(resultados_test)
@@ -146,40 +162,52 @@ def main():
     logger.info("=== ENTRENAMIENTO FINAL ===")
     logger.info("Preparar datos para entrenamiento final")
  
-    X_train, y_train, pesos_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(df_fe, undersampling=conf.parametros_lgb.undersampling)
-
-    # Entrenar modelo final
-    logger.info("Entrenar modelo final")
-    modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0])
-
+    #X_train, y_train, pesos_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(df_fe, undersampling=conf.parametros_lgb.undersampling)
+    
+    _, _, _, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(
+        df_fe, 
+        undersampling=conf.parametros_lgb.undersampling
+    )
+    
     # Calcular porcentaje de envíos promedio si hay múltiples meses de test
-   
+    
     lista_porcentajes = [
-            resultados_mes['porcentaje_envios_max_gan'] 
-            for resultados_mes in resultados_test.values()
-        ]
-   
+        resultados_mes['porcentaje_envios_max_gan'] 
+        for resultados_mes in resultados_test.values()
+    ]
     porcentaje_promedio = np.mean(lista_porcentajes)
-        
     logger.info(f"Usando porcentaje de envíos promedio (calculado de {len(lista_porcentajes)} meses de test): {porcentaje_promedio:.4f}")
 
+    # Entrenar modelo final
+    #logger.info("Entrenar modelo final")
+    #modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0])
+    
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
-    resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, porcentaje_promedio)
+    
+    resultados = generar_predicciones_finales_zglbm(
+        model=modelo_entrenado,           # <--- AQUÍ PASAS TU MODELO YA ENTRENADO
+        X_predict=X_predict,              # Features del futuro (FINAL_PREDIC)
+        clientes_predict=clientes_predict,# IDs del futuro
+        porcentaje_envios=porcentaje_promedio
+    )
+    
+ 
+    #resultados = generar_predicciones_finales_seeds(modelos_finales, X_predict, clientes_predict, porcentaje_promedio)
   
-    # Guardar predicciones
-    logger.info("Guardar predicciones")
-    archivo_salida = guardar_predicciones_finales(resultados)
+    # # Guardar predicciones
+    # logger.info("Guardar predicciones")
+    # archivo_salida = guardar_predicciones_finales(resultados)
   
-    # Resumen final
-    logger.info("=== RESUMEN FINAL ===")
-    logger.info(f"✅ Entrenamiento final completado exitosamente")
-    logger.info(f"📊 Mejores hiperparámetros utilizados: {mejores_params}")
-    logger.info(f"🎯 Períodos de entrenamiento: {FINAL_TRAIN}")
-    logger.info(f"🔮 Período de predicción: {FINAL_PREDIC}")
+    # # Resumen final
+    # logger.info("=== RESUMEN FINAL ===")
+    # logger.info(f"✅ Entrenamiento final completado exitosamente")
+    # logger.info(f"📊 Mejores hiperparámetros utilizados: {mejores_params}")
+    # logger.info(f"🎯 Períodos de entrenamiento: {FINAL_TRAIN}")
+    # logger.info(f"🔮 Período de predicción: {FINAL_PREDIC}")
 
-    ## Sumar cantidad de features utilizadas, feature importance y cantidad de clientes predichos
-    logger.info(f"📁 Archivo de salida: {archivo_salida}")
+    # ## Sumar cantidad de features utilizadas, feature importance y cantidad de clientes predichos
+    # logger.info(f"📁 Archivo de salida: {archivo_salida}")
     logger.info(f"📝 Log detallado: {conf.BUCKET_NAME}/logs/{monbre_log}")
 
 

@@ -978,7 +978,7 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         train_data,
         valid_sets=[val_data],
         feval=lgb_gan_eval,  
-        callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
+        callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
     )
     logger.info("Modelo zLGBM entrenado en train/val")
 

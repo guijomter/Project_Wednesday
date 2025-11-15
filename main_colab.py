@@ -27,8 +27,7 @@ from src.target import crear_clase_ternaria_gcs
 from src.data_quality import data_quality_gcs
 
 
-file_name = "Compe_02_V2_1ob_ss01"
-study_name = file_name
+study_name = conf.STUDY_NAME
 
 ## config basico logging
 os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
@@ -128,7 +127,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros(archivo_base=study_name)
   
     # Evaluar en test
-    resultados_test = evaluar_en_test_colab(df_fe, mejores_params, n_semillas=25, semilla_base=SEMILLA[0], undersampling=0.1)
+    resultados_test = evaluar_en_test_colab(df_fe, mejores_params, n_semillas=25, semilla_base=SEMILLA[0], undersampling=0.03)
   
     # # Guardar resultados de test
     # guardar_resultados_test(resultados_test)

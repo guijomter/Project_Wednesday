@@ -971,22 +971,22 @@ def objetivo_ganancia_zlgbm(trial: optuna.trial.Trial, df: pl.DataFrame, undersa
         params, 
         train_data,
         valid_sets=[val_data],
-        feval=lgb_gan_eval, 
-        callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
+        feval=lgb_gan_eval  
+       # callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)]
     )
 
     # Predecir y calcular ganancia
     y_pred_proba = model.predict(X_val)
 
-    # Usamos lgb_gan_eval para obtener la ganancia tal como se definió en el entrenamiento
-    _, ganancia_total, _ = lgb_gan_eval(y_pred_proba, val_data)
+    #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
+    ganancia_med, ganancia_max, _ = calcular_ganancias(y_pred_proba, val_data)
 
     # Guardar iteración en JSON
-    guardar_iteracion(trial, ganancia_total)
+    guardar_iteracion(trial, ganancia_med)
   
-    logger.info(f"Trial {trial.number}: Ganancia = {ganancia_total:,.0f}")
+    logger.info(f"Trial {trial.number}: Ganancia meseta = {ganancia_med:,.0f}")
   
-    return ganancia_total
+    return ganancia_med, ganancia_max
 
 
 #################################################

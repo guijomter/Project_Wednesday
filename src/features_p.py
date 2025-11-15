@@ -628,11 +628,25 @@ def feature_engineering(
                 df_result = feature_engineering_greatest(df_result, groups_dicts)
                 break 
             if op == "canaritos":
-                # Soporta formato yaml: "canaritos: 10" o "canaritos: {cant: 10}"
+                # 1. Obtener configuración de cantidad
                 cant = cfg.get("cant", 1) if isinstance(cfg, dict) else (cfg if isinstance(cfg, int) else 1)
+                
+                # 2. Guardar columnas actuales antes de aplicar canaritos
+                cols_antes = df_result.columns
+                
+                # 3. Generar los canaritos (se agregarán al final por defecto)
                 df_result = feature_engineering_canaritos(df_result, cant=cant)
-                logger.info(f"Operación '{op}' aplicada. {cant} variables generadas.")
-                continue # Saltamos el resto del bucle ya que no requiere 'columnas'
+                
+                # 4. Identificar cuáles son las columnas nuevas
+                cols_despues = df_result.columns
+                nuevas_cols = [c for c in cols_despues if c not in cols_antes]
+                
+                # 5. Reordenar: Nuevas (canaritos) primero + Viejas después
+                # Polars permite reordenar simplemente pasando la lista de nombres a select
+                df_result = df_result.select(nuevas_cols + cols_antes)
+                
+                logger.info(f"Operación '{op}' aplicada. {cant} variables generadas y movidas al inicio del dataset.")
+                continue
 
             if not isinstance(cfg, dict) and hasattr(cfg, "__dict__"):
                 cfg = vars(cfg)

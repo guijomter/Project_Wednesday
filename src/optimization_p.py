@@ -900,7 +900,7 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
         'verbosity': -1,
-        'is_unbalance': trial.suggest_categorical('is_unbalance', [True, False]),
+        #'is_unbalance': trial.suggest_categorical('is_unbalance', [True, False]),
         #'scale_pos_weight': 97,
         #'pos_bagging_fraction': 1.0, 
         #'neg_bagging_fraction': 0.01, 

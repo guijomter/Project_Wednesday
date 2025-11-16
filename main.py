@@ -104,7 +104,7 @@ def main():
     
     #03 Ejecutar optimizacion de hiperparametros
     
-    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
+    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=5, undersampling=conf.parametros_lgb.undersampling)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")

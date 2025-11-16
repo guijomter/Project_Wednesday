@@ -106,14 +106,14 @@ def main():
     
     #study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
 
-    # #04 Análisis adicional
-    logger.info("=== ANÁLISIS DE RESULTADOS ===")
-    trials_df = study.trials_dataframe()
-    if len(trials_df) > 0:
-        top_5 = trials_df.nlargest(5, 'value')
-        logger.info("Top 5 mejores trials:")
-        for idx, trial in top_5.iterrows():
-            logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
+    # # #04 Análisis adicional
+    # logger.info("=== ANÁLISIS DE RESULTADOS ===")
+    # trials_df = study.trials_dataframe()
+    # if len(trials_df) > 0:
+    #     top_5 = trials_df.nlargest(5, 'value')
+    #     logger.info("Top 5 mejores trials:")
+    #     for idx, trial in top_5.iterrows():
+    #         logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
   
     logger.info("=== OPTIMIZACIÓN COMPLETADA ===")
   

@@ -46,10 +46,24 @@ def cargar_mejores_hiperparametros(archivo_base: str = None) -> dict:
         # Agregar los fijos al diccionario de Optuna
         mejores_params.update(params_fijos)
 
+        
         logger.info(f"Mejores hiperparámetros cargados desde {archivo}")
         logger.info(f"Mejor ganancia encontrada: {mejor_ganancia:,.0f}")
         logger.info(f"Trial número: {mejor_iteracion['trial_number']}")
         logger.info(f"Parámetros: {mejores_params}")
+
+        # Ajuste de min_child_samples basado en tasas de submuestreo de optimización y final
+        
+        factor_ajuste = conf.parametros_lgb.undersampling_final / conf.parametros_lgb.undersampling  # Ejemplo: si optimización fue 0.5 y final es 0.1, factor = 5
+        valor_original = mejores_params['min_child_samples']
+        nuevo_valor = int(round(valor_original * factor_ajuste))
+        mejores_params['min_child_samples'] = nuevo_valor
+
+        logger.info("Ajuste de 'min_child_samples':")
+        logger.info(f"  Valor original (optimización): {valor_original}")
+        logger.info(f"  Factor de ajuste: {factor_ajuste:.2f}")
+        logger.info(f"  Nuevo valor (final): {nuevo_valor}")
+
   
         return mejores_params
   

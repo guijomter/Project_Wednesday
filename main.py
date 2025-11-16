@@ -124,7 +124,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros()
   
     # Evaluar en test
-    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling)
+    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
   
     # Guardar resultados de test
     guardar_resultados_test(resultados_test)

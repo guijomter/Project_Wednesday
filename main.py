@@ -139,14 +139,15 @@ def main():
 
     # Calcular porcentaje de envíos promedio si hay múltiples meses de test
    
-    lista_porcentajes = [
-            resultados_mes['porcentaje_envios_max_gan'] 
-            for resultados_mes in resultados_test.values()
-        ]
+    # lista_porcentajes = [
+    #         resultados_mes['porcentaje_envios_max_gan'] 
+    #         for resultados_mes in resultados_test.values()
+    #     ]
    
-    porcentaje_promedio = np.mean(lista_porcentajes)
+    # porcentaje_promedio = np.mean(lista_porcentajes)
         
-    logger.info(f"Usando porcentaje de envíos promedio (calculado de {len(lista_porcentajes)} meses de test): {porcentaje_promedio:.4f}")
+    #logger.info(f"Usando porcentaje de envíos promedio (calculado de {len(lista_porcentajes)} meses de test): {porcentaje_promedio:.4f}")
+    porcentaje_promedio = 0.067 # traido de la corrida anterior con evaluacion en test
 
     # Generar predicciones finales
     logger.info("Generar predicciones finales")

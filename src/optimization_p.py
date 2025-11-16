@@ -887,6 +887,45 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     Returns:
     float: ganancia total
     """
+        
+    # Preparar dataset para entrenamiento y validación
+    
+    if isinstance(MES_TRAIN, list):
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
+    else:
+        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
+   
+    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
+    
+    # Aplicar undersampling si es necesario
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
+    
+      # Preparar datos para LGBM
+    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_train = df_train['clase_ternaria'].to_numpy()
+    weights_train = df_train['clase_peso'].to_numpy()
+    
+    X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_val = df_val['clase_ternaria'].to_numpy()
+    weights_val = df_val['clase_peso'].to_numpy()
+
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+    
+    ratio_neg_pos = (y_train == 0).sum() / (y_train == 1).sum()
+    print(f"Ratio Neg/Pos después del sampling externo: {ratio_neg_pos:.2f}")
+
+    # A) scale_pos_weight: Buscamos alrededor del ratio calculado.
+    #    Rango: desde la mitad del ratio hasta el doble del ratio.
+    param_scale_pos_weight = trial.suggest_float('scale_pos_weight', ratio_neg_pos * 0.5, ratio_neg_pos * 2.0)
+    
+    # B) Bagging Fractions: La magia de la Estrategia 3
+    #    pos_bagging: Casi siempre queremos mantener todos los positivos (0.9 a 1.0)
+    param_pos_bagging = trial.suggest_float('pos_bagging_fraction', 0.9, 1.0)
+
+    #    neg_bagging: Aquí damos variabilidad. Usamos entre el 50% y 100% de los negativos DISPONIBLES en cada árbol.
+    param_neg_bagging = trial.suggest_float('neg_bagging_fraction', 0.5, 1.0)
+
     params = {
         'objective': 'binary', 'metric': 'None',
         'num_iterations': trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
@@ -904,34 +943,15 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         #'scale_pos_weight': 97,
         #'pos_bagging_fraction': 1.0, 
         #'neg_bagging_fraction': 0.01, 
-        'bagging_freq': trial.suggest_int('bagging_freq', conf.parametros_lgb.bagging_freq[0], conf.parametros_lgb.bagging_freq[1]),
+        'scale_pos_weight': param_scale_pos_weight,
+        'pos_bagging_fraction': param_pos_bagging,
+        'neg_bagging_fraction': param_neg_bagging,
+        'bagging_freq': 1,
+        #'bagging_freq': trial.suggest_int('bagging_freq', conf.parametros_lgb.bagging_freq[0], conf.parametros_lgb.bagging_freq[1]),
         'silent': True, 'bin': 31
     }
-    
-    # Preparar dataset para entrenamiento y validación
-    
-    if isinstance(MES_TRAIN, list):
-        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
-    else:
-        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
-   
-    df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
-    
-    # Aplicar undersampling si es necesario
-    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
-    
-    # Preparar datos para LGBM
-    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_train = df_train['clase_ternaria'].to_numpy()
-    weights_train = df_train['clase_peso'].to_numpy()
-    
-    X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_val = df_val['clase_ternaria'].to_numpy()
-    weights_val = df_val['clase_peso'].to_numpy()
 
-    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
-    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
-    
+  
     # Entrenar modelos distintos por cada seed
     ganancia_med_total = 0
     ganancia_max_total = 0

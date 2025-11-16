@@ -1,6 +1,6 @@
 # config.yaml
 
-STUDY_NAME : "Compe_02_V4_3ob_ss05"  
+STUDY_NAME : "Compe_02_V4_2ob_ss03"  
 BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
@@ -44,8 +44,8 @@ competencia02:
 
 parametros_lgb:
     n_trial: 20
-    undersampling: 0.5
-    undersampling_final: 1
+    undersampling: 0.3
+    undersampling_final: 0.5
     num_leaves: [8, 300]
     num_iterations: [50, 1000]
     feature_fraction: [0.1, 1.0]

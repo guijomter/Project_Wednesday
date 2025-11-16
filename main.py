@@ -104,7 +104,7 @@ def main():
     
     #03 Ejecutar optimizacion de hiperparametros
     
-    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
+    #study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
 
     # #04 Análisis adicional
     logger.info("=== ANÁLISIS DE RESULTADOS ===")
@@ -124,24 +124,9 @@ def main():
     mejores_params = cargar_mejores_hiperparametros()
   
     # Evaluar en test
-    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
+    #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
   
-    # Guardar resultados de test
-    guardar_resultados_test(resultados_test)
-  
-    # Resumen de evaluación en test
-    logger.info("=== RESUMEN DE EVALUACIÓN EN TEST ===")
-
-    if not resultados_test:
-        logger.warning("No se generaron resultados de test para mostrar.")
-    else:
-    # Iteramos sobre cada mes en los resultados
-        for mes, resultados_mes in resultados_test.items():
-            logger.info(f"--- Mes: {mes} ---")
-            logger.info(f"  ✅ Ganancia suavizada: {resultados_mes['ganancia_suavizada_test']:,.0f}")
-            logger.info(f"  ✅ Ganancia máxima: {resultados_mes['ganancia_maxima_test']:,.0f}")
-            logger.info(f"  🔍 Envíos de máx. ganancia: {resultados_mes['envios_max_gan']:,.0f}")
-
+    #
     #06 Entrenar modelo final
     logger.info("=== ENTRENAMIENTO FINAL ===")
     logger.info("Preparar datos para entrenamiento final")

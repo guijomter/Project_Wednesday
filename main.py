@@ -104,16 +104,16 @@ def main():
     
     #03 Ejecutar optimizacion de hiperparametros
     
-    #study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
+    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
 
-    # # #04 Análisis adicional
-    # logger.info("=== ANÁLISIS DE RESULTADOS ===")
-    # trials_df = study.trials_dataframe()
-    # if len(trials_df) > 0:
-    #     top_5 = trials_df.nlargest(5, 'value')
-    #     logger.info("Top 5 mejores trials:")
-    #     for idx, trial in top_5.iterrows():
-    #         logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
+    # #04 Análisis adicional
+    logger.info("=== ANÁLISIS DE RESULTADOS ===")
+    trials_df = study.trials_dataframe()
+    if len(trials_df) > 0:
+        top_5 = trials_df.nlargest(5, 'value')
+        logger.info("Top 5 mejores trials:")
+        for idx, trial in top_5.iterrows():
+            logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
   
     logger.info("=== OPTIMIZACIÓN COMPLETADA ===")
   
@@ -124,7 +124,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros()
   
     # Evaluar en test
-    #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
+    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
   
     #
     #06 Entrenar modelo final

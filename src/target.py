@@ -3,6 +3,7 @@ import pandas as pd
 import subprocess
 import os
 from src.bucket_utils import archivo_existe_en_bucket
+import sys
 
 def procesar_y_guardar_clase_ternaria(input_csv_path: str, output_csv_path: str):
     """

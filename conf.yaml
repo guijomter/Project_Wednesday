@@ -1,6 +1,6 @@
 # config.yaml
 
-STUDY_NAME : "Compe_02_V4_3ob_ss05"  
+STUDY_NAME : "Compe_03_V0_2q"  
 BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
@@ -42,10 +42,32 @@ competencia02:
     FINAL_PREDIC: "202108"                                 # Período objetivo para predicción
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
+competencia03:
+    BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_03"
+    GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_03"
+    DATA_PATH_RAW: "datasets/competencia_03_crudo_comp.csv.gz"
+    DATA_PATH: "datasets/competencia_03.csv"
+    DATA_PATH_Q: "datasets/competencia_03_calidad.csv"
+    SEMILLA: [839071, 666557] #, 390653, 408341, 858577] #, 156893, 220481, 557412, 111058, 401171]
+    N_SEMILLERO: 20
+    #MES_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202003","202004","202005","202007","202008","202009","202010","202011","202012","202101"] # SACAR TAMBIE´N 201910 # Períodos para entrenamiento. Período pandemaia excluido ,"202006","202007","202008","202009","202010",
+    MES_TRAIN: ["201904","201905","201906","202004","202005","202006","202104"] # SACAR TAMBIE´N 201910 # Períodos para entrenamiento. Período pandemaia excluido ,"202006","202007","202008","202009","202010",
+    MES_TEST: ["202106", "202107"]
+    MES_VALIDACION: "202105"
+    #MES_TEST: "202106"  # para Zlgbm
+    GANANCIA_ACIERTO: 780000
+    COSTO_ESTIMULO: 20000
+  # Configuración para entrenamiento final
+    #FINAL_TRAIN: ["201901","201902","201903","201904","201905","201906","201907","201908","201909","201910","201911","201912","202001","202002","202003","202004","202005","202007","202008","202009","202010","202011","202012","202101","202102","202103","202104","202105","202106"] #["202001","202002","202003","202004","202005","202007","202008","202009","202010","202011","202012","202101","202102","202103","202104"]  # Todos los períodos para entrenar
+    FINAL_TRAIN: ["201904","201905","201906","202004","202005","202006","202104"]
+    FINAL_PREDIC: "202109"                                 # Período objetivo para predicción
+  #  UMBRAL: 0.025    
+
+
 parametros_lgb:
     n_trial: 20
-    undersampling: 0.5
-    undersampling_final: 1
+    undersampling: 0.075
+    undersampling_final: 0.3
     num_leaves: [8, 300]
     num_iterations: [50, 1000]
     feature_fraction: [0.1, 1.0]

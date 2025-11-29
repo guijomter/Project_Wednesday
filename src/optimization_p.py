@@ -900,7 +900,7 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     # Aplicar undersampling si es necesario
     df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
     
-      # Preparar datos para LGBM
+    # Preparar datos para LGBM
     X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
     y_train = df_train['clase_ternaria'].to_numpy()
     weights_train = df_train['clase_peso'].to_numpy()

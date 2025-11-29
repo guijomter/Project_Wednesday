@@ -28,7 +28,7 @@ from src.target import crear_clase_ternaria_gcs
 from src.data_quality import data_quality_gcs
 
 ## config basico logging
-os.makedirs(f"{conf.BUCKET_NAME}/logs", exist_ok=True)
+os.makedirs(f"{BUCKET_NAME}/logs", exist_ok=True)
 
 fecha = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 monbre_log = f"log_{conf.STUDY_NAME}_{fecha}.log"
@@ -36,7 +36,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(name)s %(lineno)d - %(message)s',
     handlers=[
-        logging.FileHandler(f"{conf.BUCKET_NAME}/logs/{monbre_log}", mode="w", encoding="utf-8"),
+        logging.FileHandler(f"{BUCKET_NAME}/logs/{monbre_log}", mode="w", encoding="utf-8"),
         logging.StreamHandler()
     ]
 )
@@ -50,9 +50,9 @@ def main():
    
     logger.info(f"Número de trials por estudio: {conf.parametros_lgb.n_trial}")
     
-    data_path_raw_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_RAW}" # type: ignore
-    data_path_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH}"
-    data_path_q_gcs = f"{conf.GCS_BUCKET_URI}/{DATA_PATH_Q}"
+    data_path_raw_gcs = f"{GCS_BUCKET_URI}/{DATA_PATH_RAW}" # type: ignore
+    data_path_gcs = f"{GCS_BUCKET_URI}/{DATA_PATH}"
+    data_path_q_gcs = f"{GCS_BUCKET_URI}/{DATA_PATH_Q}"
 
     #00 Crear clase_ternaria en GCS si no existe
 
@@ -73,7 +73,7 @@ def main():
     #01-02 Feature Engineering + Target binario
 
     # 1. Definimos la ruta de GCS del archivo .parquet donde se guardará el FE
-    gcs_fe_path = f"{conf.GCS_BUCKET_URI}/data/df_fe_{conf.STUDY_NAME}.parquet"
+    gcs_fe_path = f"{GCS_BUCKET_URI}/data/df_fe_{conf.STUDY_NAME}.parquet"
 
     # Si existe el archivo de FE en buckets, se lo carga en un dataframe
     if archivo_existe_en_bucket(gcs_fe_path):
@@ -104,16 +104,16 @@ def main():
     
     #03 Ejecutar optimizacion de hiperparametros
     
-    #study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=2, undersampling=conf.parametros_lgb.undersampling)
+    study = optimizar(df_fe, n_trials=conf.parametros_lgb.n_trial, n_semillas=N_SEMILLERO, undersampling=conf.parametros_lgb.undersampling)
 
-    # # #04 Análisis adicional
-    # logger.info("=== ANÁLISIS DE RESULTADOS ===")
-    # trials_df = study.trials_dataframe()
-    # if len(trials_df) > 0:
-    #     top_5 = trials_df.nlargest(5, 'value')
-    #     logger.info("Top 5 mejores trials:")
-    #     for idx, trial in top_5.iterrows():
-    #         logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
+    # #04 Análisis adicional
+    logger.info("=== ANÁLISIS DE RESULTADOS ===")
+    trials_df = study.trials_dataframe()
+    if len(trials_df) > 0:
+        top_5 = trials_df.nlargest(5, 'value')
+        logger.info("Top 5 mejores trials:")
+        for idx, trial in top_5.iterrows():
+            logger.info(f"  Trial {trial['number']}: {trial['value']:,.0f}")
   
     logger.info("=== OPTIMIZACIÓN COMPLETADA ===")
   
@@ -124,7 +124,7 @@ def main():
     mejores_params = cargar_mejores_hiperparametros()
   
     # Evaluar en test
-    #resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
+    resultados_test = evaluar_en_test_pesos(df_fe, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0], undersampling=conf.parametros_lgb.undersampling_final)
   
     #
     #06 Entrenar modelo final
@@ -132,6 +132,7 @@ def main():
     logger.info("Preparar datos para entrenamiento final")
  
     X_train, y_train, pesos_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(df_fe, undersampling=conf.parametros_lgb.undersampling_final)
+### probar que el undersampling lo haga en cada modelo final entrenado
 
     # Entrenar modelo final
     logger.info("Entrenar modelo final")
@@ -139,14 +140,15 @@ def main():
 
     # Calcular porcentaje de envíos promedio si hay múltiples meses de test
    
-    lista_porcentajes = [
-            resultados_mes['porcentaje_envios_max_gan'] 
-            for resultados_mes in resultados_test.values()
-        ]
+    # lista_porcentajes = [
+    #         resultados_mes['porcentaje_envios_max_gan'] 
+    #         for resultados_mes in resultados_test.values()
+    #     ]
    
-    porcentaje_promedio = np.mean(lista_porcentajes)
+    # porcentaje_promedio = np.mean(lista_porcentajes)
         
-    logger.info(f"Usando porcentaje de envíos promedio (calculado de {len(lista_porcentajes)} meses de test): {porcentaje_promedio:.4f}")
+    #logger.info(f"Usando porcentaje de envíos promedio (calculado de {len(lista_porcentajes)} meses de test): {porcentaje_promedio:.4f}")
+    porcentaje_promedio = 0.067 # traido de la corrida anterior con evaluacion en test
 
     # Generar predicciones finales
     logger.info("Generar predicciones finales")
@@ -165,7 +167,7 @@ def main():
 
     ## Sumar cantidad de features utilizadas, feature importance y cantidad de clientes predichos
     logger.info(f"📁 Archivo de salida: {archivo_salida}")
-    logger.info(f"📝 Log detallado: {conf.BUCKET_NAME}/logs/{monbre_log}")
+    logger.info(f"📝 Log detallado: {BUCKET_NAME}/logs/{monbre_log}")
 
 
     logger.info(f">>> Ejecución finalizada. Revisar logs para mas detalles.")

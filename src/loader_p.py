@@ -30,7 +30,7 @@ def cargar_datos(gcs_path: str) -> pl.DataFrame:
             logger.info(f"Dataset descargado. Cargando en polars...")
             
             # 4. Cargar el CSV local. Polars detecta gzip automáticamente por la extensión .gz
-            df = pl.read_csv(local_path)
+            df = pl.read_csv(local_path, infer_schema_length=None )
             
             logger.info(f"Dataset cargado con {df.height} filas y {df.width} columnas")
             return df

@@ -476,20 +476,7 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
     
     df_train_completo = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(p) for p in periodos]))
     
-    # Aplicar undersampling si es necesario (usando la semilla base)
-    df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=semilla_base)
     
-    logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}')
-
-    # Convertir a lgb.Dataset
-    X_train = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_train = df_train_completo['clase_ternaria'].to_numpy()
-    weights_train = df_train_completo['clase_peso'].to_numpy()
-    
-    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
-    logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
-
-
     # --- 3. Loop de Entrenamiento (N Semillas) ---
     
     logger.info(f"Iniciando entrenamiento de {n_semillas} modelos...")
@@ -504,6 +491,21 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
     for i, seed in enumerate(semillas_modelos):
         logger.info(f"Entrenando modelo {i+1}/{n_semillas} (Semilla: {seed})...")
         
+
+        # Aplicar undersampling si es necesario (usando la semilla base)
+        df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=seed)
+    
+        logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}')
+
+        # Convertir a lgb.Dataset
+        X_train = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_train = df_train_completo['clase_ternaria'].to_numpy()
+        weights_train = df_train_completo['clase_peso'].to_numpy()
+    
+        train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+       # logger.info(f"Tipo de dato de train_data: {type(train_data)}, Dimensiones de train_data: {train_data.data.shape}")
+
+
         # 3. Copiar parámetros y asignar la semilla de esta iteración
         params_seed = copy.deepcopy(mejores_params)
         
@@ -895,37 +897,12 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     else:
         df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
    
+    # Datos de validación (sin undersampling)
     df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
-    
-    # Aplicar undersampling si es necesario
-    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
-    
-    # Preparar datos para LGBM
-    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_train = df_train['clase_ternaria'].to_numpy()
-    weights_train = df_train['clase_peso'].to_numpy()
-    
     X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
     y_val = df_val['clase_ternaria'].to_numpy()
     weights_val = df_val['clase_peso'].to_numpy()
-
-    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
-    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
     
-    # ratio_neg_pos = (y_train == 0).sum() / (y_train == 1).sum()
-    # print(f"Ratio Neg/Pos después del sampling externo: {ratio_neg_pos:.2f}")
-
-    # # A) scale_pos_weight: Buscamos alrededor del ratio calculado.
-    # #    Rango: desde la mitad del ratio hasta el doble del ratio.
-    # param_scale_pos_weight = trial.suggest_float('scale_pos_weight', ratio_neg_pos * 0.5, ratio_neg_pos * 2.0)
-    
-    # # B) Bagging Fractions: La magia de la Estrategia 3
-    # #    pos_bagging: Casi siempre queremos mantener todos los positivos (0.9 a 1.0)
-    # param_pos_bagging = trial.suggest_float('pos_bagging_fraction', 0.9, 1.0)
-
-    # #    neg_bagging: Aquí damos variabilidad. Usamos entre el 50% y 100% de los negativos DISPONIBLES en cada árbol.
-    # param_neg_bagging = trial.suggest_float('neg_bagging_fraction', 0.5, 1.0)
-
     params = {
         'objective': 'binary', 'metric': 'None',
         'num_iterations': trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
@@ -951,7 +928,6 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         'silent': True, 'bin': 31
     }
 
-  
     # Entrenar modelos distintos por cada seed
     ganancia_med_total = 0
     ganancia_max_total = 0
@@ -964,11 +940,29 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     #semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
     
     for seed in semillas:
+
+        # Aplicar undersampling con la semilla actual
+        df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=seed)
+    
+        # Preparar datos para LGBM
+        X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_train = df_train['clase_ternaria'].to_numpy()
+        weights_train = df_train['clase_peso'].to_numpy()
+    
+        train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+        val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+
+
+        # Asignar semillas a parámetros de LightGBM
         params['random_state'] = seed
+
+        # Entrenar el modelo
         model = lgb.train(params, train_data, valid_sets=[val_data], feval=lgb_gan_eval,
                           callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)])
-        # Predecir y calcular ganancia
+        
+        # Predecir y calcular ganancia del modelo entrenado
         y_pred_proba = model.predict(X_val)
+
         #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
         ganancia_med_iter, ganancia_max_iter, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
 

@@ -1,6 +1,6 @@
 import gzip
 
-BUCKET= "/home/guijomter/buckets/b1/Compe_03/datasets"
+BUCKET= "/home/guijomter/buckets/datasets"
 csv_file_1 = f"{BUCKET}/competencia_02_crudo.csv.gz"
 csv_file_2 = f"{BUCKET}/competencia_03_crudo.csv.gz"
 csv_file_out = f"{BUCKET}/competencia_03_crudo_comp.csv.gz"

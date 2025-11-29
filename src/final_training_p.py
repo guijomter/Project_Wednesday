@@ -600,6 +600,6 @@ def preparar_datos_entrenamiento_final_p (df: pl.DataFrame) -> tuple:
     clientes_predict = df_predict['numero_de_cliente'].to_numpy()
 
     logger.info(f"Features utilizadas: {len(X_predict.columns):,}")
-    logger.info(f"Distribución del target - 0: {(y_train == 0).sum():,}, 1: {(y_train == 1).sum():,}")
+    #logger.info(f"Distribución del target - 0: {(y_train == 0).sum():,}, 1: {(y_train == 1).sum():,}")
   
     return df_train, X_predict, clientes_predict

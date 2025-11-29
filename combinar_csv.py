@@ -14,8 +14,11 @@ df2 = pl.read_csv(csv_file_2, infer_schema_length=None , try_parse_dates=False)
 df = pl.concat([df1, df2], how="vertical")
 
 # Guardar limpio
-df.write_csv(csv_file_out, compression="gzip")
+#df.write_csv(csv_file_out, compression="gzip")
 
+
+with gzip.open(csv_file_out, "wt", encoding="utf-8") as f:
+    df.write_csv(f)
 
 
 

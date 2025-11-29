@@ -19,6 +19,9 @@ def dict_to_namespace(d):
 
 def load_yaml_config(file_path=PATH_CONFIG):
     """Carga el YAML y devuelve un único objeto con acceso por puntos."""
+    
+    abs_path = os.path.abspath(file_path)
+    print(f"DEBUG: Intentando abrir archivo en ruta absoluta: {abs_path}")
     try:
         with open(file_path, "r") as f:
             config_data = yaml.safe_load(f)

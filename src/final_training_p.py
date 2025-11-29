@@ -251,22 +251,21 @@ def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame,
     
     # Crear dataset de LightGBM
     train_data = lgb.Dataset(X_train, label=y_train, weight=pesos)
-    
-    # --- INICIO DE LA MODIFICACIÓN ---
+        
+    # Usar deepcopy para no modificar 'mejores_params' entre iteraciones
+    params = copy.deepcopy(mejores_params)
+       
     # 1. Generar N semillas aleatorias reproducibles a partir de la semilla base
     rng = np.random.RandomState(semilla_base)
     semillas_nuevas = rng.randint(0, 2**32 - 1, size=n_semillas)
-    # --- FIN DE LA MODIFICACIÓN ---
+    
 
     modelos_finales = []
     
     # 2. Iterar sobre la NUEVA lista de semillas
     for seed in semillas_nuevas:
         
-        # 3. Usar deepcopy para no modificar 'mejores_params' entre iteraciones
-        params = copy.deepcopy(mejores_params)
-
-        # 4. Asignar la semilla actual a todos los parámetros relevantes
+        # Asignar la semilla actual a todos los parámetros relevantes
         params['random_state'] = seed
        # params['seed'] = seed
         params['bagging_seed'] = seed + 1
@@ -300,6 +299,93 @@ def entrenar_modelo_final_p_seeds(X_train: pd.DataFrame,
 
     logger.info(f"Entrenamiento de {len(modelos_finales)} modelos finales completado.")
     return modelos_finales
+###########################################################################################################################
+
+
+def entrenar_modelo_final_p_us(df: pl.DataFrame, 
+                                mejores_params: dict, 
+                                n_semillas: int, 
+                                undersampling: float = 1.0,
+                                semilla_base=SEMILLA[0]) -> list:
+    """
+    Entrena N modelos finales con los mejores hiperparámetros, usando N semillas
+    generadas a partir de una semilla base.
+    
+    Args:
+        df: dataset de entrenamiento pl.DataFrame
+        mejores_params: Mejores hiperparámetros de Optuna
+        n_semillas: Número de modelos a entrenar
+        semilla_base: Semilla para generar la lista de N semillas
+    
+    Returns:
+        list: Lista de N modelos (lgb.Booster) entrenados
+    """
+    logger.info(f"Iniciando entrenamiento de {n_semillas} modelos finales (base: {semilla_base})")
+    logger.info(f"Preparando datos para entrenamiento final")
+    
+    
+    # 1. Generar N semillas aleatorias reproducibles a partir de la semilla base
+    rng = np.random.RandomState(semilla_base)
+    semillas_nuevas = rng.randint(0, 2**32 - 1, size=n_semillas)
+    
+    # Usar deepcopy para no modificar 'mejores_params' entre iteraciones
+    params = copy.deepcopy(mejores_params)
+
+    modelos_finales = []
+    
+    # 2. Iterar sobre la NUEVA lista de semillas
+    for seed in semillas_nuevas:
+
+         # Aplicar undersampling
+        df_train = aplicar_undersampling_clientes(df, tasa=undersampling, semilla=seed)
+
+        #Corroborar que no esten vacios los df
+        logger.info(f"Registros de entrenamiento: {df_train.height:,}")
+
+        # Preparar features y target para entrenamiento
+    
+        X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_train = df_train['clase_ternaria'].to_numpy()
+        pesos_train = df_train['clase_peso'].to_numpy()
+         
+        # Crear dataset de LightGBM
+        train_data = lgb.Dataset(X_train, label=y_train, weight=pesos_train)
+        
+        # Asignar la semilla actual a todos los parámetros relevantes
+        params['random_state'] = seed
+       # params['seed'] = seed
+        params['bagging_seed'] = seed + 1
+        params['feature_fraction_seed'] = seed + 2
+        
+        # 5. Agregar parámetros fijos
+        params['objective'] = 'binary'
+        params['metric'] = 'None'  # Usamos nuestra métrica personalizada
+        params['verbose'] = -1
+        
+        logger.info(f"Entrenando modelo con semilla: {seed}...")
+        
+        # Entrenar modelo con la semilla actual
+        modelo = lgb.train(
+            params,
+            train_data,
+            valid_sets=None,
+            feval=lgb_gan_eval 
+        )
+
+        # Guardar el modelo entrenado a un archivo en la carpeta de resultados
+        os.makedirs(f"resultados/{conf.STUDY_NAME}", exist_ok=True)
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        modelo_path = f"resultados/{conf.STUDY_NAME}/modelo_final_semilla_{seed}_{timestamp}.txt"
+
+        modelo.save_model(modelo_path)
+        logger.info(f"Modelo final (semilla {seed}) guardado en: {modelo_path}")
+        
+        # Agregar el modelo a la lista de modelos
+        modelos_finales.append(modelo)
+
+    logger.info(f"Entrenamiento de {len(modelos_finales)} modelos finales completado.")
+    return modelos_finales
+
 
 
 ###########################################################################################################################
@@ -481,3 +567,39 @@ def preparar_datos_entrenamiento_final_pesos(df: pl.DataFrame, undersampling: fl
     logger.info(f"Distribución del target - 0: {(y_train == 0).sum():,}, 1: {(y_train == 1).sum():,}")
   
     return X_train, y_train, pesos_train, X_predict, clientes_predict
+
+
+#######################################################################################
+
+def preparar_datos_entrenamiento_final_p (df: pl.DataFrame) -> tuple:
+    """
+    Prepara los datos para el entrenamiento final con pesos usando Polars.
+    
+    Returns:
+        tuple: (X_train (pd.DataFrame), y_train (np.array), pesos_train (np.array), X_predict (pd.DataFrame), clientes_predict (np.array))
+    """
+    logger.info(f"Preparando datos para entrenamiento final")
+    logger.info(f"Períodos de entrenamiento: {FINAL_TRAIN}")
+    logger.info(f"Período de predicción: {FINAL_PREDIC}")
+    
+    
+    final_train_str = [str(x) for x in FINAL_TRAIN] if isinstance(FINAL_TRAIN, list) else [str(FINAL_TRAIN)]
+    final_predic_str = [str(x) for x in FINAL_PREDIC] if isinstance(FINAL_PREDIC, list) else [str(FINAL_PREDIC)] 
+    
+    # Datos de entrenamiento: todos los períodos en FINAL_TRAIN
+    df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in(final_train_str))
+    # Datos de predicción: período FINAL_PREDIC
+    df_predict = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in(final_predic_str))
+    
+    #Corroborar que no esten vacios los df
+    logger.info(f"Registros de entrenamiento: {df_train.height:,}")
+    logger.info(f"Registros de predicción: {df_predict.height:,}")
+    
+    # Preparar features y target para predecir
+    X_predict = df_predict.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    clientes_predict = df_predict['numero_de_cliente'].to_numpy()
+
+    logger.info(f"Features utilizadas: {len(X_predict.columns):,}")
+    logger.info(f"Distribución del target - 0: {(y_train == 0).sum():,}, 1: {(y_train == 1).sum():,}")
+  
+    return df_train, X_predict, clientes_predict

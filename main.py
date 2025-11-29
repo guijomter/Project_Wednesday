@@ -17,7 +17,7 @@ from src.optimization_p import optimizar, evaluar_en_test, guardar_resultados_te
 from src.optimization_cv import optimizar_con_cv, optimizar_con_cv_pesos
 from src.best_params import cargar_mejores_hiperparametros
 #from src.final_training import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
-from src.final_training_p import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds
+from src.final_training_p import preparar_datos_entrenamiento_final, generar_predicciones_finales, entrenar_modelo_final, entrenar_modelo_final_pesos, preparar_datos_entrenamiento_final_pesos, entrenar_modelo_final_p_seeds, generar_predicciones_finales_seeds, entrenar_modelo_final_p_us, preparar_datos_entrenamiento_final_p
 #from src.output_manager import guardar_predicciones_finales
 from src.output_manager_p import guardar_predicciones_finales
 from src.best_params import obtener_estadisticas_optuna
@@ -131,12 +131,15 @@ def main():
     logger.info("=== ENTRENAMIENTO FINAL ===")
     logger.info("Preparar datos para entrenamiento final")
  
-    X_train, y_train, pesos_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(df_fe, undersampling=conf.parametros_lgb.undersampling_final)
+   # X_train, y_train, pesos_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_pesos(df_fe, undersampling=1 conf.parametros_lgb.undersampling_final)
+
+    df_train, X_predict, clientes_predict = preparar_datos_entrenamiento_final_p(df_fe)
+
 ### probar que el undersampling lo haga en cada modelo final entrenado
 
     # Entrenar modelo final
     logger.info("Entrenar modelo final")
-    modelos_finales = entrenar_modelo_final_p_seeds(X_train, y_train, pesos_train, mejores_params, n_semillas=N_SEMILLERO, semilla_base=SEMILLA[0])
+    modelos_finales = entrenar_modelo_final_p_us(df_train, mejores_params, n_semillas=N_SEMILLERO, undersampling=conf.parametros_lgb.undersampling_final , semilla_base=SEMILLA[0])
 
     # Calcular porcentaje de envíos promedio si hay múltiples meses de test
    

@@ -67,7 +67,7 @@ fe_orden_1:
     cant_lag: 2
 
   slope:
-    columnas: ['mcuentas_saldo'] # ├ 'slope' que depende de originales
+    columnas: ['mcuentas_saldo'] #  'slope' que depende de originales
     n_meses: 6
 
   lag:

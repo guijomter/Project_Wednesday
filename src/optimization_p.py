@@ -903,6 +903,20 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     y_val = df_val['clase_ternaria'].to_numpy()
     weights_val = df_val['clase_peso'].to_numpy()
     
+    
+    # Aplicar undersampling con la semilla actual
+    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
+    
+    # Preparar datos para LGBM
+    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+    y_train = df_train['clase_ternaria'].to_numpy()
+    weights_train = df_train['clase_peso'].to_numpy()
+    
+    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+
+
+
     params = {
         'objective': 'binary', 'metric': 'None',
         'num_iterations': trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
@@ -940,18 +954,6 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
     #semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
     
     for seed in semillas:
-
-        # Aplicar undersampling con la semilla actual
-        df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=seed)
-    
-        # Preparar datos para LGBM
-        X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-        y_train = df_train['clase_ternaria'].to_numpy()
-        weights_train = df_train['clase_peso'].to_numpy()
-    
-        train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
-        val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
-
 
         # Asignar semillas a parámetros de LightGBM
         params['random_state'] = seed

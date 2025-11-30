@@ -495,7 +495,7 @@ def evaluar_en_test_pesos(df: pl.DataFrame, mejores_params: dict, n_semillas: in
         # Aplicar undersampling si es necesario (usando la semilla base)
         df_train_completo = aplicar_undersampling_clientes(df_train_completo, tasa=undersampling, semilla=seed)
     
-        logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}')
+        #logger.info(f'Dimensiones df_train_completo: {df_train_completo.height, df_train_completo.width}')
 
         # Convertir a lgb.Dataset
         X_train = df_train_completo.drop(['clase_ternaria', 'clase_peso']).to_pandas()
@@ -1405,6 +1405,6 @@ def aplicar_undersampling_clientes(
     # 5. Filtrar el dataframe original y mezclar
     df_filtrado = df.filter(pl.col(col_cliente).is_in(clientes_finales))
     
-    logger.info(f"Undersampling aplicado: tasa={tasa}, registros originales={df.height} (C May: {registros_originales_clase_mayoritaria} / C Min: {registros_originales_clase_minoritarias}), registros finales={df_filtrado.height} (CMay : {df_filtrado.filter(pl.col('clase_ternaria') != 1).height} / CMin: {df_filtrado.filter(pl.col('clase_ternaria') == 1).height})")
+    #logger.info(f"Undersampling aplicado: tasa={tasa}, registros originales={df.height} (C May: {registros_originales_clase_mayoritaria} / C Min: {registros_originales_clase_minoritarias}), registros finales={df_filtrado.height} (CMay : {df_filtrado.filter(pl.col('clase_ternaria') != 1).height} / CMin: {df_filtrado.filter(pl.col('clase_ternaria') == 1).height})")
 
     return df_filtrado.sample(fraction=1.0, shuffle=True, seed=semilla)

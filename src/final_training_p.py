@@ -340,7 +340,7 @@ def entrenar_modelo_final_p_us(df: pl.DataFrame,
         df_train = aplicar_undersampling_clientes(df, tasa=undersampling, semilla=seed)
 
         #Corroborar que no esten vacios los df
-        logger.info(f"Registros de entrenamiento: {df_train.height:,}")
+        #logger.info(f"Registros de entrenamiento: {df_train.height:,}")
 
         # Preparar features y target para entrenamiento
     

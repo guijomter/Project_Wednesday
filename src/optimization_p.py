@@ -1038,7 +1038,7 @@ def crear_o_cargar_estudio(study_name: str = None, semilla: int = None) -> optun
         semilla = SEMILLA[0] if isinstance(SEMILLA, list) else SEMILLA
   
     # Crear carpeta para bases de datos si no existe
-    path_db = os.path.join(conf.BUCKET_NAME, "optuna_db")
+    path_db = os.path.join(BUCKET_NAME, "optuna_db")
     os.makedirs(path_db, exist_ok=True)
   
     # Ruta completa de la base de datos

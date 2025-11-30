@@ -1,7 +1,7 @@
 # config.yaml
 
 STUDY_NAME : "Compe_03_V0_1s_c"  
-BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
+#BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
 GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
 
@@ -55,7 +55,7 @@ competencia03:
     MES_TRAIN: ["202101","202102","202103","202104"] 
     MES_TEST: ["202106", "202107"]
     MES_VALIDACION: "202105"
-    MES_TRAIN: ["202101","202102","202103","202104","202105","202106"] 
+    FINAL_TRAIN: ["202101","202102","202103","202104","202105","202106"] 
     FINAL_PREDIC: "202109" 
 
 

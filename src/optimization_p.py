@@ -869,54 +869,143 @@ def evaluar_en_test_zlgbm(df: pl.DataFrame, model: lgb.Booster) -> dict:
 
 
 ####################################################################################################################
+# def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semillas: int, undersampling: float = 1) -> float:
+#     """
+#     Parameters:
+#     trial: trial de optuna
+#     df: dataframe con datos
+#     n_semillas: int, número de semillas aleatorias a generar y promediar
+#     undersampling: float, tasa de undersampling
+
+#     Description:
+#     Función objetivo que maximiza ganancia en mes de validación.
+#     Utiliza configuración YAML para períodos y semilla.
+#     Define parametros para el modelo LightGBM
+#     Preparar dataset para entrenamiento y validación
+#     Entrena modelo con función de ganancia personalizada
+#     Predecir y calcular ganancia
+#     Guardar cada iteración en JSON
+  
+#     Returns:
+#     float: ganancia total
+#     """
+        
+#     # Preparar dataset para entrenamiento y validación
+    
+#     if isinstance(MES_TRAIN, list):
+#         df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
+#     else:
+#         df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
+   
+#     # Datos de validación (sin undersampling)
+#     df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
+#     X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+#     y_val = df_val['clase_ternaria'].to_numpy()
+#     weights_val = df_val['clase_peso'].to_numpy()
+    
+    
+#     # Aplicar undersampling con la semilla actual
+#     df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
+    
+#     # Preparar datos para LGBM
+#     X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+#     y_train = df_train['clase_ternaria'].to_numpy()
+#     weights_train = df_train['clase_peso'].to_numpy()
+    
+#     train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+#     val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+
+
+
+#     params = {
+#         'objective': 'binary', 'metric': 'None',
+#         'num_iterations': trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
+#         'num_leaves': trial.suggest_int('num_leaves', conf.parametros_lgb.num_leaves[0], conf.parametros_lgb.num_leaves[1]),
+#         'learning_rate': trial.suggest_float('learning_rate', conf.parametros_lgb.learning_rate[0], conf.parametros_lgb.learning_rate[1], log=True),
+#         'feature_fraction': trial.suggest_float('feature_fraction', conf.parametros_lgb.feature_fraction[0], conf.parametros_lgb.feature_fraction[1]),
+#         'bagging_fraction': trial.suggest_float('bagging_fraction', conf.parametros_lgb.bagging_fraction[0], conf.parametros_lgb.bagging_fraction[1]),
+#         'min_child_samples': trial.suggest_int('min_child_samples', conf.parametros_lgb.min_child_samples[0], conf.parametros_lgb.min_child_samples[1]),
+#         'max_depth': trial.suggest_int('max_depth', conf.parametros_lgb.max_depth[0], conf.parametros_lgb.max_depth[1]),
+#         'reg_lambda': trial.suggest_float('reg_lambda', conf.parametros_lgb.reg_lambda[0], conf.parametros_lgb.reg_lambda[1]),
+#         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
+#         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
+#         'verbosity': -1,
+#         #'is_unbalance': trial.suggest_categorical('is_unbalance', [True, False]),
+#         #'scale_pos_weight': 97,
+#         #'pos_bagging_fraction': 1.0, 
+#         #'neg_bagging_fraction': 0.01, 
+#         # 'scale_pos_weight': param_scale_pos_weight,
+#         # 'pos_bagging_fraction': param_pos_bagging,
+#         # 'neg_bagging_fraction': param_neg_bagging,
+#         'bagging_freq': 1,
+#         #'bagging_freq': trial.suggest_int('bagging_freq', conf.parametros_lgb.bagging_freq[0], conf.parametros_lgb.bagging_freq[1]),
+#         'silent': True, 'bin': 31
+#     }
+
+#     # Entrenar modelos distintos por cada seed
+#     ganancia_med_total = 0
+#     ganancia_max_total = 0
+#     envios_max_gan_total = 0
+    
+#     base_seed = SEMILLA[0]
+#     rng = np.random.RandomState(base_seed)
+#     semillas = rng.randint(0, 2**32 - 1, size=n_semillas)
+
+   
+    
+#     for seed in semillas:
+
+#         # Asignar semillas a parámetros de LightGBM
+#         params['random_state'] = seed
+
+#         # Entrenar el modelo
+#         model = lgb.train(params, train_data, valid_sets=[val_data], feval=lgb_gan_eval,
+#                           callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)])
+        
+#         # Predecir y calcular ganancia del modelo entrenado
+#         y_pred_proba = model.predict(X_val)
+
+#         #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
+#         ganancia_med_iter, ganancia_max_iter, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
+
+#         # Sumar a la ganancia de los modelos anteriores
+#         ganancia_med_total += ganancia_med_iter
+#         ganancia_max_total += ganancia_max_iter
+#         envios_max_gan_total += envios_max_gan
+
+#     # Calcular ganancia media de los modelos entrenados en la iteración
+#     ganancia_med = ganancia_med_total / len(semillas)
+#     ganancia_max = ganancia_max_total / len(semillas)
+#     envios_max_gan = envios_max_gan_total / len(semillas)
+    
+#     # Guardar cada iteración en JSON
+#     guardar_iteracion(trial, ganancia_med)
+#     logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_med:,.0f}, Ganancia Max = {ganancia_max:,.0f}, Envios Max Gan = {envios_max_gan:,.0f}")
+#     return ganancia_med
+
 def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semillas: int, undersampling: float = 1) -> float:
     """
-    Parameters:
-    trial: trial de optuna
-    df: dataframe con datos
-    n_semillas: int, número de semillas aleatorias a generar y promediar
-    undersampling: float, tasa de undersampling
-
-    Description:
-    Función objetivo que maximiza ganancia en mes de validación.
-    Utiliza configuración YAML para períodos y semilla.
-    Define parametros para el modelo LightGBM
-    Preparar dataset para entrenamiento y validación
-    Entrena modelo con función de ganancia personalizada
-    Predecir y calcular ganancia
-    Guardar cada iteración en JSON
-  
-    Returns:
-    float: ganancia total
+    Función objetivo corregida: Entrena N modelos, promedia sus PROBABILIDADES 
+    y calcula la ganancia sobre ese promedio (Lógica de Bagging/Ensemble).
     """
         
-    # Preparar dataset para entrenamiento y validación
-    
-    if isinstance(MES_TRAIN, list):
-        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
-    else:
-        df_train = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
-   
-    # Datos de validación (sin undersampling)
+    # --- 1. Preparar Datos Estáticos (Validación) ---
+    # La validación es fija, no cambia con las semillas
     df_val = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_VALIDACION))
     X_val = df_val.drop(['clase_ternaria', 'clase_peso']).to_pandas()
     y_val = df_val['clase_ternaria'].to_numpy()
     weights_val = df_val['clase_peso'].to_numpy()
     
+    # Dataset de validación "crudo" para calcular ganancia final (sin formato lgb.Dataset necesario aún)
+    # Sin embargo, para early_stopping dentro del loop, necesitaremos crear lgb.Dataset referenciado.
     
-    # Aplicar undersampling con la semilla actual
-    df_train = aplicar_undersampling_clientes(df_train, tasa=undersampling, semilla=SEMILLA[0])
-    
-    # Preparar datos para LGBM
-    X_train = df_train.drop(['clase_ternaria', 'clase_peso']).to_pandas()
-    y_train = df_train['clase_ternaria'].to_numpy()
-    weights_train = df_train['clase_peso'].to_numpy()
-    
-    train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
-    val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
+    # Filtrar datos de entrenamiento base (antes del undersampling)
+    if isinstance(MES_TRAIN, list):
+        df_train_base = df.filter(pl.col('foto_mes').cast(pl.Utf8).is_in([str(m) for m in MES_TRAIN]))
+    else:
+        df_train_base = df.filter(pl.col('foto_mes').cast(pl.Utf8) == str(MES_TRAIN))
 
-
-
+    # --- 2. Definir Espacio de Búsqueda (Hiperparámetros) ---
     params = {
         'objective': 'binary', 'metric': 'None',
         'num_iterations': trial.suggest_int('num_iterations', conf.parametros_lgb.num_iterations[0], conf.parametros_lgb.num_iterations[1]),
@@ -930,59 +1019,71 @@ def objetivo_ganancia_seeds(trial: optuna.trial.Trial, df: pl.DataFrame, n_semil
         'reg_alpha': trial.suggest_float('reg_alpha', conf.parametros_lgb.reg_alpha[0], conf.parametros_lgb.reg_alpha[1]),
         'min_gain_to_split': trial.suggest_float('min_gain_to_split', conf.parametros_lgb.min_gain_to_split[0], conf.parametros_lgb.min_gain_to_split[1]),
         'verbosity': -1,
-        #'is_unbalance': trial.suggest_categorical('is_unbalance', [True, False]),
-        #'scale_pos_weight': 97,
-        #'pos_bagging_fraction': 1.0, 
-        #'neg_bagging_fraction': 0.01, 
-        # 'scale_pos_weight': param_scale_pos_weight,
-        # 'pos_bagging_fraction': param_pos_bagging,
-        # 'neg_bagging_fraction': param_neg_bagging,
         'bagging_freq': 1,
-        #'bagging_freq': trial.suggest_int('bagging_freq', conf.parametros_lgb.bagging_freq[0], conf.parametros_lgb.bagging_freq[1]),
-        'silent': True, 'bin': 31
+        'silent': True, 
+        'bin': 31
     }
 
-    # Entrenar modelos distintos por cada seed
-    ganancia_med_total = 0
-    ganancia_max_total = 0
-    envios_max_gan_total = 0
+    # --- 3. Loop de Entrenamiento (Bagging) ---
+    lista_predicciones = []
     
-    base_seed = SEMILLA[0]
+    # Generar semillas
+    base_seed = SEMILLA[0] # Asumo que SEMILLA es una lista global o variable definida
     rng = np.random.RandomState(base_seed)
     semillas = rng.randint(0, 2**32 - 1, size=n_semillas)
 
-    #semillas = SEMILLA if isinstance(SEMILLA, list) else [SEMILLA]
-    
     for seed in semillas:
+        # A. Preparar datos de Train para esta semilla (Undersampling varía por semilla)
+        # Esto es vital: cada modelo ve un subset distinto de la clase negativa
+        df_train_iter = aplicar_undersampling_clientes(df_train_base, tasa=undersampling, semilla=seed)
+        
+        X_train = df_train_iter.drop(['clase_ternaria', 'clase_peso']).to_pandas()
+        y_train = df_train_iter['clase_ternaria'].to_numpy()
+        weights_train = df_train_iter['clase_peso'].to_numpy()
+        
+        train_data = lgb.Dataset(X_train, label=y_train, weight=weights_train)
+        
+        # Creamos validación referenciada al train de esta iteración (buena práctica en lgb)
+        val_data = lgb.Dataset(X_val, label=y_val, weight=weights_val, reference=train_data)
 
-        # Asignar semillas a parámetros de LightGBM
-        params['random_state'] = seed
+        # B. Configurar semilla en parámetros
+        params_iter = copy.deepcopy(params)
+        params_iter['random_state'] = seed
+        # Variar semillas internas de bagging/feature fraction para mayor diversidad
+        params_iter['bagging_seed'] = seed + 1
+        params_iter['feature_fraction_seed'] = seed + 2
 
-        # Entrenar el modelo
-        model = lgb.train(params, train_data, valid_sets=[val_data], feval=lgb_gan_eval,
+        # C. Entrenar
+        # Nota: Usamos early_stopping para evitar sobreajuste individual, 
+        # aunque en bagging a veces se prefiere árboles más profundos.
+        model = lgb.train(params_iter, train_data, valid_sets=[val_data], feval=lgb_gan_eval,
                           callbacks=[lgb.early_stopping(15), lgb.log_evaluation(0)])
         
-        # Predecir y calcular ganancia del modelo entrenado
-        y_pred_proba = model.predict(X_val)
+        # D. Predecir (probabilidad) y guardar
+        y_pred_proba_iter = model.predict(X_val)
+        lista_predicciones.append(y_pred_proba_iter)
 
-        #_, ganancia_med_iter,  _ = lgb_gan_eval(y_pred_proba, val_data)
-        ganancia_med_iter, ganancia_max_iter, envios_max_gan = calcular_ganancias(y_pred_proba, val_data)
-
-        # Sumar a la ganancia de los modelos anteriores
-        ganancia_med_total += ganancia_med_iter
-        ganancia_max_total += ganancia_max_iter
-        envios_max_gan_total += envios_max_gan
-
-    # Calcular ganancia media de los modelos entrenados en la iteración
-    ganancia_med = ganancia_med_total / len(semillas)
-    ganancia_max = ganancia_max_total / len(semillas)
-    envios_max_gan = envios_max_gan_total / len(semillas)
+    # --- 4. Ensamble y Cálculo de Ganancia ---
     
-    # Guardar cada iteración en JSON
-    guardar_iteracion(trial, ganancia_med)
-    logger.info(f"Trial {trial.number}: Ganancia Media = {ganancia_med:,.0f}, Ganancia Max = {ganancia_max:,.0f}, Envios Max Gan = {envios_max_gan:,.0f}")
-    return ganancia_med
-   
+    # Promediar las probabilidades (Bagging)
+    y_pred_proba_promedio = np.mean(lista_predicciones, axis=0)
+
+    # Para usar calcular_ganancias, a veces necesitas el objeto lgb.Dataset o solo los targets.
+    # Asumo que tu función calcular_ganancias toma (y_pred, lgb_dataset) o (y_pred, y_true, weights).
+    # Reutilizamos el último 'val_data' creado o creamos uno genérico, ya que solo importa label y weight.
+    val_data_final = lgb.Dataset(X_val, label=y_val, weight=weights_val)
+
+    # Calcular ganancia sobre el ensamble
+    ganancia_suav, ganancia_max, envios_max_gan = calcular_ganancias(y_pred_proba_promedio, val_data_final)
+    
+    # --- 5. Logging y Retorno ---
+    
+    # Guardar métricas del trial (opcional, ajusta a tu función guardar_iteracion)
+    guardar_iteracion(trial, ganancia_suav) # Asumo que guardas la ganancia "suavizada"
+    
+    logger.info(f"Trial {trial.number}: Ganancia Ensamble Suavizada  = {ganancia_suav:,.0f}, Max Posible = {ganancia_max:,.0f}, Envios = {envios_max_gan:,.0f}")
+    
+    return ganancia_suav   
 #######################################################################################################
 
 def optimizar_con_seed_pesos(df: pl.DataFrame, n_trials=50) -> optuna.Study:

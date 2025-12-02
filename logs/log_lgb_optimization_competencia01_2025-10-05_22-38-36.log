@@ -1,3 +1,0 @@
-2025-10-05 22:38:36,369 - INFO - __main__ 36 - Inicio de ejecucion.
-2025-10-05 22:38:36,370 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
-2025-10-05 22:38:46,509 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas

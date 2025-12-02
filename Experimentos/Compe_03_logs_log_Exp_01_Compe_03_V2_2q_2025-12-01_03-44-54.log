@@ -1,0 +1,169 @@
+2025-12-01 03:44:54,273 - INFO - __main__ 183 - Script iniciado directamente.
+2025-12-01 03:44:54,273 - INFO - __main__ 49 - Inicio de ejecucion.
+2025-12-01 03:44:54,274 - INFO - __main__ 51 - Número de trials por estudio: 20
+2025-12-01 03:44:54,274 - INFO - __main__ 59 - === CREACION DE CLASE TERNARIA EN GCS ===
+2025-12-01 03:44:58,306 - INFO - __main__ 63 - === INICIO DE DATA QUALITY - INTERPOLACION DE DATOS FALTANTES ===
+2025-12-01 03:45:01,873 - INFO - __main__ 80 - Archivo de features encontrado: gs://guijomter_bukito3/Compe_03/data/df_fe_Exp_01_Compe_03_V2_2q.parquet. Cargando desde GCS.
+2025-12-01 03:45:02,012 - INFO - src.bucket_utils_p 86 - Descargando de GCS: gs://guijomter_bukito3/Compe_03/data/df_fe_Exp_01_Compe_03_V2_2q.parquet
+2025-12-01 03:46:43,884 - INFO - src.bucket_utils_p 90 - Descargado en: /tmp/df_fe_Exp_01_Compe_03_V2_2q.parquet
+2025-12-01 03:46:59,503 - INFO - src.bucket_utils_p 94 - DataFrame cargado en memoria.
+2025-12-01 03:46:59,504 - INFO - src.bucket_utils_p 101 - Archivo temporal /tmp/df_fe_Exp_01_Compe_03_V2_2q.parquet eliminado.
+2025-12-01 03:46:59,504 - INFO - __main__ 103 - Feature Engineering completado: (4883051, 1005)
+2025-12-01 03:46:59,505 - INFO - src.optimization_p 1213 - Iniciando optimización con 20 trials
+2025-12-01 03:46:59,505 - INFO - src.optimization_p 1214 - Configuración: TRAIN=['201910', '201911', '201912', '202010', '202011', '202012'], VALID=202105, SEMILLA=[839071, 666557]
+2025-12-01 03:46:59,684 - INFO - src.optimization_p 1173 - 🆕 No se encontró base de datos previa
+2025-12-01 03:46:59,685 - INFO - src.optimization_p 1174 - 📁 Creando nueva base de datos: /home/guijomter/buckets/b1/Compe_03/optuna_db/Exp_01_Compe_03_V2_2q.db
+2025-12-01 03:47:46,154 - INFO - src.optimization_p 1185 - ✅ Nuevo estudio creado: Exp_01_Compe_03_V2_2q
+2025-12-01 03:47:46,155 - INFO - src.optimization_p 1186 - 💾 Storage: sqlite:////home/guijomter/buckets/b1/Compe_03/optuna_db/Exp_01_Compe_03_V2_2q.db
+2025-12-01 03:47:46,359 - INFO - src.optimization_p 1227 - 🆕 Nueva optimización: 20 trials
+2025-12-01 03:55:38,846 - INFO - src.optimization_p 134 - Iteración 0 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 03:55:38,847 - INFO - src.optimization_p 135 - Ganancia: 160,386,057---Parámetros: {params}
+2025-12-01 03:55:38,848 - INFO - src.optimization_p 1084 - Trial 0: Ganancia Ensamble Suavizada  = 160,386,057, Max Posible = 164,500,000, Envios = 10,294
+2025-12-01 04:06:19,126 - INFO - src.optimization_p 134 - Iteración 1 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:06:19,127 - INFO - src.optimization_p 135 - Ganancia: 186,023,018---Parámetros: {params}
+2025-12-01 04:06:19,128 - INFO - src.optimization_p 1084 - Trial 1: Ganancia Ensamble Suavizada  = 186,023,018, Max Posible = 191,260,000, Envios = 10,116
+2025-12-01 04:14:38,956 - INFO - src.optimization_p 134 - Iteración 2 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:14:38,957 - INFO - src.optimization_p 135 - Ganancia: 172,088,756---Parámetros: {params}
+2025-12-01 04:14:38,957 - INFO - src.optimization_p 1084 - Trial 2: Ganancia Ensamble Suavizada  = 172,088,756, Max Posible = 176,000,000, Envios = 10,559
+2025-12-01 04:22:19,462 - INFO - src.optimization_p 134 - Iteración 3 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:22:19,463 - INFO - src.optimization_p 135 - Ganancia: 156,688,466---Parámetros: {params}
+2025-12-01 04:22:19,463 - INFO - src.optimization_p 1084 - Trial 3: Ganancia Ensamble Suavizada  = 156,688,466, Max Posible = 163,220,000, Envios = 11,118
+2025-12-01 04:30:54,638 - INFO - src.optimization_p 134 - Iteración 4 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:30:54,639 - INFO - src.optimization_p 135 - Ganancia: 177,488,776---Parámetros: {params}
+2025-12-01 04:30:54,639 - INFO - src.optimization_p 1084 - Trial 4: Ganancia Ensamble Suavizada  = 177,488,776, Max Posible = 183,840,000, Envios = 7,687
+2025-12-01 04:38:45,324 - INFO - src.optimization_p 134 - Iteración 5 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:38:45,325 - INFO - src.optimization_p 135 - Ganancia: 172,075,662---Parámetros: {params}
+2025-12-01 04:38:45,325 - INFO - src.optimization_p 1084 - Trial 5: Ganancia Ensamble Suavizada  = 172,075,662, Max Posible = 175,400,000, Envios = 11,989
+2025-12-01 04:45:57,502 - INFO - src.optimization_p 134 - Iteración 6 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:45:57,503 - INFO - src.optimization_p 135 - Ganancia: 165,427,606---Parámetros: {params}
+2025-12-01 04:45:57,503 - INFO - src.optimization_p 1084 - Trial 6: Ganancia Ensamble Suavizada  = 165,427,606, Max Posible = 168,640,000, Envios = 10,967
+2025-12-01 04:55:52,912 - INFO - src.optimization_p 134 - Iteración 7 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 04:55:52,913 - INFO - src.optimization_p 135 - Ganancia: 168,324,018---Parámetros: {params}
+2025-12-01 04:55:52,914 - INFO - src.optimization_p 1084 - Trial 7: Ganancia Ensamble Suavizada  = 168,324,018, Max Posible = 173,160,000, Envios = 11,861
+2025-12-01 05:05:58,094 - INFO - src.optimization_p 134 - Iteración 8 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 05:05:58,095 - INFO - src.optimization_p 135 - Ganancia: 171,999,360---Parámetros: {params}
+2025-12-01 05:05:58,095 - INFO - src.optimization_p 1084 - Trial 8: Ganancia Ensamble Suavizada  = 171,999,360, Max Posible = 175,520,000, Envios = 9,103
+2025-12-01 05:14:59,580 - INFO - src.optimization_p 134 - Iteración 9 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 05:14:59,581 - INFO - src.optimization_p 135 - Ganancia: 174,840,410---Parámetros: {params}
+2025-12-01 05:14:59,582 - INFO - src.optimization_p 1084 - Trial 9: Ganancia Ensamble Suavizada  = 174,840,410, Max Posible = 178,860,000, Envios = 11,336
+2025-12-01 05:25:17,145 - INFO - src.optimization_p 134 - Iteración 10 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 05:25:17,146 - INFO - src.optimization_p 135 - Ganancia: 186,292,774---Parámetros: {params}
+2025-12-01 05:25:17,146 - INFO - src.optimization_p 1084 - Trial 10: Ganancia Ensamble Suavizada  = 186,292,774, Max Posible = 192,640,000, Envios = 9,407
+2025-12-01 05:36:14,689 - INFO - src.optimization_p 134 - Iteración 11 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 05:36:14,691 - INFO - src.optimization_p 135 - Ganancia: 190,875,072---Parámetros: {params}
+2025-12-01 05:36:14,691 - INFO - src.optimization_p 1084 - Trial 11: Ganancia Ensamble Suavizada  = 190,875,072, Max Posible = 194,620,000, Envios = 9,708
+2025-12-01 05:45:33,753 - INFO - src.optimization_p 134 - Iteración 12 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 05:45:33,753 - INFO - src.optimization_p 135 - Ganancia: 181,565,277---Parámetros: {params}
+2025-12-01 05:45:33,754 - INFO - src.optimization_p 1084 - Trial 12: Ganancia Ensamble Suavizada  = 181,565,277, Max Posible = 184,920,000, Envios = 8,313
+2025-12-01 05:55:29,828 - INFO - src.optimization_p 134 - Iteración 13 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 05:55:29,829 - INFO - src.optimization_p 135 - Ganancia: 185,418,741---Parámetros: {params}
+2025-12-01 05:55:29,830 - INFO - src.optimization_p 1084 - Trial 13: Ganancia Ensamble Suavizada  = 185,418,741, Max Posible = 189,300,000, Envios = 9,414
+2025-12-01 06:04:39,893 - INFO - src.optimization_p 134 - Iteración 14 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:04:39,894 - INFO - src.optimization_p 135 - Ganancia: 186,146,197---Parámetros: {params}
+2025-12-01 06:04:39,894 - INFO - src.optimization_p 1084 - Trial 14: Ganancia Ensamble Suavizada  = 186,146,197, Max Posible = 191,340,000, Envios = 10,392
+2025-12-01 06:16:41,008 - INFO - src.optimization_p 134 - Iteración 15 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:16:41,009 - INFO - src.optimization_p 135 - Ganancia: 182,502,069---Parámetros: {params}
+2025-12-01 06:16:41,010 - INFO - src.optimization_p 1084 - Trial 15: Ganancia Ensamble Suavizada  = 182,502,069, Max Posible = 185,040,000, Envios = 10,707
+2025-12-01 06:26:04,145 - INFO - src.optimization_p 134 - Iteración 16 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:26:04,145 - INFO - src.optimization_p 135 - Ganancia: 187,906,567---Parámetros: {params}
+2025-12-01 06:26:04,146 - INFO - src.optimization_p 1084 - Trial 16: Ganancia Ensamble Suavizada  = 187,906,567, Max Posible = 190,640,000, Envios = 8,947
+2025-12-01 06:34:42,557 - INFO - src.optimization_p 134 - Iteración 17 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:34:42,558 - INFO - src.optimization_p 135 - Ganancia: 180,073,063---Parámetros: {params}
+2025-12-01 06:34:42,559 - INFO - src.optimization_p 1084 - Trial 17: Ganancia Ensamble Suavizada  = 180,073,063, Max Posible = 183,800,000, Envios = 8,009
+2025-12-01 06:43:03,368 - INFO - src.optimization_p 134 - Iteración 18 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:43:03,369 - INFO - src.optimization_p 135 - Ganancia: 169,546,337---Parámetros: {params}
+2025-12-01 06:43:03,370 - INFO - src.optimization_p 1084 - Trial 18: Ganancia Ensamble Suavizada  = 169,546,337, Max Posible = 174,220,000, Envios = 8,888
+2025-12-01 06:53:26,609 - INFO - src.optimization_p 134 - Iteración 19 guardada en resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:53:26,610 - INFO - src.optimization_p 135 - Ganancia: 186,430,655---Parámetros: {params}
+2025-12-01 06:53:26,611 - INFO - src.optimization_p 1084 - Trial 19: Ganancia Ensamble Suavizada  = 186,430,655, Max Posible = 190,940,000, Envios = 11,452
+2025-12-01 06:53:31,690 - INFO - src.optimization_p 1233 - 🏆 Mejor ganancia: 190,875,072
+2025-12-01 06:53:32,638 - INFO - src.optimization_p 1234 - Mejores parámetros: {'num_iterations': 915, 'num_leaves': 63, 'learning_rate': 0.2732157391794641, 'feature_fraction': 0.977231739566692, 'bagging_fraction': 0.9969948567867236, 'min_child_samples': 3, 'max_depth': 23, 'reg_lambda': 4.616253066414, 'reg_alpha': 0.11272353750107245, 'min_gain_to_split': 0.0771619625318113}
+2025-12-01 06:53:32,639 - INFO - __main__ 110 - === ANÁLISIS DE RESULTADOS ===
+2025-12-01 06:53:33,844 - INFO - __main__ 114 - Top 5 mejores trials:
+2025-12-01 06:53:33,846 - INFO - __main__ 116 -   Trial 11: 190,875,072
+2025-12-01 06:53:33,846 - INFO - __main__ 116 -   Trial 16: 187,906,567
+2025-12-01 06:53:33,847 - INFO - __main__ 116 -   Trial 19: 186,430,655
+2025-12-01 06:53:33,848 - INFO - __main__ 116 -   Trial 10: 186,292,774
+2025-12-01 06:53:33,848 - INFO - __main__ 116 -   Trial 14: 186,146,197
+2025-12-01 06:53:33,848 - INFO - __main__ 118 - === OPTIMIZACIÓN COMPLETADA ===
+2025-12-01 06:53:33,849 - INFO - __main__ 121 - === EVALUACIÓN EN CONJUNTO DE TEST ===
+2025-12-01 06:53:33,850 - INFO - src.best_params 50 - Mejores hiperparámetros cargados desde resultados/Exp_01_Compe_03_V2_2q_iteraciones.json
+2025-12-01 06:53:33,850 - INFO - src.best_params 51 - Mejor ganancia encontrada: 190,875,072
+2025-12-01 06:53:33,850 - INFO - src.best_params 52 - Trial número: 11
+2025-12-01 06:53:33,851 - INFO - src.best_params 53 - Parámetros: {'num_iterations': 915, 'num_leaves': 63, 'learning_rate': 0.2732157391794641, 'feature_fraction': 0.977231739566692, 'bagging_fraction': 0.9969948567867236, 'min_child_samples': 3, 'max_depth': 23, 'reg_lambda': 4.616253066414, 'reg_alpha': 0.11272353750107245, 'min_gain_to_split': 0.0771619625318113, 'bagging_freq': 1, 'objective': 'binary', 'metric': 'None', 'random_state': 839071}
+2025-12-01 06:53:33,851 - INFO - src.best_params 62 - Ajuste de 'min_child_samples':
+2025-12-01 06:53:33,851 - INFO - src.best_params 63 -   Valor original (optimización): 3
+2025-12-01 06:53:33,852 - INFO - src.best_params 64 -   Factor de ajuste: 3.00
+2025-12-01 06:53:33,852 - INFO - src.best_params 65 -   Nuevo valor (final): 9
+2025-12-01 06:53:33,852 - INFO - __main__ 127 - === Evaluación con mismo undersampling ===
+2025-12-01 06:53:33,852 - INFO - src.optimization_p 453 - === EVALUACIÓN EN CONJUNTO DE TEST (Promediando N Modelos) ===
+2025-12-01 06:53:33,853 - INFO - src.optimization_p 466 - Períodos de test a evaluar: ['202106', '202107']
+2025-12-01 06:53:33,853 - INFO - src.optimization_p 467 - Semilla base: 839071, N Modelos: 20
+2025-12-01 06:53:35,193 - INFO - src.optimization_p 482 - Iniciando entrenamiento de 20 modelos...
+2025-12-01 06:53:35,195 - INFO - src.optimization_p 492 - Entrenando modelo 1/20 (Semilla: 3060817664)...
+2025-12-01 06:55:24,430 - INFO - src.optimization_p 492 - Entrenando modelo 2/20 (Semilla: 992140286)...
+2025-12-01 06:56:13,508 - INFO - src.optimization_p 492 - Entrenando modelo 3/20 (Semilla: 3237557171)...
+2025-12-01 06:56:50,918 - INFO - src.optimization_p 492 - Entrenando modelo 4/20 (Semilla: 2314383897)...
+2025-12-01 06:57:28,164 - INFO - src.optimization_p 492 - Entrenando modelo 5/20 (Semilla: 404200786)...
+2025-12-01 06:58:04,438 - INFO - src.optimization_p 492 - Entrenando modelo 6/20 (Semilla: 3847701201)...
+2025-12-01 06:58:55,804 - INFO - src.optimization_p 492 - Entrenando modelo 7/20 (Semilla: 2865421062)...
+2025-12-01 06:59:35,801 - INFO - src.optimization_p 492 - Entrenando modelo 8/20 (Semilla: 3643192183)...
+2025-12-01 07:00:16,025 - INFO - src.optimization_p 492 - Entrenando modelo 9/20 (Semilla: 1117668684)...
+2025-12-01 07:01:01,184 - INFO - src.optimization_p 492 - Entrenando modelo 10/20 (Semilla: 3510756625)...
+2025-12-01 07:01:47,245 - INFO - src.optimization_p 492 - Entrenando modelo 11/20 (Semilla: 2571145538)...
+2025-12-01 07:02:32,039 - INFO - src.optimization_p 492 - Entrenando modelo 12/20 (Semilla: 2213045784)...
+2025-12-01 07:03:10,026 - INFO - src.optimization_p 492 - Entrenando modelo 13/20 (Semilla: 2153453051)...
+2025-12-01 07:03:48,122 - INFO - src.optimization_p 492 - Entrenando modelo 14/20 (Semilla: 3163014560)...
+2025-12-01 07:04:26,235 - INFO - src.optimization_p 492 - Entrenando modelo 15/20 (Semilla: 3698929166)...
+2025-12-01 07:05:03,614 - INFO - src.optimization_p 492 - Entrenando modelo 16/20 (Semilla: 766887731)...
+2025-12-01 07:05:38,904 - INFO - src.optimization_p 492 - Entrenando modelo 17/20 (Semilla: 1371336364)...
+2025-12-01 07:06:16,891 - INFO - src.optimization_p 492 - Entrenando modelo 18/20 (Semilla: 1730670187)...
+2025-12-01 07:06:57,558 - INFO - src.optimization_p 492 - Entrenando modelo 19/20 (Semilla: 1386299423)...
+2025-12-01 07:07:37,057 - INFO - src.optimization_p 492 - Entrenando modelo 20/20 (Semilla: 1650770698)...
+2025-12-01 07:08:17,812 - INFO - src.optimization_p 527 - Entrenamiento de los N modelos completado.
+2025-12-01 07:08:17,814 - INFO - src.optimization_p 534 - --- Evaluando en Período de Test: 202106 ---
+2025-12-01 07:08:18,913 - INFO - src.optimization_p 543 - Dimensiones df_test (202106): (164313, 1005)
+2025-12-01 07:09:28,109 - INFO - src.optimization_p 573 - Predicciones completadas para el mes 202106. Promediando...
+2025-12-01 07:09:28,194 - INFO - src.optimization_p 604 - Resultados Test Mes 202106 (N=20): Ganancia Suavizada = 360,488,856, Ganancia Máxima = 364,600,000, Envios Máx Gan = 12009
+2025-12-01 07:09:28,195 - INFO - src.optimization_p 534 - --- Evaluando en Período de Test: 202107 ---
+2025-12-01 07:09:29,309 - INFO - src.optimization_p 543 - Dimensiones df_test (202107): (164596, 1005)
+2025-12-01 07:10:34,998 - INFO - src.optimization_p 573 - Predicciones completadas para el mes 202107. Promediando...
+2025-12-01 07:10:35,081 - INFO - src.optimization_p 604 - Resultados Test Mes 202107 (N=20): Ganancia Suavizada = 375,013,873, Ganancia Máxima = 377,960,000, Envios Máx Gan = 10061
+2025-12-01 07:10:35,082 - INFO - src.optimization_p 611 - === EVALUACIÓN EN CONJUNTO DE TEST COMPLETADA ===
+2025-12-01 07:10:35,157 - INFO - __main__ 130 - === Evaluación con undersampling final ===
+2025-12-01 07:10:35,158 - INFO - src.optimization_p 453 - === EVALUACIÓN EN CONJUNTO DE TEST (Promediando N Modelos) ===
+2025-12-01 07:10:35,158 - INFO - src.optimization_p 466 - Períodos de test a evaluar: ['202106', '202107']
+2025-12-01 07:10:35,159 - INFO - src.optimization_p 467 - Semilla base: 839071, N Modelos: 20
+2025-12-01 07:10:36,387 - INFO - src.optimization_p 482 - Iniciando entrenamiento de 20 modelos...
+2025-12-01 07:10:36,388 - INFO - src.optimization_p 492 - Entrenando modelo 1/20 (Semilla: 3060817664)...
+2025-12-01 07:15:32,035 - INFO - src.optimization_p 492 - Entrenando modelo 2/20 (Semilla: 992140286)...
+2025-12-01 07:17:12,224 - INFO - src.optimization_p 492 - Entrenando modelo 3/20 (Semilla: 3237557171)...
+2025-12-01 07:18:15,879 - INFO - src.optimization_p 492 - Entrenando modelo 4/20 (Semilla: 2314383897)...
+2025-12-01 07:19:15,990 - INFO - src.optimization_p 492 - Entrenando modelo 5/20 (Semilla: 404200786)...
+2025-12-01 07:19:58,710 - INFO - src.optimization_p 492 - Entrenando modelo 6/20 (Semilla: 3847701201)...
+2025-12-01 07:20:38,137 - INFO - src.optimization_p 492 - Entrenando modelo 7/20 (Semilla: 2865421062)...
+2025-12-01 07:21:16,260 - INFO - src.optimization_p 492 - Entrenando modelo 8/20 (Semilla: 3643192183)...
+2025-12-01 07:21:54,056 - INFO - src.optimization_p 492 - Entrenando modelo 9/20 (Semilla: 1117668684)...
+2025-12-01 07:22:32,176 - INFO - src.optimization_p 492 - Entrenando modelo 10/20 (Semilla: 3510756625)...
+2025-12-01 07:23:09,203 - INFO - src.optimization_p 492 - Entrenando modelo 11/20 (Semilla: 2571145538)...
+2025-12-01 07:23:46,104 - INFO - src.optimization_p 492 - Entrenando modelo 12/20 (Semilla: 2213045784)...
+2025-12-01 07:24:24,994 - INFO - src.optimization_p 492 - Entrenando modelo 13/20 (Semilla: 2153453051)...
+2025-12-01 07:25:04,466 - INFO - src.optimization_p 492 - Entrenando modelo 14/20 (Semilla: 3163014560)...
+2025-12-01 07:25:42,712 - INFO - src.optimization_p 492 - Entrenando modelo 15/20 (Semilla: 3698929166)...
+2025-12-01 07:26:20,146 - INFO - src.optimization_p 492 - Entrenando modelo 16/20 (Semilla: 766887731)...
+2025-12-01 07:27:02,581 - INFO - src.optimization_p 492 - Entrenando modelo 17/20 (Semilla: 1371336364)...
+2025-12-01 07:27:41,744 - INFO - src.optimization_p 492 - Entrenando modelo 18/20 (Semilla: 1730670187)...
+2025-12-01 07:28:20,884 - INFO - src.optimization_p 492 - Entrenando modelo 19/20 (Semilla: 1386299423)...
+2025-12-01 07:29:12,132 - INFO - src.optimization_p 492 - Entrenando modelo 20/20 (Semilla: 1650770698)...
+2025-12-01 07:29:49,069 - INFO - src.optimization_p 527 - Entrenamiento de los N modelos completado.
+2025-12-01 07:29:49,070 - INFO - src.optimization_p 534 - --- Evaluando en Período de Test: 202106 ---
+2025-12-01 07:29:50,143 - INFO - src.optimization_p 543 - Dimensiones df_test (202106): (164313, 1005)
+2025-12-01 07:31:01,631 - INFO - src.optimization_p 573 - Predicciones completadas para el mes 202106. Promediando...
+2025-12-01 07:31:01,718 - INFO - src.optimization_p 604 - Resultados Test Mes 202106 (N=20): Ganancia Suavizada = 363,609,255, Ganancia Máxima = 366,920,000, Envios Máx Gan = 12613
+2025-12-01 07:31:01,719 - INFO - src.optimization_p 534 - --- Evaluando en Período de Test: 202107 ---
+2025-12-01 07:31:02,795 - INFO - src.optimization_p 543 - Dimensiones df_test (202107): (164596, 1005)
+2025-12-01 07:32:09,966 - INFO - src.optimization_p 573 - Predicciones completadas para el mes 202107. Promediando...
+2025-12-01 07:32:10,053 - INFO - src.optimization_p 604 - Resultados Test Mes 202107 (N=20): Ganancia Suavizada = 394,499,480, Ganancia Máxima = 400,660,000, Envios Máx Gan = 10726
+2025-12-01 07:32:10,054 - INFO - src.optimization_p 611 - === EVALUACIÓN EN CONJUNTO DE TEST COMPLETADA ===
+2025-12-01 07:32:10,136 - INFO - __main__ 180 - >>> Ejecución finalizada. Revisar logs para mas detalles.
+2025-12-01 07:32:10,292 - INFO - __main__ 189 - Ejecución finalizada.

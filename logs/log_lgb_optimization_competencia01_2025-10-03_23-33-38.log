@@ -1,6 +1,0 @@
-2025-10-03 23:33:38,419 - INFO - __main__ 36 - Inicio de ejecucion.
-2025-10-03 23:33:38,419 - INFO - __name__ 14 - Cargando dataset desde ./data/competencia_01.csv
-2025-10-03 23:33:48,568 - INFO - __name__ 17 - Dataset cargado con 978439 filas y 155 columnas
-2025-10-03 23:33:48,568 - INFO - __name__ 27 - Realizando feature engineering con 2 lags para 5 atributos
-2025-10-03 23:33:54,977 - INFO - __name__ 57 - Feature engineering completado. DataFrame resultante con 165 columnas
-2025-10-03 23:33:54,978 - INFO - __name__ 80 - Realizando feature engineering con percentiles para 11 atributos

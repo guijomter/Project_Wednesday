@@ -65,7 +65,7 @@ competencia03:
 
 
 parametros_lgb:
-    n_trial: 21
+    n_trial: 20
     undersampling: 0.05         #0.075   # Usado en Compe_03
     undersampling_final: 0.3
     num_leaves: [8, 300]

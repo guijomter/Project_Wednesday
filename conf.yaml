@@ -3,7 +3,7 @@
 STUDY_NAME : "Compe_03_V3_1s"  
 #BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
-GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_02"
+GCS_BUCKET_URI: "gs://ultraguille84_bukito3/Compe_02"
 
 PIPELINE_STAGES: [
     "fe_orden_1",
@@ -43,8 +43,8 @@ competencia02:
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 competencia03:
-    BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_03"
-    GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_03"
+    BUCKET_NAME: "/home/ultraguille84/buckets/b1/Compe_03"
+    GCS_BUCKET_URI: "gs://ultraguille84_bukito3/Compe_03"
     DATA_PATH_RAW: "datasets/competencia_03_crudo_comp.csv.gz"
     DATA_PATH: "datasets/competencia_03.csv"
     DATA_PATH_Q: "datasets/competencia_03_calidad.csv"

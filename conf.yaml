@@ -1,9 +1,9 @@
 # config.yaml
 
-STUDY_NAME : "Compe_03_V3_1q"  
+STUDY_NAME : "Compe_03_V3_1s"  
 #BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_02"
 #LOCAL_PATH: "/home/guijomter/temp/Compe_02/"
-GCS_BUCKET_URI: "gs://ultraguille84_bukito3/Compe_02"
+#GCS_BUCKET_URI: "gs://ultraguille84_bukito3/Compe_02"
 
 PIPELINE_STAGES: [
     "fe_orden_1",
@@ -43,8 +43,10 @@ competencia02:
     UMBRAL: 0.025                                       # Umbral de decisión para clasificar como 1
 
 competencia03:
-    BUCKET_NAME: "/home/ultraguille84/buckets/b1/Compe_03"
-    GCS_BUCKET_URI: "gs://ultraguille84_bukito3/Compe_03"
+    BUCKET_NAME: "/home/guijomter/buckets/b1/Compe_03"
+    GCS_BUCKET_URI: "gs://guijomter_bukito3/Compe_03"
+    #BUCKET_NAME: "/home/ultraguille84/buckets/b1/Compe_03"
+    #GCS_BUCKET_URI: "gs://ultraguille84_bukito3/Compe_03"
     DATA_PATH_RAW: "datasets/competencia_03_crudo_comp.csv.gz"
     DATA_PATH: "datasets/competencia_03.csv"
     DATA_PATH_Q: "datasets/competencia_03_calidad.csv"
@@ -52,11 +54,12 @@ competencia03:
     N_SEMILLERO: 20
     GANANCIA_ACIERTO: 780000
     COSTO_ESTIMULO: 20000
-    MES_TRAIN: ["201901","201902","201903","202001","202002","202003","202101","202102","202103"] 
+    MES_TRAIN: ["201901","201902","201903","201904","201905","201906","202001","202002","202003","202004","202005","202006","202101","202102","202103"]
     MES_TEST: "202107"
     MES_VALIDACION: "202104"
-    FINAL_TRAIN: ["201901","201902","201903","202001","202002","202003","202101","202102","202103","202104"]   
-    FINAL_PREDIC: "202109"
+    FINAL_TRAIN: ["201901","201902","201903","201904","201905","201906","202001","202002","202003","202004","202005","202006","202101","202102","202103","202104","202105","202106"] 
+    FINAL_PREDIC: "202109" 
+
 
 
 
@@ -68,7 +71,7 @@ competencia03:
 
 parametros_lgb:
     n_trial: 20
-    undersampling: 0.05         #0.075   # Usado en Compe_03
+    undersampling: 0.075         #0.075   # Usado en Compe_03
     undersampling_final: 0.3
     num_leaves: [8, 300]
     num_iterations: [50, 1000]
